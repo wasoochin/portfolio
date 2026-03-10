@@ -22,11 +22,9 @@
             --pink-400: #f472b6;
             --emerald-400: #34d399;
             --emerald-500: #10b981;
-            --orange-400: #fb923c;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             background-color: var(--slate-950);
             color: var(--slate-200);
@@ -34,89 +32,86 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
-
         .container { max-width: 1152px; margin: 0 auto; padding: 0 1.5rem; }
 
-        /* --- Navigation --- */
+        /* Navigation */
         nav {
-            position: sticky; top: 0; z-index: 50;
+            position: sticky; top: 0; z-index: 100;
             backdrop-filter: blur(12px);
             background-color: rgba(2, 6, 23, 0.8);
             border-bottom: 1px solid var(--slate-800);
             padding: 1rem 0;
         }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .logo { font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; gap: 0.6rem; color: #fff; }
+        .logo-sq { width: 32px; height: 32px; background: linear-gradient(135deg, var(--purple-500), var(--blue-500)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .nav-btns { display: flex; gap: 0.75rem; }
+        .btn-sm { padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: 0.2s; }
+        .btn-white { background: #fff; color: var(--slate-950); }
+        .btn-dark { background: var(--slate-900); border: 1px solid var(--slate-800); color: #fff; }
+        .btn-sm:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        .nav-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-
-        .logo { font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; color: white; }
-        .logo-box {
-            width: 2rem; height: 2rem; border-radius: 8px;
-            background: linear-gradient(to bottom right, var(--purple-500), var(--blue-500));
-            display: flex; align-items: center; justify-content: center; font-size: 0.875rem;
-        }
-
-        .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
-        .btn-talk { background: white; color: var(--slate-950); padding: 0.5rem 1rem; border-radius: 12px; font-weight: 600; text-decoration: none; font-size: 0.875rem; transition: 0.2s; }
-        .btn-social { background: var(--slate-900); border: 1px solid var(--slate-800); color: white; padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.875rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: 0.2s; }
-        .btn-talk:hover { background: var(--slate-200); }
-        .btn-social:hover { background: var(--slate-800); }
-
-        /* --- Hero Banner --- */
+        /* Hero Banner */
         .hero-banner {
-            position: relative; width: 100%; border-radius: 2.5rem; overflow: hidden;
-            border: 1px solid var(--slate-800); background: var(--slate-950);
-            margin-top: 2rem; margin-bottom: 3rem; min-h: 480px; display: flex; align-items: center;
+            position: relative; margin: 2rem 0 4rem; border-radius: 2rem; border: 1px solid var(--slate-800);
+            background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.1), transparent), var(--slate-950);
+            padding: 4rem; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 3rem;
         }
-
-        .hero-bg { position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.15), transparent), radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.1), transparent); z-index: 1; }
-        .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 3rem 3rem; opacity: 0.3; z-index: 2; }
-
-        .hero-content { position: relative; z-index: 10; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; width: 100%; padding: 4rem; align-items: center; }
-
-        @media (max-width: 1024px) { .hero-content { grid-template-columns: 1fr; padding: 3rem 2rem; text-align: left; } }
-
-        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--slate-700); border-radius: 999px; margin-bottom: 1.5rem; }
-        .status-dot { width: 10px; height: 10px; background: var(--emerald-500); border-radius: 50%; position: relative; }
-        .status-dot::after { content: ''; position: absolute; inset: 0; background: var(--emerald-400); border-radius: 50%; animation: ping 1.5s infinite; }
-        @keyframes ping { 75%, 100% { transform: scale(2.5); opacity: 0; } }
-
-        h1.name { font-size: 5rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1; margin-bottom: 1rem; }
-        .hero-titles { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1.5rem; }
-        .title-gradient { background: linear-gradient(to right, var(--purple-400), var(--pink-400), var(--blue-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.75rem; font-weight: 700; }
-        .hero-tagline { font-size: 1.25rem; color: var(--slate-400); font-weight: 300; max-width: 500px; }
-
-        /* --- Dashboard Card --- */
-        .dashboard-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-        .pipeline-node { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; position: relative; z-index: 2; }
-        .node-icon { width: 44px; height: 44px; background: var(--slate-950); border: 1px solid var(--slate-700); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-        .pipeline-node:not(:last-child)::after { content: ''; position: absolute; left: 21px; top: 44px; height: 24px; width: 2px; background: linear-gradient(to bottom, var(--purple-500), var(--blue-500)); opacity: 0.3; }
-
-        /* --- Tabs --- */
-        .tab-switcher { display: flex; gap: 0.5rem; background: var(--slate-900); padding: 0.5rem; border-radius: 999px; border: 1px solid var(--slate-800); width: fit-content; margin: 3rem auto; }
-        .tab-btn { border: none; background: transparent; color: var(--slate-400); padding: 0.75rem 1.5rem; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 0.875rem; transition: 0.2s; }
-        .tab-btn.active { background: var(--slate-800); color: white; }
-
-        .tab-panel { display: none; animation: slideIn 0.4s ease-out; }
-        .tab-panel.active { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- Grid Layouts --- */
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-        .card { background: var(--slate-900); border: 1px solid var(--slate-800); padding: 1.5rem; border-radius: 1.25rem; transition: 0.3s; }
-        .card:hover { border-color: var(--slate-700); transform: translateY(-4px); }
-
-        /* --- Resume Section --- */
-        .resume-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 2.5rem; }
-        @media (max-width: 768px) { .resume-layout { grid-template-columns: 1fr; } }
+        .hero-grid { position: absolute; inset: 0; background-image: radial-gradient(var(--slate-800) 1px, transparent 1px); background-size: 30px 30px; opacity: 0.2; }
+        .hero-text { position: relative; z-index: 10; max-width: 55%; }
+        .hero-visual { position: relative; z-index: 10; width: 40%; }
         
-        .timeline { position: relative; padding-left: 2.5rem; border-left: 2px solid var(--slate-800); margin-left: 1rem; }
-        .timeline-item { position: relative; margin-bottom: 2.5rem; }
-        .timeline-item::before { content: ''; position: absolute; left: calc(-2.5rem - 7px); top: 5px; width: 12px; height: 12px; background: var(--slate-800); border-radius: 50%; border: 4px solid var(--slate-950); transition: 0.3s; }
-        .timeline-item:hover::before { background: var(--purple-500); transform: scale(1.3); }
+        .badge-avail { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--slate-700); border-radius: 100px; margin-bottom: 1.5rem; font-size: 0.7rem; font-weight: 700; color: var(--slate-300); text-transform: uppercase; letter-spacing: 0.05em; }
+        .dot-ping { width: 8px; height: 8px; background: var(--emerald-500); border-radius: 50%; position: relative; }
+        .dot-ping::after { content: ''; position: absolute; inset: 0; background: var(--emerald-400); border-radius: 50%; animation: ping 1.5s infinite; }
+        @keyframes ping { 75%, 100% { transform: scale(3); opacity: 0; } }
 
-        .skill-tag { background: var(--slate-950); border: 1px solid var(--slate-800); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; color: var(--slate-400); font-weight: 500; }
+        h1.big-name { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; line-height: 0.9; margin-bottom: 1.5rem; letter-spacing: -0.04em; }
+        .hero-sub { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+        .gradient-text { background: linear-gradient(to right, var(--purple-400), var(--pink-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Workflow Card */
+        .work-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+        .node { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; position: relative; }
+        .node:not(:last-child)::after { content: ''; position: absolute; left: 20px; top: 40px; width: 2px; height: 20px; background: linear-gradient(to bottom, var(--purple-500), var(--blue-500)); opacity: 0.2; }
+        .n-icon { width: 40px; height: 40px; background: var(--slate-950); border: 1px solid var(--slate-700); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 
-        footer { border-top: 1px solid var(--slate-800); padding: 2.5rem 0; text-align: center; color: var(--slate-500); font-size: 0.875rem; margin-top: 4rem; }
+        /* Sections & Tabs */
+        .section-title { font-size: 1.75rem; font-weight: 800; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem; }
+        .title-line { width: 6px; height: 28px; background: var(--purple-500); border-radius: 3px; }
+
+        .tab-nav { display: flex; justify-content: center; gap: 2.5rem; border-bottom: 1px solid var(--slate-800); margin: 4rem 0; }
+        .tab-link { background: none; border: none; padding-bottom: 1rem; color: var(--slate-500); font-weight: 700; cursor: pointer; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; transition: 0.2s; border-bottom: 2px solid transparent; }
+        .tab-link.active { color: #fff; border-bottom-color: var(--purple-500); }
+
+        .tab-pane { display: none; animation: fadeIn 0.5s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Grid */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .card { background: var(--slate-900); border: 1px solid var(--slate-800); padding: 2rem; border-radius: 1.5rem; transition: 0.3s; height: 100%; }
+        .card:hover { border-color: var(--slate-600); transform: translateY(-5px); }
+        
+        /* Resume */
+        .resume-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; }
+        .sidebar-box { background: var(--slate-900); padding: 2rem; border-radius: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--slate-800); }
+        .timeline { border-left: 2px solid var(--slate-800); padding-left: 2rem; margin-left: 0.5rem; }
+        .time-item { position: relative; margin-bottom: 3rem; }
+        .time-item::before { content: ''; position: absolute; left: calc(-2rem - 7px); top: 5px; width: 12px; height: 12px; background: var(--slate-800); border: 3px solid var(--slate-950); border-radius: 50%; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-banner { flex-direction: column; padding: 3rem 2rem; text-align: center; }
+            .hero-text, .hero-visual { max-width: 100%; width: 100%; }
+            .hero-sub { justify-content: center; }
+            .resume-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+            .hero-banner { padding: 2rem 1rem; border-radius: 1.5rem; }
+            .tab-nav { gap: 1rem; }
+            .tab-link { font-size: 0.75rem; }
+        }
     </style>
 </head>
 <body>
@@ -124,243 +119,222 @@
     <nav>
         <div class="container nav-content">
             <div class="logo">
-                <div class="logo-box">A</div>
+                <div class="logo-sq">A</div>
                 Abby Airen
             </div>
-            <div class="nav-actions">
-                <a href="mailto:wawagraphic@gmail.com" class="btn-talk">
-                    <i data-lucide="mail" style="width:16px; height:16px; vertical-align:middle;"></i> Let's Talk
-                </a>
-                <a href="https://www.linkedin.com/in/abby-wasoochin/" target="_blank" class="btn-social">
-                    <i data-lucide="linkedin" style="width:16px; height:16px;"></i> <span>LinkedIn</span>
-                </a>
+            <div class="nav-btns">
+                <a href="mailto:wawagraphic@gmail.com" class="btn-sm btn-white"><i data-lucide="mail" style="width:16px"></i> Let's Talk</a>
+                <a href="https://www.linkedin.com/in/abby-wasoochin/" target="_blank" class="btn-sm btn-dark"><i data-lucide="linkedin" style="width:16px"></i> <span class="hidden sm:inline">LinkedIn</span></a>
             </div>
         </div>
     </nav>
 
     <main class="container">
-        <div class="hero-banner">
-            <div class="hero-bg"></div>
+        <section class="hero-banner">
             <div class="hero-grid"></div>
-            <div class="hero-content">
-                <div class="hero-text">
-                    <div class="hero-badge">
-                        <span class="status-dot"></span>
-                        <span style="font-size: 0.7rem; font-weight: 700; color: var(--slate-300); text-transform: uppercase; letter-spacing: 0.1em;">Available for new opportunities</span>
-                    </div>
-                    <h1 class="name">Abby Airen</h1>
-                    <div class="hero-titles">
-                        <span class="title-gradient">Digital Creative Designer</span>
-                        <span style="color: var(--slate-700); font-size: 1.5rem;">|</span>
-                        <span style="font-size: 1.5rem; font-weight: 700; color: var(--slate-300);">Multimedia Producer</span>
-                    </div>
-                    <p class="hero-tagline">Designing high-impact digital marketing creatives across social media, display campaigns, and multimedia storytelling.</p>
+            <div class="hero-text">
+                <div class="badge-avail">
+                    <span class="dot-ping"></span>
+                    Available for new opportunities
                 </div>
-
-                <div class="hero-visual">
-                    <div class="dashboard-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-800); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                            <span style="font-size: 0.7rem; font-weight: 800; color: var(--slate-500); text-transform: uppercase;">Workflow System</span>
-                            <div style="display: flex; gap: 4px;">
-                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--slate-800);"></div>
-                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--slate-800);"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="pipeline-node">
-                            <div class="node-icon"><i data-lucide="pen-tool" style="color: var(--pink-400); width: 20px;"></i></div>
-                            <div>
-                                <div style="font-size: 0.875rem; font-weight: 700;">Design & Ideation</div>
-                                <div style="font-size: 0.75rem; color: var(--slate-500);">Figma • Creative Suite</div>
-                            </div>
-                        </div>
-                        <div class="pipeline-node">
-                            <div class="node-icon" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.4);"><i data-lucide="sparkles" style="color: var(--purple-400); width: 20px;"></i></div>
-                            <div>
-                                <div style="font-size: 0.875rem; font-weight: 700;">AI Automation</div>
-                                <div style="font-size: 0.75rem; color: var(--slate-500);">Gemini • LTX • GenAI</div>
-                            </div>
-                        </div>
-                        <div class="pipeline-node">
-                            <div class="node-icon"><i data-lucide="clapperboard" style="color: var(--blue-400); width: 20px;"></i></div>
-                            <div>
-                                <div style="font-size: 0.875rem; font-weight: 700;">Multimedia Output</div>
-                                <div style="font-size: 0.75rem; color: var(--slate-500);">Video • Campaigns</div>
-                            </div>
-                        </div>
-                    </div>
+                <h1 class="big-name">Abby Airen</h1>
+                <div class="hero-sub">
+                    <span class="gradient-text">Digital Creative Designer</span>
+                    <span style="color:var(--slate-700)">|</span>
+                    <span style="color:var(--slate-300)">Multimedia Producer</span>
                 </div>
+                <p style="color:var(--slate-400); font-size: 1.1rem; font-weight: 300;">Designing high-impact digital marketing creatives across social media, display campaigns, and multimedia storytelling.</p>
             </div>
-        </div>
 
-        <section style="margin-bottom: 4rem;">
-            <h2 style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem; margin-bottom: 1.5rem;">
-                <span style="width: 6px; height: 24px; background: var(--purple-500); border-radius: 3px;"></span> Core Strengths
-            </h2>
-            <div class="grid-3">
-                <div class="card">
-                    <i data-lucide="layout-dashboard" style="color: var(--blue-400); margin-bottom: 1rem;"></i>
-                    <h3 style="margin-bottom: 0.75rem;">Digital Marketing Creative</h3>
-                    <p style="font-size: 0.875rem; color: var(--slate-400);">Designing campaign visuals across social media, display banners, and digital advertising.</p>
-                </div>
-                <div class="card">
-                    <i data-lucide="film" style="color: var(--purple-400); margin-bottom: 1rem;"></i>
-                    <h3 style="margin-bottom: 0.75rem;">Multimedia Production</h3>
-                    <p style="font-size: 0.875rem; color: var(--slate-400);">Creating engaging visual storytelling through video production and motion graphics.</p>
-                </div>
-                <div class="card">
-                    <i data-lucide="sparkles" style="color: var(--emerald-400); margin-bottom: 1rem;"></i>
-                    <h3 style="margin-bottom: 0.75rem;">AI-Augmented Workflow</h3>
-                    <p style="font-size: 0.875rem; color: var(--slate-400);">Leveraging generative AI tools to streamline creative production and asset workflows.</p>
+            <div class="hero-visual">
+                <div class="work-card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem; border-bottom:1px solid var(--slate-800); padding-bottom:1rem;">
+                        <span style="font-size:10px; font-weight:800; color:var(--slate-500); text-transform:uppercase; letter-spacing:1px;">Production Pipeline</span>
+                        <div style="display:flex; gap:4px;"><div style="width:6px;height:6px;border-radius:50%;background:var(--slate-800)"></div><div style="width:6px;height:6px;border-radius:50%;background:var(--slate-800)"></div></div>
+                    </div>
+                    <div class="node">
+                        <div class="n-icon"><i data-lucide="pen-tool" style="color:var(--pink-400); width:18px;"></i></div>
+                        <div><div style="font-size:13px; font-weight:700;">Design & Ideation</div><div style="font-size:11px; color:var(--slate-500)">Figma • Creative Suite</div></div>
+                    </div>
+                    <div class="node">
+                        <div class="n-icon" style="background:rgba(168,85,247,0.1); border-color:var(--purple-500);"><i data-lucide="sparkles" style="color:var(--purple-400); width:18px;"></i></div>
+                        <div><div style="font-size:13px; font-weight:700;">AI Automation</div><div style="font-size:11px; color:var(--slate-500)">Gemini • LTX • GenAI</div></div>
+                    </div>
+                    <div class="node">
+                        <div class="n-icon"><i data-lucide="clapperboard" style="color:var(--blue-400); width:18px;"></i></div>
+                        <div><div style="font-size:13px; font-weight:700;">Multimedia Output</div><div style="font-size:11px; color:var(--slate-500)">Video • Social Campaigns</div></div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <div class="tab-switcher">
-            <button class="tab-btn active" onclick="showTab('portfolio')">Case Studies</button>
-            <button class="tab-btn" onclick="showTab('resume')">Interactive Resume</button>
-            <button class="tab-btn" onclick="showTab('cover')">Cover Letter</button>
+        <div class="grid-3" style="margin-bottom: 5rem;">
+            <div class="card">
+                <i data-lucide="megaphone" style="color:var(--blue-400); margin-bottom:1rem"></i>
+                <h3 style="margin-bottom:0.5rem">Digital Marketing</h3>
+                <p style="font-size:0.85rem; color:var(--slate-400)">Campaign visuals across social media, display banners, and digital advertising.</p>
+            </div>
+            <div class="card">
+                <i data-lucide="film" style="color:var(--purple-400); margin-bottom:1rem"></i>
+                <h3 style="margin-bottom:0.5rem">Multimedia Production</h3>
+                <p style="font-size:0.85rem; color:var(--slate-400)">Engaging storytelling through video production, motion graphics, and post-editing.</p>
+            </div>
+            <div class="card">
+                <i data-lucide="sparkles" style="color:var(--emerald-400); margin-bottom:1rem"></i>
+                <h3 style="margin-bottom:0.5rem">AI-Augmented Workflow</h3>
+                <p style="font-size:0.85rem; color:var(--slate-400)">Leveraging generative AI tools to streamline production and asset management.</p>
+            </div>
         </div>
 
-        <div id="portfolio" class="tab-panel active">
+        <div class="tab-nav">
+            <button class="tab-link active" onclick="openTab(event, 'case-studies')">Case Studies</button>
+            <button class="tab-link" onclick="openTab(event, 'resume')">Interactive Resume</button>
+            <button class="tab-link" onclick="openTab(event, 'cover-letter')">Cover Letter</button>
+        </div>
+
+        <div id="case-studies" class="tab-pane active">
+            <h2 class="section-title"><span class="title-line"></span> Featured Work</h2>
             <div class="grid-3">
                 <div class="card">
-                    <i data-lucide="megaphone" style="color: var(--blue-400); margin-bottom: 1rem;"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Digital Marketing Campaigns</h3>
-                    <span style="display: inline-block; background: rgba(168, 85, 247, 0.1); color: var(--purple-400); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin-bottom: 1.5rem;">Role: Digital Designer</span>
-                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--slate-500); text-transform: uppercase; margin-bottom: 0.5rem;">Solution</div>
-                    <p style="font-size: 0.875rem; color: var(--slate-300);">Designed visuals across social media and display advertising, leading to improved visibility.</p>
+                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1.5rem;">
+                        <div class="n-icon"><i data-lucide="layout-dashboard" style="color:var(--blue-400)"></i></div>
+                        <span style="font-size:10px; font-weight:800; background:rgba(168,85,247,0.1); color:var(--purple-400); padding:4px 8px; border-radius:6px;">DIGITAL DESIGN</span>
+                    </div>
+                    <h3 style="margin-bottom:1rem">Marketing Campaign Visuals</h3>
+                    <div style="font-size:11px; color:var(--slate-500); text-transform:uppercase; font-weight:800; margin-bottom:0.5rem;">Impact</div>
+                    <ul style="font-size:0.85rem; color:var(--slate-300); list-style:none;">
+                        <li style="margin-bottom:0.4rem;">• Higher campaign engagement</li>
+                        <li style="margin-bottom:0.4rem;">• Optimized display banners</li>
+                    </ul>
                 </div>
                 <div class="card">
-                    <i data-lucide="share-2" style="color: var(--pink-400); margin-bottom: 1rem;"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Social Creative System</h3>
-                    <span style="display: inline-block; background: rgba(168, 85, 247, 0.1); color: var(--purple-400); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin-bottom: 1.5rem;">Role: Content Creator</span>
-                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--slate-500); text-transform: uppercase; margin-bottom: 0.5rem;">Solution</div>
-                    <p style="font-size: 0.875rem; color: var(--slate-300);">Created a structured visual system for cross-platform storytelling and consistency.</p>
+                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1.5rem;">
+                        <div class="n-icon"><i data-lucide="share-2" style="color:var(--pink-400)"></i></div>
+                        <span style="font-size:10px; font-weight:800; background:rgba(168,85,247,0.1); color:var(--purple-400); padding:4px 8px; border-radius:6px;">SOCIAL MEDIA</span>
+                    </div>
+                    <h3 style="margin-bottom:1rem">Social Storytelling System</h3>
+                    <div style="font-size:11px; color:var(--slate-500); text-transform:uppercase; font-weight:800; margin-bottom:0.5rem;">Impact</div>
+                    <ul style="font-size:0.85rem; color:var(--slate-300); list-style:none;">
+                        <li style="margin-bottom:0.4rem;">• Consistent brand identity</li>
+                        <li style="margin-bottom:0.4rem;">• Engaging cross-platform visuals</li>
+                    </ul>
                 </div>
                 <div class="card">
-                    <i data-lucide="monitor-play" style="color: var(--purple-400); margin-bottom: 1rem;"></i>
-                    <h3 style="margin-bottom: 0.5rem;">Marketing Video Production</h3>
-                    <span style="display: inline-block; background: rgba(168, 85, 247, 0.1); color: var(--purple-400); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin-bottom: 1.5rem;">Role: Video Editor</span>
-                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--slate-500); text-transform: uppercase; margin-bottom: 0.5rem;">Solution</div>
-                    <p style="font-size: 0.875rem; color: var(--slate-300);">Produced motion graphics that increased viewer retention and campaign storytelling impact.</p>
+                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1.5rem;">
+                        <div class="n-icon"><i data-lucide="monitor-play" style="color:var(--purple-400)"></i></div>
+                        <span style="font-size:10px; font-weight:800; background:rgba(168,85,247,0.1); color:var(--purple-400); padding:4px 8px; border-radius:6px;">MULTIMEDIA</span>
+                    </div>
+                    <h3 style="margin-bottom:1rem">Marketing Video Content</h3>
+                    <div style="font-size:11px; color:var(--slate-500); text-transform:uppercase; font-weight:800; margin-bottom:0.5rem;">Impact</div>
+                    <ul style="font-size:0.85rem; color:var(--slate-300); list-style:none;">
+                        <li style="margin-bottom:0.4rem;">• Enhanced audience engagement</li>
+                        <li style="margin-bottom:0.4rem;">• High-retention video assets</li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div id="resume" class="tab-panel">
-            <div class="resume-layout">
-                <div class="sidebar">
-                    <div class="card" style="margin-bottom: 1.5rem;">
-                        <h3 style="font-size: 1rem; margin-bottom: 1rem;">About Me</h3>
-                        <p style="font-size: 0.875rem; color: var(--slate-400); margin-bottom: 1rem;">I turn marketing ideas into high-impact visual experiences, focusing on campaign creatives and smarter AI workflows.</p>
-                        <div style="font-size: 0.875rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="phone" style="width:14px; color: var(--slate-500);"></i> 014-904 6253</div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="map-pin" style="width:14px; color: var(--slate-500);"></i> On-site / Remote</div>
+        <div id="resume" class="tab-pane">
+            <div class="resume-grid">
+                <div class="res-sidebar">
+                    <div class="sidebar-box">
+                        <h4 style="margin-bottom:1rem">About Me</h4>
+                        <p style="font-size:0.85rem; color:var(--slate-400)">Digital Creative Designer & Multimedia Producer who turns marketing ideas into high-impact visual experiences.</p>
+                        <hr style="border:none; border-top:1px solid var(--slate-800); margin:1.5rem 0;">
+                        <div style="font-size:0.85rem; display:flex; flex-direction:column; gap:0.8rem;">
+                            <div style="display:flex; align-items:center; gap:0.5rem;"><i data-lucide="phone" style="width:14px; color:var(--slate-500)"></i> 014-904 6253</div>
+                            <div style="display:flex; align-items:center; gap:0.5rem;"><i data-lucide="map-pin" style="width:14px; color:var(--slate-500)"></i> On-site / Remote</div>
                         </div>
                     </div>
-                    <div class="card">
-                        <h3 style="font-size: 1rem; margin-bottom: 1rem;">Technical Arsenal</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                            <span class="skill-tag">Premiere Pro</span>
-                            <span class="skill-tag">After Effects</span>
-                            <span class="skill-tag">Figma</span>
-                            <span class="skill-tag">Gemini AI</span>
-                            <span class="skill-tag">LTX</span>
-                            <span class="skill-tag">Photoshop</span>
+                    <div class="sidebar-box">
+                        <h4 style="margin-bottom:1.5rem">Technical Arsenal</h4>
+                        <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+                            <span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:11px; border:1px solid var(--slate-800);">Premiere Pro</span>
+                            <span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:11px; border:1px solid var(--slate-800);">After Effects</span>
+                            <span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:11px; border:1px solid var(--slate-800);">Figma</span>
+                            <span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:11px; border:1px solid var(--slate-800);">Gemini AI</span>
+                            <span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:11px; border:1px solid var(--slate-800);">HeyGen</span>
                         </div>
                     </div>
                 </div>
-
-                <div class="experience">
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                                <div>
-                                    <h4 style="font-size: 1.125rem; font-weight: 800; color: white;">Senior Multimedia Producer</h4>
-                                    <div style="color: var(--purple-400); font-weight: 600;">Deriv</div>
+                <div class="res-main">
+                    <div class="sidebar-box" style="height:100%">
+                        <h3 class="section-title" style="font-size:1.25rem"><i data-lucide="briefcase" style="color:var(--emerald-400)"></i> Professional Journey</h3>
+                        <div class="timeline">
+                            <div class="time-item">
+                                <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.5rem">
+                                    <h4 style="font-size:1.1rem">Senior Multimedia Producer</h4>
+                                    <span style="font-size:10px; background:var(--slate-800); padding:2px 8px; border-radius:4px; font-weight:800;">2024 - PRESENT</span>
                                 </div>
-                                <span style="background: var(--slate-800); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;">Aug 2024 - Present</span>
+                                <div style="color:var(--purple-400); font-weight:700; font-size:0.9rem; margin-bottom:0.75rem">Deriv</div>
+                                <p style="font-size:0.85rem; color:var(--slate-400)">Leveraging generative AI tools (Gemini, LTX, HeyGen) to streamline creative workflows and accelerate production.</p>
                             </div>
-                            <p style="font-size: 0.875rem; color: var(--slate-400);">Leveraging generative AI tools (Gemini, LTX, HeyGen) to streamline creative workflows and accelerate multimedia production.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                                <div>
-                                    <h4 style="font-size: 1.125rem; font-weight: 800; color: white;">Graphic Designer</h4>
-                                    <div style="color: var(--purple-400); font-weight: 600;">Deriv</div>
+                            <div class="time-item">
+                                <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.5rem">
+                                    <h4 style="font-size:1.1rem">Graphic Designer</h4>
+                                    <span style="font-size:10px; background:var(--slate-800); padding:2px 8px; border-radius:4px; font-weight:800;">2023 - 2024</span>
                                 </div>
-                                <span style="background: var(--slate-800); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;">Jul 2023 - Aug 2024</span>
+                                <div style="color:var(--purple-400); font-weight:700; font-size:0.9rem; margin-bottom:0.75rem">Deriv</div>
+                                <p style="font-size:0.85rem; color:var(--slate-400)">Designed visuals for PPC campaigns, social media, and internal magazines, ensuring brand consistency.</p>
                             </div>
-                            <p style="font-size: 0.875rem; color: var(--slate-400);">Designed visuals for PPC, social media, and internal SPARK magazine, ensuring global brand consistency.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                                <div>
-                                    <h4 style="font-size: 1.125rem; font-weight: 800; color: white;">Multimedia Designer</h4>
-                                    <div style="color: var(--purple-400); font-weight: 600;">KZ1</div>
+                            <div class="time-item">
+                                <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.5rem">
+                                    <h4 style="font-size:1.1rem">Multimedia Designer</h4>
+                                    <span style="font-size:10px; background:var(--slate-800); padding:2px 8px; border-radius:4px; font-weight:800;">2016 - 2022</span>
                                 </div>
-                                <span style="background: var(--slate-800); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;">Apr 2016 - Jun 2022</span>
+                                <div style="color:var(--purple-400); font-weight:700; font-size:0.9rem; margin-bottom:0.75rem">KZ1</div>
+                                <p style="font-size:0.85rem; color:var(--slate-400)">Produced marketing assets, event visuals, and photography to support global brand campaigns.</p>
                             </div>
-                            <p style="font-size: 0.875rem; color: var(--slate-400);">Produced marketing assets including event visuals, photography, and post-production video editing.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="cover" class="tab-panel">
-            <div class="card" style="max-width: 800px; margin: 0 auto; padding: 3rem; background: var(--slate-900);">
-                <div style="border-bottom: 1px solid var(--slate-800); padding-bottom: 1.5rem; margin-bottom: 2rem;">
-                    <h2 style="font-size: 1.5rem; color: white; margin-bottom: 0.5rem;">Subject: Creative Designer Application</h2>
-                    <p style="font-size: 0.875rem; color: var(--slate-500);">To: Global Digital Sales Creative Studio</p>
+        <div id="cover-letter" class="tab-pane">
+            <div class="card" style="max-width:800px; margin:0 auto; padding:3rem; background:var(--slate-900);">
+                <div style="border-bottom:1px solid var(--slate-800); padding-bottom:1.5rem; margin-bottom:2rem;">
+                    <h2 style="font-size:1.5rem; color:#fff; margin-bottom:0.5rem;">Creative Designer Application</h2>
+                    <p style="font-size:0.85rem; color:var(--slate-500)">Targeted: Global Digital Sales Studio</p>
                 </div>
-                <div style="font-size: 1rem; color: var(--slate-300); line-height: 1.8;">
-                    <p style="margin-bottom: 1.5rem;">Dear Hiring Manager,</p>
-                    <p style="margin-bottom: 1.5rem;">I am excited to apply for the Creative Designer role. With a background in multimedia production at Deriv, I have developed a passion for creating digital experiences that enhance brand storytelling through AI-augmented workflows.</p>
-                    <p style="margin-bottom: 1.5rem;">In my current role as a Senior Multimedia Producer, I collaborate with cross-functional teams to produce visual assets that ensure alignment with strategic goals while pushing the boundaries of creative efficiency.</p>
-                    <p style="margin-bottom: 1.5rem;">I would welcome the opportunity to bring my creative perspective and collaborative approach to your team.</p>
-                    <div style="margin-top: 3rem;">
+                <div style="font-size:1rem; color:var(--slate-300); display:flex; flex-direction:column; gap:1.5rem;">
+                    <p>Dear Hiring Manager,</p>
+                    <p>I am excited to apply for the Creative Designer role. With a background in multimedia production and digital visual design at Deriv, I have developed a strong passion for creating engaging digital experiences that support marketing objectives.</p>
+                    <p>In my current role as a Senior Multimedia Producer, I collaborate closely with cross-functional teams to design and produce visual assets across social media and promotional campaigns. My work involves translating marketing ideas into visually compelling designs using both traditional creative suites and emerging AI technologies.</p>
+                    <p>Thank you for your time and consideration.</p>
+                    <div style="margin-top:2rem">
                         <p>Warm regards,</p>
-                        <p style="font-weight: 800; color: white; font-size: 1.25rem; margin-top: 0.5rem;">Abby Airen</p>
-                        <p style="font-size: 0.875rem; color: var(--slate-500);">Digital Creative Designer</p>
+                        <p style="font-weight:800; color:#fff; font-size:1.2rem; margin-top:0.5rem;">Abby Airen</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>© <span id="year"></span> Abby Airen. Crafted for digital excellence.</p>
-        </div>
+    <footer style="margin-top:6rem; padding:4rem 0; border-top:1px solid var(--slate-800); text-align:center; color:var(--slate-500); font-size:0.8rem;">
+        <p>© <span id="year"></span> Abby Airen. Crafted for Creative Excellence.</p>
     </footer>
 
     <script>
-        // Set Year
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Tab Switching Logic
-        function showTab(tabId) {
-            // Update buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.innerText.toLowerCase().includes(tabId === 'cover' ? 'cover' : tabId)) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // Update panels
-            document.querySelectorAll('.tab-panel').forEach(panel => {
-                panel.classList.remove('active');
-            });
-            document.getElementById(tabId).classList.add('active');
-            
-            // Re-render icons for new content if necessary
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-pane");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
             lucide.createIcons();
         }
 
-        // Initialize Lucide Icons
         lucide.createIcons();
     </script>
 </body>
