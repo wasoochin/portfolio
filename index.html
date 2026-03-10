@@ -25,7 +25,6 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
             background-color: var(--slate-950);
             color: var(--slate-200);
@@ -33,7 +32,6 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
-
         .container { max-width: 1152px; margin: 0 auto; padding: 0 1.5rem; }
 
         /* --- Navigation --- */
@@ -47,7 +45,6 @@
         .nav-content { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
         .logo { font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; gap: 0.6rem; color: #fff; }
         .logo-sq { width: 32px; height: 32px; background: linear-gradient(135deg, var(--purple-500), var(--blue-500)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: white; }
-        
         .nav-btns { display: flex; gap: 0.75rem; }
         .btn-sm { padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: 0.2s; }
         .btn-white { background: #fff; color: var(--slate-950); }
@@ -60,9 +57,6 @@
             background: var(--slate-950); padding: 4rem; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 3rem;
         }
         .hero-bg-gradient { position: absolute; inset: 0; background: linear-gradient(to bottom right, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.9)); z-index: 1; }
-        .hero-orb { position: absolute; width: 40rem; height: 40rem; border-radius: 50%; filter: blur(100px); opacity: 0.1; z-index: 2; }
-        .orb-1 { top: -10rem; right: -10rem; background: var(--purple-500); }
-        .orb-2 { bottom: -10rem; left: -10rem; background: var(--blue-500); }
         .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 3rem 3rem; opacity: 0.3; z-index: 3; mask-image: radial-gradient(ellipse at center, black, transparent); }
 
         .hero-text { position: relative; z-index: 10; max-width: 55%; }
@@ -77,13 +71,13 @@
         .hero-sub { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
         .gradient-text { background: linear-gradient(to right, var(--purple-400), var(--pink-400), var(--blue-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* --- Workflow Card --- */
+        /* --- Dashboard Card --- */
         .work-card { width: 100%; max-width: 360px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 2rem; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
         .node { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; position: relative; }
-        .node:not(:last-child)::after { content: ''; position: absolute; left: 21px; top: 44px; width: 2px; height: 24px; background: linear-gradient(to bottom, var(--purple-500), var(--blue-500)); opacity: 0.3; }
+        .node:not(:last-child)::after { content: ''; position: absolute; left: 21px; top: 44px; width: 2px; height: 24px; background: linear-gradient(to bottom, var(--pink-500), var(--purple-500), var(--blue-500)); opacity: 0.3; }
         .n-icon { width: 44px; height: 44px; background: var(--slate-950); border: 1px solid var(--slate-700); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-        /* --- Tabs --- */
+        /* --- Tab Nav Bar --- */
         .tab-nav { display: flex; justify-content: center; gap: 3rem; border-bottom: 1px solid var(--slate-800); margin: 3rem auto 4rem; max-width: 800px; }
         .tab-link { background: none; border: none; padding-bottom: 0.75rem; color: var(--slate-500); font-weight: 700; cursor: pointer; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; transition: 0.2s; border-bottom: 2px solid transparent; }
         .tab-link.active { color: #fff; border-bottom-color: var(--purple-500); }
@@ -119,17 +113,10 @@
 
     <nav>
         <div class="container nav-content">
-            <div class="logo">
-                <div class="logo-sq">A</div>
-                Abby Airen
-            </div>
+            <div class="logo"><div class="logo-sq">A</div>Abby Airen</div>
             <div class="nav-btns">
-                <a href="mailto:wawagraphic@gmail.com" class="btn-sm btn-white">
-                    <i data-lucide="mail" style="width:16px"></i> Let's Talk
-                </a>
-                <a href="https://www.linkedin.com/in/abby-wasoochin/" target="_blank" class="btn-sm btn-dark">
-                    <i data-lucide="linkedin" style="width:16px"></i> <span class="hidden sm:inline">LinkedIn</span>
-                </a>
+                <a href="mailto:wawagraphic@gmail.com" class="btn-sm btn-white"><i data-lucide="mail" style="width:16px"></i> Let's Talk</a>
+                <a href="https://www.linkedin.com/in/abby-wasoochin/" target="_blank" class="btn-sm btn-dark"><i data-lucide="linkedin" style="width:16px"></i> <span class="hidden sm:inline">LinkedIn</span></a>
             </div>
         </div>
     </nav>
@@ -137,10 +124,7 @@
     <main class="container">
         <section class="hero-banner">
             <div class="hero-bg-gradient"></div>
-            <div class="hero-orb orb-1"></div>
-            <div class="hero-orb orb-2"></div>
             <div class="hero-grid"></div>
-            
             <div class="hero-text">
                 <div class="badge-avail">
                     <span class="dot-ping"></span>
@@ -186,13 +170,10 @@
         </div>
 
         <div id="portfolio" class="tab-pane active">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem;">
-                <h2 style="font-size:1.8rem; font-weight:800; display:flex; align-items:center; gap:0.75rem;">
-                    <i data-lucide="award" style="color:var(--purple-400)"></i> Featured Case Studies
-                </h2>
-            </div>
-            <div class="grid-3" id="case-studies-grid">
-                </div>
+            <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:2.5rem; display:flex; align-items:center; gap:0.75rem;">
+                <i data-lucide="award" style="color:var(--purple-400)"></i> Featured Case Studies
+            </h2>
+            <div class="grid-3" id="case-studies-grid"></div>
         </div>
 
         <div id="resume" class="tab-pane">
@@ -200,13 +181,17 @@
                 <div class="res-sidebar">
                     <div class="sidebar-box">
                         <h4 style="margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem;"><span style="width:4px; height:18px; background:var(--purple-500); border-radius:2px;"></span> About Me</h4>
-                        <div id="about-content" style="font-size:0.9rem; color:var(--slate-400); display:flex; flex-direction:column; gap:1rem;">
-                            </div>
+                        <div id="about-content" style="font-size:0.9rem; color:var(--slate-400); display:flex; flex-direction:column; gap:1rem;"></div>
+                        <hr style="border:none; border-top:1px solid var(--slate-800); margin:1.5rem 0;">
+                        <div style="display:flex; flex-direction:column; gap:0.8rem; font-size:0.85rem;">
+                            <div style="display:flex; align-items:center; gap:10px;"><i data-lucide="mail" style="width:16px; color:var(--slate-500)"></i> wawagraphic@gmail.com</div>
+                            <div style="display:flex; align-items:center; gap:10px;"><i data-lucide="phone" style="width:16px; color:var(--slate-500)"></i> 014-904 6253</div>
+                            <div style="display:flex; align-items:center; gap:10px;"><i data-lucide="map-pin" style="width:16px; color:var(--slate-500)"></i> On-site / Hybrid / Remote</div>
+                        </div>
                     </div>
                     <div class="sidebar-box">
                         <h4 style="margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem;"><span style="width:4px; height:18px; background:var(--blue-500); border-radius:2px;"></span> Technical Arsenal</h4>
-                        <div id="skills-content">
-                            </div>
+                        <div id="skills-content"></div>
                     </div>
                 </div>
                 <div class="res-main">
@@ -214,8 +199,7 @@
                         <h3 style="font-size:1.5rem; font-weight:800; margin-bottom:2.5rem; display:flex; align-items:center; gap:0.75rem;">
                             <i data-lucide="briefcase" style="color:var(--emerald-400)"></i> Professional Journey
                         </h3>
-                        <div class="timeline" id="experience-timeline">
-                            </div>
+                        <div class="timeline" id="experience-timeline"></div>
                     </div>
                 </div>
             </div>
@@ -224,107 +208,100 @@
         <div id="cover-letter" class="tab-pane">
             <div class="card" style="max-width:850px; margin:0 auto; padding:3.5rem; background:var(--slate-900);">
                 <div style="border-bottom:1px solid var(--slate-800); padding-bottom:2rem; margin-bottom:2.5rem;">
-                    <h2 style="font-size:1.75rem; color:#fff; margin-bottom:0.5rem;">Application for Creative Designer</h2>
+                    <h2 style="font-size:1.75rem; color:#fff; margin-bottom:0.5rem;">Subject: Application for Creative Designer</h2>
                     <p style="font-size:0.9rem; color:var(--slate-500);">Targeted: Global Digital Sales Creative Studio</p>
                 </div>
-                <div style="font-size:1.05rem; color:var(--slate-300); display:flex; flex-direction:column; gap:1.5rem; line-height:1.8;">
+                <div style="font-size:1rem; color:var(--slate-300); line-height:1.8; display:flex; flex-direction:column; gap:1.5rem;">
                     <p>Dear Hiring Manager,</p>
-                    <p>I am excited to apply for the Creative Designer role. With a background in multimedia production and digital visual design at <strong>Deriv</strong>, I have developed a strong passion for creating engaging digital experiences that support marketing objectives.</p>
-                    <p>In my current role as a Senior Multimedia Producer, I collaborate closely with cross-functional teams to design and produce visual assets while ensuring alignment with brand guidelines. I am particularly interested in how AI tools can enhance these creative workflows.</p>
-                    <p>Thank you for your time and consideration.</p>
+                    <p>I am excited to apply for the Creative Designer role. With a background in multimedia production and digital visual design at <strong>Deriv</strong>, I have developed a strong passion for creating engaging digital experiences that support marketing objectives and enhance brand storytelling.</p>
+                    <p>In my current role as a Senior Multimedia Producer, I collaborate closely with cross-functional teams to design and produce visual assets while ensuring alignment with brand guidelines and strategic goals.</p>
+                    <p>I actively explore emerging technologies like <strong>Gemini and AI-assisted tools</strong> to enhance creative workflows and improve production efficiency.</p>
+                    <p>Thank you for your consideration.</p>
                     <div style="margin-top:2.5rem">
                         <p>Warm regards,</p>
-                        <p style="font-weight:900; color:#fff; font-size:1.3rem; margin-top:0.5rem;">Abby Airen</p>
+                        <p style="font-weight:900; color:#fff; font-size:1.2rem; margin-top:0.5rem;">Abby Airen</p>
+                        <p style="font-size:0.9rem; color:var(--slate-500)">Digital Creative Designer | Senior Multimedia Producer</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>© <span id="year"></span> Abby Airen. Crafted for Creative Excellence.</p>
-        </div>
+    <footer style="margin-top:6rem; padding:4rem 0; border-top:1px solid var(--slate-800); text-align:center; color:var(--slate-500); font-size:0.85rem;">
+        <p>© <span id="year"></span> Abby Airen. Crafted for Creative Excellence.</p>
     </footer>
 
     <script>
-        // --- Data preserving all React content ---
         const DATA = {
             caseStudies: [
-                { id: 1, title: "Digital Marketing Campaigns", role: "Digital Designer", icon: "megaphone", color: "var(--blue-400)", problem: "Brand campaigns needed stronger digital engagement.", solution: "Designed visuals across social media and display advertising.", impact: ["Improved visibility", "Higher engagement"] },
-                { id: 2, title: "Social Creative System", role: "Content Creator", icon: "share-2", color: "var(--pink-400)", problem: "Inconsistent visual identity across platforms.", solution: "Created a structured system for social media storytelling.", impact: ["Stronger consistency", "Improved audience engagement"] },
-                { id: 3, title: "Multimedia Marketing Video", role: "Video Editor", icon: "monitor-play", color: "var(--purple-400)", problem: "Static creatives lacked audience attention.", solution: "Produced motion graphics and storytelling video content.", impact: ["Higher retention", "Stronger storytelling"] }
+                { id: 1, title: "Digital Marketing Campaigns", role: "Digital Designer", icon: "megaphone", color: "var(--blue-400)", problem: "Brand campaigns needed engagement.", solution: "Designed visuals across social media and display advertising.", impact: ["Improved visibility", "Higher engagement"] },
+                { id: 2, title: "Social Creative System", role: "Content Creator", icon: "share-2", color: "var(--pink-400)", problem: "Inconsistent visual identity.", solution: "Created a structured system for social media storytelling.", impact: ["Stronger brand consistency", "Improved engagement"] },
+                { id: 3, title: "Multimedia Marketing Video", role: "Video Editor", icon: "monitor-play", color: "var(--purple-400)", problem: "Static creatives lacked attention.", solution: "Produced motion graphics and storytelling video content.", impact: ["Higher viewer retention", "Stronger campaign storytelling"] }
             ],
             experience: [
-                { role: "Senior Multimedia Producer", company: "Deriv", period: "Aug 2024 – Present", desc: "Leveraging generative AI tools (Gemini, LTX, HeyGen) to streamline creative workflows and accelerate multimedia production." },
-                { role: "Graphic Designer", company: "Deriv", period: "Jul 2023 – Aug 2024", desc: "Designed high-impact visuals for social media, PPC campaigns, and internal SPARK magazine." },
-                { role: "Multimedia Designer", company: "KZ1", period: "Apr 2016 – Jun 2022", desc: "Produced marketing assets including social content, photography, and post-production editing." }
+                { role: "Senior Multimedia Producer", company: "Deriv", period: "Aug 2024 – Present", desc: "Leveraging generative AI tools including Gemini, LTX, HeyGen, and Freepik AI Suite to streamline creative workflows and accelerate multimedia production." },
+                { role: "Graphic Designer", company: "Deriv", period: "Jul 2023 – Aug 2024", desc: "Designed high-impact visuals for social media, PPC campaigns, events, and internal SPARK magazine." },
+                { role: "Multimedia Designer", company: "KZ1", period: "Apr 2016 – Jun 2022", desc: "Produced multimedia marketing assets including social media content, photography, and post-production editing." }
             ],
             skills: [
-                { cat: "Production", items: ["Video Production", "Motion Graphics", "Visual Storytelling"], icon: "video" },
+                { cat: "Production", items: ["Video Production", "Visual Storytelling", "Post-production"], icon: "video" },
                 { cat: "AI & Automation", items: ["Prompt Engineering", "Generative AI", "Workflow Automation"], icon: "bot" },
                 { cat: "Tools", items: ["Premiere Pro", "After Effects", "Figma", "Gemini API"], icon: "wrench" }
             ],
             about: [
                 "I’m a Digital Creative Designer and Multimedia Producer who turns marketing ideas into high-impact visual experiences.",
-                "My work focuses on digital campaign creatives, social media storytelling, and multimedia content that strengthen brand communication.",
+                "My work focuses on digital campaign creatives, social media storytelling, and multimedia content that strengthen brand communication and audience engagement.",
                 "I’m also passionate about improving creative workflows by exploring AI-assisted tools."
             ]
         };
 
-        // --- Tab Logic ---
         function switchTab(evt, tabName) {
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
             evt.currentTarget.classList.add('active');
-            window.scrollTo({ top: document.querySelector('.tab-nav').offsetTop - 100, behavior: 'smooth' });
+            lucide.createIcons();
         }
 
-        // --- Render Content ---
         function init() {
-            // Case Studies
+            // Render CS
             document.getElementById('case-studies-grid').innerHTML = DATA.caseStudies.map(s => `
                 <div class="card">
-                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1.5rem;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
                         <div class="n-icon"><i data-lucide="${s.icon}" style="color:${s.color}"></i></div>
-                        <span style="font-size:10px; font-weight:800; background:rgba(168,85,247,0.1); color:var(--purple-400); padding:4px 10px; border-radius:8px;">${s.role}</span>
+                        <span style="font-size:10px; font-weight:800; background:rgba(168,85,247,0.1); color:var(--purple-400); padding:4px 8px; border-radius:6px;">${s.role}</span>
                     </div>
                     <h3 style="margin-bottom:1rem; color:white;">${s.title}</h3>
-                    <div style="font-size:11px; color:var(--slate-500); text-transform:uppercase; font-weight:800; margin-bottom:0.5rem;">Solution</div>
-                    <p style="font-size:0.9rem; color:var(--slate-300); margin-bottom:1.5rem;">${s.solution}</p>
-                    <div style="margin-top:auto;">
-                        <div style="font-size:11px; color:var(--slate-500); text-transform:uppercase; font-weight:800; margin-bottom:0.5rem;">Impact</div>
-                        <ul style="list-style:none; color:var(--slate-400); font-size:0.85rem;">
-                            ${s.impact.map(i => `<li style="display:flex; align-items:center; gap:8px; margin-bottom:4px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--emerald-500)"></span>${i}</li>`).join('')}
-                        </ul>
+                    <p style="font-size:0.9rem; color:var(--slate-300); margin-bottom:1rem;">${s.solution}</p>
+                    <div style="margin-top:auto; font-size:0.85rem; color:var(--slate-400);">
+                        ${s.impact.map(i => `<div style="display:flex; align-items:center; gap:6px; margin-top:4px;"><span style="width:6px; height:6px; background:var(--emerald-500); border-radius:50%;"></span>${i}</div>`).join('')}
                     </div>
                 </div>
             `).join('');
 
-            // About
+            // Render About
             document.getElementById('about-content').innerHTML = DATA.about.map(p => `<p>${p}</p>`).join('');
 
-            // Skills
+            // Render Skills
             document.getElementById('skills-content').innerHTML = DATA.skills.map(s => `
                 <div style="margin-bottom:1.5rem;">
                     <div style="font-size:0.75rem; font-weight:800; color:var(--slate-500); text-transform:uppercase; margin-bottom:0.75rem; display:flex; align-items:center; gap:6px;">
                         <i data-lucide="${s.icon}" style="width:14px"></i> ${s.cat}
                     </div>
                     <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
-                        ${s.items.map(i => `<span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:0.75rem; border:1px solid var(--slate-800); color:var(--slate-300);">${i}</span>`).join('')}
+                        ${s.items.map(i => `<span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:0.75rem; border:1px solid var(--slate-800);">${i}</span>`).join('')}
                     </div>
                 </div>
             `).join('');
 
-            // Experience
+            // Render Exp
             document.getElementById('experience-timeline').innerHTML = DATA.experience.map(e => `
                 <div class="time-item">
                     <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.5rem; flex-wrap:wrap; gap:10px;">
                         <h4 style="font-size:1.2rem; font-weight:800; color:white;">${e.role}</h4>
-                        <span style="font-size:0.7rem; background:var(--slate-800); padding:4px 12px; border-radius:99px; font-weight:800;">${e.period}</span>
+                        <span style="font-size:0.7rem; background:var(--slate-800); padding:4px 12px; border-radius:99px;">${e.period}</span>
                     </div>
-                    <div style="color:var(--purple-400); font-weight:700; font-size:1rem; margin-bottom:0.75rem;">${e.company}</div>
+                    <div style="color:var(--purple-400); font-weight:700; margin-bottom:0.75rem;">${e.company}</div>
                     <p style="font-size:0.9rem; color:var(--slate-400);">${e.desc}</p>
                 </div>
             `).join('');
