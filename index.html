@@ -15,313 +15,108 @@
             --slate-400: #94a3b8;
             --slate-300: #cbd5e1;
             --slate-200: #e2e8f0;
-            --purple-500: #a855f7;
             --purple-400: #c084fc;
+            --purple-500: #a855f7;
+            --blue-400: #60a5fa;
             --blue-500: #3b82f6;
+            --pink-400: #f472b6;
+            --emerald-400: #34d399;
             --emerald-500: #10b981;
+            --orange-400: #fb923c;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--slate-950);
             color: var(--slate-200);
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            line-height: 1.5;
-            selection-background-color: rgba(168, 85, 247, 0.3);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1152px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
+        .container { max-width: 1152px; margin: 0 auto; padding: 0 1.5rem; }
 
         /* --- Navigation --- */
         nav {
-            position: sticky;
-            top: 0;
-            z-index: 50;
+            position: sticky; top: 0; z-index: 50;
             backdrop-filter: blur(12px);
             background-color: rgba(2, 6, 23, 0.8);
             border-bottom: 1px solid var(--slate-800);
             padding: 1rem 0;
         }
 
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
 
-        .logo {
-            font-weight: 700;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: white;
-        }
-
-        .logo-icon {
-            width: 2rem;
-            height: 2rem;
+        .logo { font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; color: white; }
+        .logo-box {
+            width: 2rem; height: 2rem; border-radius: 8px;
             background: linear-gradient(to bottom right, var(--purple-500), var(--blue-500));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
+            display: flex; align-items: center; justify-content: center; font-size: 0.875rem;
         }
 
-        .tab-group {
-            background: var(--slate-900);
-            padding: 0.25rem;
-            border-radius: 9999px;
-            border: 1px solid var(--slate-800);
-            display: flex;
+        .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+        .btn-talk { background: white; color: var(--slate-950); padding: 0.5rem 1rem; border-radius: 12px; font-weight: 600; text-decoration: none; font-size: 0.875rem; transition: 0.2s; }
+        .btn-social { background: var(--slate-900); border: 1px solid var(--slate-800); color: white; padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.875rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: 0.2s; }
+        .btn-talk:hover { background: var(--slate-200); }
+        .btn-social:hover { background: var(--slate-800); }
+
+        /* --- Hero Banner --- */
+        .hero-banner {
+            position: relative; width: 100%; border-radius: 2.5rem; overflow: hidden;
+            border: 1px solid var(--slate-800); background: var(--slate-950);
+            margin-top: 2rem; margin-bottom: 3rem; min-h: 480px; display: flex; align-items: center;
         }
 
-        .tab-btn {
-            padding: 0.5rem 1.5rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            border: none;
-            background: transparent;
-            color: var(--slate-400);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .hero-bg { position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.15), transparent), radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.1), transparent); z-index: 1; }
+        .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 3rem 3rem; opacity: 0.3; z-index: 2; }
 
-        .tab-btn.active {
-            background: var(--slate-800);
-            color: white;
-        }
+        .hero-content { position: relative; z-index: 10; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; width: 100%; padding: 4rem; align-items: center; }
 
-        /* --- Hero Section --- */
-        .hero {
-            padding: 5rem 0;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        @media (max-width: 1024px) { .hero-content { grid-template-columns: 1fr; padding: 3rem 2rem; text-align: left; } }
 
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 0.75rem;
-            background: rgba(168, 85, 247, 0.1);
-            color: var(--purple-400);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            margin-bottom: 1.5rem;
-        }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--slate-700); border-radius: 999px; margin-bottom: 1.5rem; }
+        .status-dot { width: 10px; height: 10px; background: var(--emerald-500); border-radius: 50%; position: relative; }
+        .status-dot::after { content: ''; position: absolute; inset: 0; background: var(--emerald-400); border-radius: 50%; animation: ping 1.5s infinite; }
+        @keyframes ping { 75%, 100% { transform: scale(2.5); opacity: 0; } }
 
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: var(--purple-500);
-            border-radius: 50%;
-            position: relative;
-        }
+        h1.name { font-size: 5rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1; margin-bottom: 1rem; }
+        .hero-titles { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1.5rem; }
+        .title-gradient { background: linear-gradient(to right, var(--purple-400), var(--pink-400), var(--blue-400)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.75rem; font-weight: 700; }
+        .hero-tagline { font-size: 1.25rem; color: var(--slate-400); font-weight: 300; max-width: 500px; }
 
-        .dot::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--purple-400);
-            border-radius: 50%;
-            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
+        /* --- Dashboard Card --- */
+        .dashboard-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 1.5rem; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .pipeline-node { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; position: relative; z-index: 2; }
+        .node-icon { width: 44px; height: 44px; background: var(--slate-950); border: 1px solid var(--slate-700); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .pipeline-node:not(:last-child)::after { content: ''; position: absolute; left: 21px; top: 44px; height: 24px; width: 2px; background: linear-gradient(to bottom, var(--purple-500), var(--blue-500)); opacity: 0.3; }
 
-        @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+        /* --- Tabs --- */
+        .tab-switcher { display: flex; gap: 0.5rem; background: var(--slate-900); padding: 0.5rem; border-radius: 999px; border: 1px solid var(--slate-800); width: fit-content; margin: 3rem auto; }
+        .tab-btn { border: none; background: transparent; color: var(--slate-400); padding: 0.75rem 1.5rem; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 0.875rem; transition: 0.2s; }
+        .tab-btn.active { background: var(--slate-800); color: white; }
 
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--slate-200), var(--slate-400));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-        }
+        .tab-panel { display: none; animation: slideIn 0.4s ease-out; }
+        .tab-panel.active { display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .tagline {
-            font-size: 1.25rem;
-            color: var(--slate-400);
-            max-width: 42rem;
-            margin-bottom: 2.5rem;
-            font-weight: 300;
-        }
+        /* --- Grid Layouts --- */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .card { background: var(--slate-900); border: 1px solid var(--slate-800); padding: 1.5rem; border-radius: 1.25rem; transition: 0.3s; }
+        .card:hover { border-color: var(--slate-700); transform: translateY(-4px); }
 
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-
-        .btn-primary { background: white; color: var(--slate-950); }
-        .btn-secondary { background: var(--slate-900); color: white; border: 1px solid var(--slate-800); }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-
-        /* --- Content Tabs --- */
-        .tab-content { display: none; animation: fadeIn 0.5s ease-out; }
-        .tab-content.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Portfolio Grid --- */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .card {
-            background: var(--slate-900);
-            border: 1px solid var(--slate-800);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            transition: 0.3s;
-        }
-
-        .card:hover { border-color: var(--slate-700); }
-
-        .card-icon {
-            width: 3rem;
-            height: 3rem;
-            background: var(--slate-950);
-            border: 1px solid var(--slate-800);
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .role-badge {
-            background: rgba(168, 85, 247, 0.1);
-            color: var(--purple-400);
-            padding: 0.25rem 0.75rem;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-        }
-
-        .section-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--slate-500);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-        }
-
-        .impact-list { list-style: none; margin-top: 0.5rem; }
-        .impact-list li {
-            font-size: 0.875rem;
-            color: var(--slate-300);
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .impact-list li::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--emerald-500);
-            border-radius: 50%;
-            margin-top: 6px;
-            flex-shrink: 0;
-        }
-
-        /* --- Resume Styles --- */
-        .resume-layout {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2.5rem;
-        }
-
+        /* --- Resume Section --- */
+        .resume-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 2.5rem; }
         @media (max-width: 768px) { .resume-layout { grid-template-columns: 1fr; } }
+        
+        .timeline { position: relative; padding-left: 2.5rem; border-left: 2px solid var(--slate-800); margin-left: 1rem; }
+        .timeline-item { position: relative; margin-bottom: 2.5rem; }
+        .timeline-item::before { content: ''; position: absolute; left: calc(-2.5rem - 7px); top: 5px; width: 12px; height: 12px; background: var(--slate-800); border-radius: 50%; border: 4px solid var(--slate-950); transition: 0.3s; }
+        .timeline-item:hover::before { background: var(--purple-500); transform: scale(1.3); }
 
-        .sidebar-section {
-            background: var(--slate-900);
-            padding: 2rem;
-            border-radius: 1.5rem;
-            border: 1px solid var(--slate-800);
-            margin-bottom: 2rem;
-        }
+        .skill-tag { background: var(--slate-950); border: 1px solid var(--slate-800); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; color: var(--slate-400); font-weight: 500; }
 
-        .timeline {
-            position: relative;
-            padding-left: 2rem;
-            border-left: 2px solid var(--slate-800);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 2.5rem;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: calc(-2rem - 6px);
-            top: 0;
-            width: 10px;
-            height: 10px;
-            background: var(--slate-800);
-            border: 4px solid var(--slate-950);
-            border-radius: 50%;
-        }
-
-        /* --- Cover Letter --- */
-        .letter-card {
-            background: var(--slate-900);
-            padding: 3rem;
-            border-radius: 1.5rem;
-            border: 1px solid var(--slate-800);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        footer {
-            margin-top: 4rem;
-            padding: 2rem 0;
-            border-top: 1px solid var(--slate-800);
-            text-align: center;
-            color: var(--slate-500);
-            font-size: 0.875rem;
-        }
+        footer { border-top: 1px solid var(--slate-800); padding: 2.5rem 0; text-align: center; color: var(--slate-500); font-size: 0.875rem; margin-top: 4rem; }
     </style>
 </head>
 <body>
@@ -329,100 +124,206 @@
     <nav>
         <div class="container nav-content">
             <div class="logo">
-                <div class="logo-icon">A</div>
+                <div class="logo-box">A</div>
                 Abby Airen
             </div>
-            <div class="tab-group">
-                <button class="tab-btn active" onclick="switchTab('portfolio')">Case Studies</button>
-                <button class="tab-btn" onclick="switchTab('resume')">Interactive Resume</button>
-                <button class="tab-btn" onclick="switchTab('cover-letter')">Cover Letter</button>
+            <div class="nav-actions">
+                <a href="mailto:wawagraphic@gmail.com" class="btn-talk">
+                    <i data-lucide="mail" style="width:16px; height:16px; vertical-align:middle;"></i> Let's Talk
+                </a>
+                <a href="https://www.linkedin.com/in/abby-wasoochin/" target="_blank" class="btn-social">
+                    <i data-lucide="linkedin" style="width:16px; height:16px;"></i> <span>LinkedIn</span>
+                </a>
             </div>
         </div>
     </nav>
 
     <main class="container">
-        <section class="hero">
-            <div class="badge">
-                <span class="dot"></span>
-                Available for new opportunities
+        <div class="hero-banner">
+            <div class="hero-bg"></div>
+            <div class="hero-grid"></div>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">
+                        <span class="status-dot"></span>
+                        <span style="font-size: 0.7rem; font-weight: 700; color: var(--slate-300); text-transform: uppercase; letter-spacing: 0.1em;">Available for new opportunities</span>
+                    </div>
+                    <h1 class="name">Abby Airen</h1>
+                    <div class="hero-titles">
+                        <span class="title-gradient">Digital Creative Designer</span>
+                        <span style="color: var(--slate-700); font-size: 1.5rem;">|</span>
+                        <span style="font-size: 1.5rem; font-weight: 700; color: var(--slate-300);">Multimedia Producer</span>
+                    </div>
+                    <p class="hero-tagline">Designing high-impact digital marketing creatives across social media, display campaigns, and multimedia storytelling.</p>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="dashboard-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-800); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                            <span style="font-size: 0.7rem; font-weight: 800; color: var(--slate-500); text-transform: uppercase;">Workflow System</span>
+                            <div style="display: flex; gap: 4px;">
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--slate-800);"></div>
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--slate-800);"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="pipeline-node">
+                            <div class="node-icon"><i data-lucide="pen-tool" style="color: var(--pink-400); width: 20px;"></i></div>
+                            <div>
+                                <div style="font-size: 0.875rem; font-weight: 700;">Design & Ideation</div>
+                                <div style="font-size: 0.75rem; color: var(--slate-500);">Figma • Creative Suite</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-node">
+                            <div class="node-icon" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.4);"><i data-lucide="sparkles" style="color: var(--purple-400); width: 20px;"></i></div>
+                            <div>
+                                <div style="font-size: 0.875rem; font-weight: 700;">AI Automation</div>
+                                <div style="font-size: 0.75rem; color: var(--slate-500);">Gemini • LTX • GenAI</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-node">
+                            <div class="node-icon"><i data-lucide="clapperboard" style="color: var(--blue-400); width: 20px;"></i></div>
+                            <div>
+                                <div style="font-size: 0.875rem; font-weight: 700;">Multimedia Output</div>
+                                <div style="font-size: 0.75rem; color: var(--slate-500);">Video • Campaigns</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h1>Digital Creative Designer & Multimedia Producer</h1>
-            <p class="tagline">Designing impactful digital experiences and marketing visuals that connect brands with audiences through strategic storytelling.</p>
-            <div class="btn-group">
-                <a href="mailto:wawagraphic@gmail.com" class="btn btn-primary"><i data-lucide="mail"></i> Let's Talk</a>
-                <a href="https://www.linkedin.com/in/abby-wasoochin/" class="btn btn-secondary" target="_blank">
-<i data-lucide="linkedin"></i> LinkedIn
-</a>
-                <a href="#" class="btn btn-secondary"><i data-lucide="github"></i> GitHub</a>
+        </div>
+
+        <section style="margin-bottom: 4rem;">
+            <h2 style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem; margin-bottom: 1.5rem;">
+                <span style="width: 6px; height: 24px; background: var(--purple-500); border-radius: 3px;"></span> Core Strengths
+            </h2>
+            <div class="grid-3">
+                <div class="card">
+                    <i data-lucide="layout-dashboard" style="color: var(--blue-400); margin-bottom: 1rem;"></i>
+                    <h3 style="margin-bottom: 0.75rem;">Digital Marketing Creative</h3>
+                    <p style="font-size: 0.875rem; color: var(--slate-400);">Designing campaign visuals across social media, display banners, and digital advertising.</p>
+                </div>
+                <div class="card">
+                    <i data-lucide="film" style="color: var(--purple-400); margin-bottom: 1rem;"></i>
+                    <h3 style="margin-bottom: 0.75rem;">Multimedia Production</h3>
+                    <p style="font-size: 0.875rem; color: var(--slate-400);">Creating engaging visual storytelling through video production and motion graphics.</p>
+                </div>
+                <div class="card">
+                    <i data-lucide="sparkles" style="color: var(--emerald-400); margin-bottom: 1rem;"></i>
+                    <h3 style="margin-bottom: 0.75rem;">AI-Augmented Workflow</h3>
+                    <p style="font-size: 0.875rem; color: var(--slate-400);">Leveraging generative AI tools to streamline creative production and asset workflows.</p>
+                </div>
             </div>
         </section>
 
-        <div id="portfolio" class="tab-content active">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
-                <h2 style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.875rem;">
-                    <i data-lucide="award" style="color: var(--purple-400)"></i> Featured Case Studies
-                </h2>
-            </div>
-            
-            <div class="grid" id="case-studies-grid">
-                </div>
+        <div class="tab-switcher">
+            <button class="tab-btn active" onclick="showTab('portfolio')">Case Studies</button>
+            <button class="tab-btn" onclick="showTab('resume')">Interactive Resume</button>
+            <button class="tab-btn" onclick="showTab('cover')">Cover Letter</button>
+        </div>
 
-            <div style="margin-top: 4rem; border-top: 1px solid var(--slate-800); padding-top: 2rem;">
-                <h3 style="margin-bottom: 1.5rem;">Visual Showcase Archive</h3>
-                <div class="card" style="padding: 1rem; background: var(--slate-950);">
-                    <iframe src="https://www.behance.net/embed/project/171222733?ilo0=1" height="500" width="100%" allowfullscreen frameborder="0" style="border-radius: 8px;"></iframe>
+        <div id="portfolio" class="tab-panel active">
+            <div class="grid-3">
+                <div class="card">
+                    <i data-lucide="megaphone" style="color: var(--blue-400); margin-bottom: 1rem;"></i>
+                    <h3 style="margin-bottom: 0.5rem;">Digital Marketing Campaigns</h3>
+                    <span style="display: inline-block; background: rgba(168, 85, 247, 0.1); color: var(--purple-400); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin-bottom: 1.5rem;">Role: Digital Designer</span>
+                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--slate-500); text-transform: uppercase; margin-bottom: 0.5rem;">Solution</div>
+                    <p style="font-size: 0.875rem; color: var(--slate-300);">Designed visuals across social media and display advertising, leading to improved visibility.</p>
+                </div>
+                <div class="card">
+                    <i data-lucide="share-2" style="color: var(--pink-400); margin-bottom: 1rem;"></i>
+                    <h3 style="margin-bottom: 0.5rem;">Social Creative System</h3>
+                    <span style="display: inline-block; background: rgba(168, 85, 247, 0.1); color: var(--purple-400); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin-bottom: 1.5rem;">Role: Content Creator</span>
+                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--slate-500); text-transform: uppercase; margin-bottom: 0.5rem;">Solution</div>
+                    <p style="font-size: 0.875rem; color: var(--slate-300);">Created a structured visual system for cross-platform storytelling and consistency.</p>
+                </div>
+                <div class="card">
+                    <i data-lucide="monitor-play" style="color: var(--purple-400); margin-bottom: 1rem;"></i>
+                    <h3 style="margin-bottom: 0.5rem;">Marketing Video Production</h3>
+                    <span style="display: inline-block; background: rgba(168, 85, 247, 0.1); color: var(--purple-400); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin-bottom: 1.5rem;">Role: Video Editor</span>
+                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--slate-500); text-transform: uppercase; margin-bottom: 0.5rem;">Solution</div>
+                    <p style="font-size: 0.875rem; color: var(--slate-300);">Produced motion graphics that increased viewer retention and campaign storytelling impact.</p>
                 </div>
             </div>
         </div>
 
-        <div id="resume" class="tab-content">
+        <div id="resume" class="tab-panel">
             <div class="resume-layout">
                 <div class="sidebar">
-                    <div class="sidebar-section">
-                        <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
-                            <span style="width: 4px; height: 24px; background: var(--purple-500); border-radius: 2px;"></span> About Me
-                        </h3>
-                        <p style="font-size: 0.875rem; color: var(--slate-400); margin-bottom: 1.5rem;" id="about-text"></p>
-                        <div style="font-size: 0.875rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                            <span><i data-lucide="mail" style="width: 14px; vertical-align: middle;"></i> wawagraphic@gmail.com</span>
-                            <span><i data-lucide="map-pin" style="width: 14px; vertical-align: middle;"></i> Global / Remote</span>
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1rem; margin-bottom: 1rem;">About Me</h3>
+                        <p style="font-size: 0.875rem; color: var(--slate-400); margin-bottom: 1rem;">I turn marketing ideas into high-impact visual experiences, focusing on campaign creatives and smarter AI workflows.</p>
+                        <div style="font-size: 0.875rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="phone" style="width:14px; color: var(--slate-500);"></i> 014-904 6253</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="map-pin" style="width:14px; color: var(--slate-500);"></i> On-site / Remote</div>
                         </div>
                     </div>
-
-                    <div class="sidebar-section">
-                        <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
-                            <span style="width: 4px; height: 24px; background: var(--blue-500); border-radius: 2px;"></span> Skills
-                        </h3>
-                        <div id="skills-list"></div>
+                    <div class="card">
+                        <h3 style="font-size: 1rem; margin-bottom: 1rem;">Technical Arsenal</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <span class="skill-tag">Premiere Pro</span>
+                            <span class="skill-tag">After Effects</span>
+                            <span class="skill-tag">Figma</span>
+                            <span class="skill-tag">Gemini AI</span>
+                            <span class="skill-tag">LTX</span>
+                            <span class="skill-tag">Photoshop</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="main-resume">
-                    <div class="sidebar-section" style="height: 100%;">
-                        <h3 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem;">
-                            <i data-lucide="briefcase" style="color: var(--emerald-500)"></i> Professional Journey
-                        </h3>
-                        <div class="timeline" id="experience-timeline">
+                <div class="experience">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <h4 style="font-size: 1.125rem; font-weight: 800; color: white;">Senior Multimedia Producer</h4>
+                                    <div style="color: var(--purple-400); font-weight: 600;">Deriv</div>
+                                </div>
+                                <span style="background: var(--slate-800); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;">Aug 2024 - Present</span>
                             </div>
+                            <p style="font-size: 0.875rem; color: var(--slate-400);">Leveraging generative AI tools (Gemini, LTX, HeyGen) to streamline creative workflows and accelerate multimedia production.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <h4 style="font-size: 1.125rem; font-weight: 800; color: white;">Graphic Designer</h4>
+                                    <div style="color: var(--purple-400); font-weight: 600;">Deriv</div>
+                                </div>
+                                <span style="background: var(--slate-800); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;">Jul 2023 - Aug 2024</span>
+                            </div>
+                            <p style="font-size: 0.875rem; color: var(--slate-400);">Designed visuals for PPC, social media, and internal SPARK magazine, ensuring global brand consistency.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <h4 style="font-size: 1.125rem; font-weight: 800; color: white;">Multimedia Designer</h4>
+                                    <div style="color: var(--purple-400); font-weight: 600;">KZ1</div>
+                                </div>
+                                <span style="background: var(--slate-800); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;">Apr 2016 - Jun 2022</span>
+                            </div>
+                            <p style="font-size: 0.875rem; color: var(--slate-400);">Produced marketing assets including event visuals, photography, and post-production video editing.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="cover-letter" class="tab-content">
-            <div class="letter-card">
+        <div id="cover" class="tab-panel">
+            <div class="card" style="max-width: 800px; margin: 0 auto; padding: 3rem; background: var(--slate-900);">
                 <div style="border-bottom: 1px solid var(--slate-800); padding-bottom: 1.5rem; margin-bottom: 2rem;">
-                    <h2 style="font-size: 1.5rem; color: white;">Subject: Application for Creative Designer</h2>
-                    <p style="color: var(--slate-500); font-size: 0.875rem;">Targeted: Digital Sales Creative Studio</p>
+                    <h2 style="font-size: 1.5rem; color: white; margin-bottom: 0.5rem;">Subject: Creative Designer Application</h2>
+                    <p style="font-size: 0.875rem; color: var(--slate-500);">To: Global Digital Sales Creative Studio</p>
                 </div>
-                <div style="color: var(--slate-300); display: flex; flex-direction: column; gap: 1.5rem;">
-                    <p>Dear Hiring Manager,</p>
-                    <p>I am excited to apply for the Creative Designer role. With a background in multimedia production and digital visual design, I have developed a strong passion for creating engaging digital experiences that support marketing objectives...</p>
-                    <p>In my current role as a Senior Multimedia Producer, I collaborate closely with cross-functional teams to design and produce visual assets across digital platforms including social media and promotional campaigns.</p>
-                    <p>Thank you for your time and consideration.</p>
-                    <div style="margin-top: 2rem;">
+                <div style="font-size: 1rem; color: var(--slate-300); line-height: 1.8;">
+                    <p style="margin-bottom: 1.5rem;">Dear Hiring Manager,</p>
+                    <p style="margin-bottom: 1.5rem;">I am excited to apply for the Creative Designer role. With a background in multimedia production at Deriv, I have developed a passion for creating digital experiences that enhance brand storytelling through AI-augmented workflows.</p>
+                    <p style="margin-bottom: 1.5rem;">In my current role as a Senior Multimedia Producer, I collaborate with cross-functional teams to produce visual assets that ensure alignment with strategic goals while pushing the boundaries of creative efficiency.</p>
+                    <p style="margin-bottom: 1.5rem;">I would welcome the opportunity to bring my creative perspective and collaborative approach to your team.</p>
+                    <div style="margin-top: 3rem;">
                         <p>Warm regards,</p>
-                        <p style="color: white; font-weight: 700; font-size: 1.125rem; margin-top: 0.5rem;">Abby Airen</p>
+                        <p style="font-weight: 800; color: white; font-size: 1.25rem; margin-top: 0.5rem;">Abby Airen</p>
+                        <p style="font-size: 0.875rem; color: var(--slate-500);">Digital Creative Designer</p>
                     </div>
                 </div>
             </div>
@@ -430,82 +331,37 @@
     </main>
 
     <footer>
-        <p>© <span id="year"></span> Abby Airen. Crafted to showcase growth.</p>
+        <div class="container">
+            <p>© <span id="year"></span> Abby Airen. Crafted for digital excellence.</p>
+        </div>
     </footer>
 
     <script>
-        // --- Data ---
-        const CASE_STUDIES = [
-            { id: 1, title: "Marketing Campaign Visuals", role: "Digital Designer", icon: "megaphone", problem: "Need to increase brand visibility through targeted online campaigns.", solution: "Developed visual assets for digital marketing campaigns.", impact: ["Increased visibility", "Higher engagement"] },
-            { id: 2, title: "Social Media Series", role: "Content Creator", icon: "share-2", problem: "Maintaining visual consistency across diverse channels.", solution: "Designed brand-aligned visuals for cohesive messaging.", impact: ["Consistent identity", "Engaging storytelling"] },
-            { id: 3, title: "Multimedia Video Content", role: "Video Editor", icon: "monitor-play", problem: "Static imagery wasn't driving enough engagement.", solution: "Produced motion graphics and storytelling video content.", impact: ["Enhanced engagement", "High-retention assets"] }
-        ];
+        // Set Year
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-        const EXPERIENCE = [
-            { role: "Senior Multimedia Producer", company: "Current Company", period: "2024 - Present", desc: "Leading creative systems and multimedia production." },
-            { role: "Creative Workflow Designer", company: "Previous Agency", period: "2022 - 2024", desc: "Optimized creative production pipelines." }
-        ];
+        // Tab Switching Logic
+        function showTab(tabId) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.toLowerCase().includes(tabId === 'cover' ? 'cover' : tabId)) {
+                    btn.classList.add('active');
+                }
+            });
 
-        const SKILLS = [
-            { cat: "Production", items: ["Video", "Visual Storytelling"] },
-            { cat: "AI", items: ["Prompt Engineering", "Gen AI"] }
-        ];
-
-        // --- Logic ---
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
+            // Update panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        function init() {
-            // Render Case Studies
-            const grid = document.getElementById('case-studies-grid');
-            grid.innerHTML = CASE_STUDIES.map(s => `
-                <div class="card">
-                    <div class="card-icon"><i data-lucide="${s.icon}" class="text-purple-400"></i></div>
-                    <h3 style="margin-bottom: 0.5rem;">${s.title}</h3>
-                    <span class="role-badge">Role: ${s.role}</span>
-                    <div class="section-label">The Challenge</div>
-                    <p style="font-size: 0.875rem; color: var(--slate-300); margin-bottom: 1rem;">${s.problem}</p>
-                    <div class="section-label">Impact</div>
-                    <ul class="impact-list">${s.impact.map(i => `<li>${i}</li>`).join('')}</ul>
-                </div>
-            `).join('');
-
-            // Render Experience
-            const timeline = document.getElementById('experience-timeline');
-            timeline.innerHTML = EXPERIENCE.map(e => `
-                <div class="timeline-item">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                        <h4 style="color: white;">${e.role}</h4>
-                        <span style="font-size: 0.75rem; background: var(--slate-800); padding: 2px 8px; border-radius: 4px;">${e.period}</span>
-                    </div>
-                    <div style="color: var(--purple-400); font-size: 0.875rem; margin-bottom: 0.5rem;">${e.company}</div>
-                    <p style="font-size: 0.875rem; color: var(--slate-400);">${e.desc}</p>
-                </div>
-            `).join('');
-
-            // Render Skills
-            const skillsDiv = document.getElementById('skills-list');
-            skillsDiv.innerHTML = SKILLS.map(s => `
-                <div style="margin-bottom: 1rem;">
-                    <div class="section-label" style="margin-bottom: 0.5rem;">${s.cat}</div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        ${s.items.map(i => `<span style="background: var(--slate-950); border: 1px solid var(--slate-800); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem;">${i}</span>`).join('')}
-                    </div>
-                </div>
-            `).join('');
-
-            document.getElementById('year').innerText = new Date().getFullYear();
-            document.getElementById('about-text').innerText = "I am a multimedia creative professional with experience in digital design and visual storytelling...";
             
+            // Re-render icons for new content if necessary
             lucide.createIcons();
         }
 
-        window.onload = init;
+        // Initialize Lucide Icons
+        lucide.createIcons();
     </script>
 </body>
 </html>
