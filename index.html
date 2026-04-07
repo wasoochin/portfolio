@@ -433,8 +433,10 @@
             </div>
             <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
                 <nav class="nav-scroll-links">
-                    <a href="#case-studies">Case Studies</a>
-                    <a href="#resume">Resume</a>
+                    <a href="#about">About</a>
+                    <a href="#experience">Experience</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#work">Work</a>
                     <a href="#cover-letter">Cover Letter</a>
                 </nav>
                 <div class="nav-btns">
@@ -507,9 +509,49 @@
             </div>
         </section>
 
-        <section id="case-studies" class="section">
+        <!-- ABOUT -->
+        <section id="about" class="section">
             <h2 class="section-heading">
-                <i data-lucide="award" style="color:var(--purple-400)"></i> Featured Case Studies
+                <i data-lucide="user" style="color:var(--purple-400)"></i> About
+            </h2>
+            <div class="sidebar-box" style="max-width:800px;">
+                <div id="about-content"
+                    style="font-size:1rem; color:var(--slate-300); display:flex; flex-direction:column; gap:1rem; line-height:1.8;">
+                </div>
+                <hr style="border:none; border-top:1px solid var(--slate-800); margin:1.5rem 0;">
+                <div style="display:flex; flex-wrap:wrap; gap:1.5rem; font-size:0.9rem; color:var(--slate-400);">
+                    <div style="display:flex; align-items:center; gap:8px;"><i data-lucide="mail"
+                            style="width:16px; color:var(--slate-500)"></i> wawagraphic@gmail.com</div>
+                    <div style="display:flex; align-items:center; gap:8px;"><i data-lucide="phone"
+                            style="width:16px; color:var(--slate-500)"></i> 014-904 6253</div>
+                    <div style="display:flex; align-items:center; gap:8px;"><i data-lucide="map-pin"
+                            style="width:16px; color:var(--slate-500)"></i> On-site / Hybrid / Remote</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience" class="section">
+            <h2 class="section-heading">
+                <i data-lucide="briefcase" style="color:var(--emerald-400)"></i> Work Experience
+            </h2>
+            <div class="sidebar-box">
+                <div class="timeline" id="experience-timeline"></div>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills" class="section">
+            <h2 class="section-heading">
+                <i data-lucide="cpu" style="color:var(--blue-400)"></i> Skills
+            </h2>
+            <div class="grid-3" id="skills-content"></div>
+        </section>
+
+        <!-- WORK / CASE STUDIES -->
+        <section id="work" class="section">
+            <h2 class="section-heading">
+                <i data-lucide="award" style="color:var(--purple-400)"></i> Featured Work
             </h2>
             <div class="grid-3" id="case-studies-grid"></div>
 
@@ -549,48 +591,6 @@
                             <li>Reduced back-and-forth communication</li>
                             <li>Improved cross-team collaboration</li>
                         </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="resume" class="section">
-            <h2 class="section-heading">
-                <i data-lucide="file-text" style="color:var(--blue-400)"></i> Interactive Resume
-            </h2>
-            <div class="resume-grid">
-                <div class="res-sidebar">
-                    <div class="sidebar-box">
-                        <h4 style="margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem;"><span
-                                style="width:4px; height:18px; background:var(--purple-500); border-radius:2px;"></span>
-                            About Me</h4>
-                        <div id="about-content"
-                            style="font-size:0.9rem; color:var(--slate-400); display:flex; flex-direction:column; gap:1rem;">
-                        </div>
-                        <hr style="border:none; border-top:1px solid var(--slate-800); margin:1.5rem 0;">
-                        <div style="display:flex; flex-direction:column; gap:0.8rem; font-size:0.85rem;">
-                            <div style="display:flex; align-items:center; gap:10px;"><i data-lucide="mail"
-                                    style="width:16px; color:var(--slate-500)"></i> wawagraphic@gmail.com</div>
-                            <div style="display:flex; align-items:center; gap:10px;"><i data-lucide="phone"
-                                    style="width:16px; color:var(--slate-500)"></i> 014-904 6253</div>
-                            <div style="display:flex; align-items:center; gap:10px;"><i data-lucide="map-pin"
-                                    style="width:16px; color:var(--slate-500)"></i> On-site / Hybrid / Remote</div>
-                        </div>
-                    </div>
-                    <div class="sidebar-box">
-                        <h4 style="margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem;"><span
-                                style="width:4px; height:18px; background:var(--blue-500); border-radius:2px;"></span>
-                            Technical Arsenal</h4>
-                        <div id="skills-content"></div>
-                    </div>
-                </div>
-                <div class="res-main">
-                    <div class="sidebar-box" style="height:100%">
-                        <h3
-                            style="font-size:1.5rem; font-weight:800; margin-bottom:2.5rem; display:flex; align-items:center; gap:0.75rem;">
-                            <i data-lucide="briefcase" style="color:var(--emerald-400)"></i> Professional Journey
-                        </h3>
-                        <div class="timeline" id="experience-timeline"></div>
                     </div>
                 </div>
             </div>
@@ -710,12 +710,13 @@
 
             // Render Skills
             document.getElementById('skills-content').innerHTML = DATA.skills.map(s => `
-                <div style="margin-bottom:1.5rem;">
-                    <div style="font-size:0.75rem; font-weight:800; color:var(--slate-500); text-transform:uppercase; margin-bottom:0.75rem; display:flex; align-items:center; gap:6px;">
-                        <i data-lucide="${s.icon}" style="width:14px"></i> ${s.cat}
+                <div class="card">
+                    <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem;">
+                        <div class="n-icon"><i data-lucide="${s.icon}" style="color:var(--blue-400); width:18px;"></i></div>
+                        <span style="font-size:0.8rem; font-weight:800; color:var(--slate-300); text-transform:uppercase; letter-spacing:0.05em;">${s.cat}</span>
                     </div>
                     <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
-                        ${s.items.map(i => `<span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:0.75rem; border:1px solid var(--slate-800);">${i}</span>`).join('')}
+                        ${s.items.map(i => `<span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:0.8rem; border:1px solid var(--slate-800); color:var(--slate-300);">${i}</span>`).join('')}
                     </div>
                 </div>
             `).join('');
