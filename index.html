@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abby Airen | Creative Operations & AI Workflow Specialist</title>
+    <title>Abby Wasoochin | Creative Operations & AI Workflow Specialist</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
@@ -123,8 +123,8 @@
             position: relative;
             margin: 2rem 0 3rem;
             border-radius: 2rem;
-            border: 1px solid var(--slate-800);
-            background: var(--slate-950);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 60%, #0d1f2d 100%);
             padding: 4rem;
             overflow: hidden;
             display: flex;
@@ -207,12 +207,12 @@
         }
 
         h1.big-name {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 900;
-            line-height: 1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.04em;
-            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0;
+            color: var(--slate-300);
         }
 
         .hero-sub {
@@ -302,6 +302,7 @@
         .section {
             padding: 5rem 0;
             border-top: 1px solid var(--slate-800);
+            position: relative;
         }
 
         .section-heading {
@@ -333,7 +334,7 @@
         }
 
         .card {
-            background: var(--slate-900);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, var(--slate-900) 100%);
             border: 1px solid var(--slate-800);
             padding: 2rem;
             border-radius: 1.5rem;
@@ -346,6 +347,7 @@
         .card:hover {
             border-color: var(--slate-600);
             transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         /* --- Resume Layout --- */
@@ -429,7 +431,7 @@
     <nav>
         <div class="container nav-content">
             <div class="logo">
-                <div class="logo-sq">A</div>Abby Airen
+                <div class="logo-sq">A</div>Abby Wasoochin
             </div>
             <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
                 <nav class="nav-scroll-links">
@@ -452,16 +454,20 @@
         <section class="hero-banner">
             <div class="hero-bg-gradient"></div>
             <div class="hero-grid"></div>
+            <!-- Purple glow blob -->
+            <div
+                style="position:absolute; top:-80px; left:-80px; width:300px; height:300px; background:radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%); pointer-events:none; z-index:2;">
+            </div>
             <div class="hero-text">
                 <div style="display:flex; align-items:center; gap:1.25rem; margin-bottom:1.5rem; flex-wrap:wrap;">
-                    <img src="https://ca.slack-edge.com/T0D277EE5-U05GWHUUHRN-df9dc74a864b-512" alt="Abby Airen"
-                        style="width:72px; height:72px; border-radius:50%; object-fit:cover; border:2px solid var(--slate-700); flex-shrink:0;">
+                    <img src="https://ca.slack-edge.com/T0D277EE5-U05GWHUUHRN-df9dc74a864b-512" alt="Abby Wasoochin"
+                        style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid var(--purple-400); box-shadow:0 0 20px rgba(192,132,252,0.4); flex-shrink:0;">
                     <div class="badge-avail" style="margin-bottom:0;">
                         <span class="dot-ping"></span>
                         Available for new opportunities
                     </div>
                 </div>
-                <h1 class="big-name">Abby Airen</h1>
+                <h1 class="big-name">Abby Wasoochin</h1>
                 <div class="hero-sub">
                     <span class="gradient-text">Creative Operations & AI Workflow Specialist</span>
                 </div>
@@ -499,7 +505,8 @@
                         </div>
                     </div>
                     <div class="node">
-                        <div class="n-icon"><i data-lucide="megaphone" style="color:var(--purple-400); width:20px;"></i>
+                        <div class="n-icon" style="background:rgba(192,132,252,0.12); border-color:var(--purple-400);">
+                            <i data-lucide="megaphone" style="color:var(--purple-400); width:20px;"></i>
                         </div>
                         <div>
                             <div style="font-size:14px; font-weight:700; color:white;">Asset Systems (DAM)</div>
@@ -507,7 +514,8 @@
                         </div>
                     </div>
                     <div class="node">
-                        <div class="n-icon"><i data-lucide="film" style="color:var(--blue-400); width:20px;"></i></div>
+                        <div class="n-icon" style="background:rgba(96,165,250,0.12); border-color:var(--blue-400);"><i
+                                data-lucide="film" style="color:var(--blue-400); width:20px;"></i></div>
                         <div>
                             <div style="font-size:14px; font-weight:700; color:white;">Creative Workflows</div>
                             <div style="font-size:11px; color:var(--slate-500)">Ops • Scalability</div>
@@ -530,9 +538,7 @@
             <h2 class="section-heading">
                 <i data-lucide="briefcase" style="color:var(--emerald-400)"></i> Work Experience
             </h2>
-            <div class="sidebar-box">
-                <div class="timeline" id="experience-timeline"></div>
-            </div>
+            <div id="experience-timeline"></div>
         </section>
 
         <!-- SKILLS -->
@@ -634,37 +640,121 @@
                     <i data-lucide="cpu" style="color:var(--emerald-400)"></i> Systems & Automation
                 </h2>
                 <div class="grid-3">
-                    <div class="card">
-                        <h3 style="margin-bottom:1rem; color:white;">Creative Asset Automation System</h3>
-                        <p style="font-size:0.9rem; color:var(--slate-300); margin-bottom:1rem;">Built a structured
-                            workflow connecting design tools, AI, and storage systems to automate asset handling and
-                            organization.</p>
-                        <ul style="font-size:0.85rem; color:var(--slate-400); line-height:1.6; padding-left:1rem;">
-                            <li>Automated asset generation and structuring</li>
-                            <li>Standardized naming and categorization</li>
-                            <li>Reduced manual handling and duplication</li>
-                        </ul>
+                    <!-- Card 1 -->
+                    <div
+                        style="background:linear-gradient(135deg,rgba(16,185,129,0.08) 0%,rgba(15,23,42,0.95) 100%);border:1px solid rgba(52,211,153,0.2);border-radius:1.25rem;padding:2rem;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:1.25rem;">
+                        <div
+                            style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(16,185,129,0.15) 0%,transparent 70%);pointer-events:none;">
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.75rem;">
+                            <div
+                                style="width:40px;height:40px;background:rgba(16,185,129,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i data-lucide="folder-check" style="color:var(--emerald-400);width:18px;"></i>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:800;color:white;">Creative Asset Automation</h3>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">1</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">Ingest raw design files</span>
+                            </div>
+                            <div style="text-align:center;color:var(--slate-700);font-size:0.7rem;">↓</div>
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">2</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">AI applies naming &
+                                    categorization</span>
+                            </div>
+                            <div style="text-align:center;color:var(--slate-700);font-size:0.7rem;">↓</div>
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">3</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">Structured, searchable asset
+                                    library</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card">
-                        <h3 style="margin-bottom:1rem; color:white;">AI Content Workflow Pipeline</h3>
-                        <p style="font-size:0.9rem; color:var(--slate-300); margin-bottom:1rem;">Designed AI-assisted
-                            workflows to streamline content creation, iteration, and delivery across teams.</p>
-                        <ul style="font-size:0.85rem; color:var(--slate-400); line-height:1.6; padding-left:1rem;">
-                            <li>Integrated AI tools for content generation</li>
-                            <li>Improved production turnaround time</li>
-                            <li>Enabled scalable content workflows</li>
-                        </ul>
+                    <!-- Card 2 -->
+                    <div
+                        style="background:linear-gradient(135deg,rgba(16,185,129,0.08) 0%,rgba(15,23,42,0.95) 100%);border:1px solid rgba(52,211,153,0.2);border-radius:1.25rem;padding:2rem;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:1.25rem;">
+                        <div
+                            style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(16,185,129,0.15) 0%,transparent 70%);pointer-events:none;">
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.75rem;">
+                            <div
+                                style="width:40px;height:40px;background:rgba(16,185,129,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i data-lucide="zap" style="color:var(--emerald-400);width:18px;"></i>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:800;color:white;">AI Content Pipeline</h3>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">1</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">Brief & creative
+                                    direction</span>
+                            </div>
+                            <div style="text-align:center;color:var(--slate-700);font-size:0.7rem;">↓</div>
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">2</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">AI generates & iterates
+                                    content</span>
+                            </div>
+                            <div style="text-align:center;color:var(--slate-700);font-size:0.7rem;">↓</div>
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">3</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">Reviewed & published at
+                                    scale</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card">
-                        <h3 style="margin-bottom:1rem; color:white;">Creative Request & Delivery System</h3>
-                        <p style="font-size:0.9rem; color:var(--slate-300); margin-bottom:1rem;">Structured the
-                            end-to-end creative request flow to improve visibility, tracking, and delivery efficiency.
-                        </p>
-                        <ul style="font-size:0.85rem; color:var(--slate-400); line-height:1.6; padding-left:1rem;">
-                            <li>Defined intake → processing → delivery flow</li>
-                            <li>Reduced back-and-forth communication</li>
-                            <li>Improved cross-team collaboration</li>
-                        </ul>
+                    <!-- Card 3 -->
+                    <div
+                        style="background:linear-gradient(135deg,rgba(16,185,129,0.08) 0%,rgba(15,23,42,0.95) 100%);border:1px solid rgba(52,211,153,0.2);border-radius:1.25rem;padding:2rem;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:1.25rem;">
+                        <div
+                            style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(16,185,129,0.15) 0%,transparent 70%);pointer-events:none;">
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.75rem;">
+                            <div
+                                style="width:40px;height:40px;background:rgba(16,185,129,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i data-lucide="inbox" style="color:var(--emerald-400);width:18px;"></i>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:800;color:white;">Creative Request System</h3>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">1</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">Intake via structured brief
+                                    form</span>
+                            </div>
+                            <div style="text-align:center;color:var(--slate-700);font-size:0.7rem;">↓</div>
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">2</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">Tracked → produced →
+                                    reviewed</span>
+                            </div>
+                            <div style="text-align:center;color:var(--slate-700);font-size:0.7rem;">↓</div>
+                            <div
+                                style="display:flex;align-items:center;gap:0.5rem;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:8px 12px;">
+                                <span
+                                    style="width:18px;height:18px;background:rgba(52,211,153,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:var(--emerald-400);flex-shrink:0;">3</span>
+                                <span style="font-size:0.78rem;color:var(--slate-300);">Delivered with full
+                                    visibility</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -674,7 +764,12 @@
             <h2 class="section-heading">
                 <i data-lucide="pen-line" style="color:var(--pink-400)"></i> Cover Letter
             </h2>
-            <div class="card" style="max-width:850px; margin:0 auto; padding:3.5rem; background:var(--slate-900);">
+            <div class="card"
+                style="max-width:850px; margin:0 auto; padding:3.5rem; background:linear-gradient(135deg, rgba(244,114,182,0.06) 0%, #0f172a 100%); border:1px solid rgba(244,114,182,0.25); position:relative; overflow:hidden;">
+                <!-- Pink glow blob -->
+                <div
+                    style="position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:radial-gradient(circle, rgba(244,114,182,0.15) 0%, transparent 70%); pointer-events:none;">
+                </div>
                 <div style="border-bottom:1px solid var(--slate-800); padding-bottom:2rem; margin-bottom:2.5rem;">
                     <h2 style="font-size:1.75rem; color:#fff; margin-bottom:0.5rem;">Subject: Application for Creative
                         Operations / AI Workflow Role</h2>
@@ -696,7 +791,7 @@
                     <p>Thank you for your consideration.</p>
                     <div style="margin-top:2.5rem">
                         <p>Warm regards,</p>
-                        <p style="font-weight:900; color:#fff; font-size:1.2rem; margin-top:0.5rem;">Abby Airen</p>
+                        <p style="font-weight:900; color:#fff; font-size:1.2rem; margin-top:0.5rem;">Abby Wasoochin</p>
                         <p style="font-size:0.9rem; color:var(--slate-500)">Digital Creative Designer | Senior
                             Multimedia Producer</p>
                     </div>
@@ -707,54 +802,60 @@
 
     <footer
         style="margin-top:6rem; padding:4rem 0; border-top:1px solid var(--slate-800); text-align:center; color:var(--slate-500); font-size:0.85rem;">
-        <p>© <span id="year"></span> Abby Airen. Crafted for Creative Excellence.</p>
+        <p>© <span id="year"></span> Abby Wasoochin. Crafted for Creative Excellence.</p>
     </footer>
 
     <script>
         const DATA = {
             caseStudies: [
                 {
-                    id: 1,
-                    title: "Creative Asset System Optimization",
-                    role: "Creative Operations",
-                    icon: "database",
-                    color: "var(--blue-400)",
-                    problem: "Creative assets were scattered across multiple sources, making retrieval inefficient and inconsistent across teams.",
-                    solution: "Restructured and centralized the asset repository with standardized naming conventions and categorization aligned to business needs.",
-                    impact: ["Improved asset discoverability across teams", "Reduced duplication and manual search time", "Enabled scalable asset management"]
+                    id: 1, title: "Creative Asset System Optimization", role: "Creative Operations", icon: "database", color: "var(--blue-400)", glow: "rgba(96,165,250,0.12)",
+                    flow: { problem: { icon: "alert-circle", label: "Assets scattered, retrieval slow" }, solution: { icon: "folder-check", label: "Centralized DAM + naming system" }, impact: [{ icon: "trending-up", label: "↑ Discoverability" }, { icon: "clock", label: "↓ Search time" }, { icon: "layers", label: "Scalable structure" }] }
                 },
                 {
-                    id: 2,
-                    title: "AI-Integrated Content Workflow",
-                    role: "AI & Workflow",
-                    icon: "sparkles",
-                    color: "var(--emerald-400)",
-                    problem: "Manual content production processes were time-consuming and difficult to scale with increasing demand.",
-                    solution: "Introduced AI-assisted workflows to streamline content generation, refinement, and iteration processes.",
-                    impact: ["Reduced production turnaround time", "Improved efficiency in content handling", "Enabled scalable content production"]
+                    id: 2, title: "AI-Integrated Content Workflow", role: "AI & Workflow", icon: "sparkles", color: "var(--emerald-400)", glow: "rgba(52,211,153,0.12)",
+                    flow: { problem: { icon: "alert-circle", label: "Manual production, hard to scale" }, solution: { icon: "zap", label: "AI-assisted generation & iteration" }, impact: [{ icon: "trending-up", label: "↑ Output speed" }, { icon: "repeat", label: "Scalable pipeline" }, { icon: "cpu", label: "AI-enabled ops" }] }
                 },
                 {
-                    id: 3,
-                    title: "Cross-Channel Creative Enablement",
-                    role: "Creative Enablement",
-                    icon: "git-branch",
-                    color: "var(--purple-400)",
-                    problem: "Social, PPC, and Email teams required consistent and accessible creative assets to execute campaigns effectively.",
-                    solution: "Established structured workflows and asset systems to support cross-channel collaboration and consistency.",
-                    impact: ["Improved cross-team collaboration", "Increased consistency in campaign outputs", "Streamlined creative request handling"]
+                    id: 3, title: "Cross-Channel Creative Enablement", role: "Creative Enablement", icon: "git-branch", color: "var(--purple-400)", glow: "rgba(192,132,252,0.12)",
+                    flow: { problem: { icon: "alert-circle", label: "Inconsistent assets across channels" }, solution: { icon: "git-branch", label: "Structured workflows + asset systems" }, impact: [{ icon: "users", label: "↑ Team collaboration" }, { icon: "check-circle", label: "Consistent outputs" }, { icon: "inbox", label: "Streamlined requests" }] }
                 }
             ],
             experience: [
-                { role: "Senior Multimedia Producer", company: "Deriv", period: "Aug 2024 – Present", desc: "Leveraging AI and generative tools (Gemini, LTX, HeyGen, Freepik AI) to streamline creative workflows, refine concepts, and accelerate content production. Focused on building scalable systems for asset management and cross-team efficiency." },
-                { role: "Graphic Designer", company: "Deriv", period: "Jul 2023 – Aug 2024", desc: "Designed and delivered creative assets across social media, PPC, events, blogs, and internal publications while improving consistency and structure across channels and teams." },
-                { role: "Multimedia Designer", company: "KZ1", period: "Apr 2016 – Jun 2022", desc: "Produced multimedia content across campaigns, events, and social platforms, including photography, videography, and post-production—building a strong foundation in storytelling and content execution." },
-                { role: "Graphic Designer", company: "KZ1", period: "Jul 2012 – Mar 2016", desc: "Conceptualized and designed visual content across print, digital, and social platforms, translating ideas into effective and engaging communication." },
-                { role: "Junior Video Editor (Intern)", company: "The Wedding Station", period: "Jan 2012 – Jun 2012", desc: "Supported video editing and shooting for event-based content, developing foundational skills in visual storytelling and production." }
+                {
+                    role: "Senior Multimedia Producer", company: "Deriv", companyColor: "var(--purple-400)", period: "Aug 2024 – Present",
+                    bullets: [{ icon: "sparkles", label: "AI Tools (Gemini, LTX, HeyGen)" }, { icon: "database", label: "Asset Systems & DAM" }, { icon: "git-branch", label: "Workflow Automation" }]
+                },
+                {
+                    role: "Graphic Designer", company: "Deriv", companyColor: "var(--purple-400)", period: "Jul 2023 – Aug 2024",
+                    bullets: [{ icon: "layout", label: "Social, PPC & Events" }, { icon: "palette", label: "Brand Consistency" }, { icon: "layers", label: "Cross-channel Assets" }]
+                },
+                {
+                    role: "Multimedia Designer", company: "KZ1", companyColor: "var(--blue-400)", period: "Apr 2016 – Jun 2022",
+                    bullets: [{ icon: "camera", label: "Photography & Videography" }, { icon: "film", label: "Post-production" }, { icon: "megaphone", label: "Campaign Content" }]
+                },
+                {
+                    role: "Graphic Designer", company: "KZ1", companyColor: "var(--blue-400)", period: "Jul 2012 – Mar 2016",
+                    bullets: [{ icon: "pen-tool", label: "Print & Digital Design" }, { icon: "monitor", label: "Social Platforms" }, { icon: "type", label: "Visual Communication" }]
+                },
+                {
+                    role: "Junior Video Editor (Intern)", company: "The Wedding Station", companyColor: "var(--slate-500)", period: "Jan 2012 – Jun 2012",
+                    bullets: [{ icon: "video", label: "Event Video Editing" }, { icon: "scissors", label: "Post-production" }, { icon: "star", label: "Visual Storytelling" }]
+                }
             ],
             skills: [
-                { cat: "Creative Systems", items: ["Digital Asset Management", "Workflow Design", "Process Optimization"], icon: "database" },
-                { cat: "AI & Automation", items: ["Prompt Engineering", "Generative AI", "AI Workflow Integration"], icon: "sparkles" },
-                { cat: "Tech Stack", items: ["Figma", "Gemini", "Google Cloud", "Supabase", "VS Code"], icon: "cpu" }
+                {
+                    cat: "Creative Systems", icon: "database", color: "var(--purple-400)", glow: "rgba(192,132,252,0.15)",
+                    items: [{ icon: "folder-check", label: "Digital Asset Management" }, { icon: "git-branch", label: "Workflow Design" }, { icon: "settings", label: "Process Optimization" }, { icon: "layers", label: "Brand Governance" }]
+                },
+                {
+                    cat: "AI & Automation", icon: "sparkles", color: "var(--emerald-400)", glow: "rgba(52,211,153,0.15)",
+                    items: [{ icon: "brain", label: "Prompt Engineering" }, { icon: "zap", label: "Generative AI" }, { icon: "cpu", label: "AI Workflow Integration" }, { icon: "repeat", label: "Automation Pipelines" }]
+                },
+                {
+                    cat: "Tech Stack", icon: "cpu", color: "var(--blue-400)", glow: "rgba(96,165,250,0.15)",
+                    items: [{ icon: "figma", label: "Figma" }, { icon: "cloud", label: "Google Cloud" }, { icon: "database", label: "Supabase" }, { icon: "code", label: "VS Code" }, { icon: "sparkles", label: "Gemini AI" }]
+                }
             ],
             about: [
                 "I specialize in building scalable creative systems that improve how teams manage, access, and produce content.",
@@ -764,43 +865,64 @@
         };
 
         function init() {
-            // Render CS
+            // Render Case Studies
             document.getElementById('case-studies-grid').innerHTML = DATA.caseStudies.map(s => `
-                <div class="card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
-                        <div class="n-icon"><i data-lucide="${s.icon}" style="color:${s.color}"></i></div>
-                        <span style="font-size:10px; font-weight:800; background:rgba(168,85,247,0.1); color:var(--purple-400); padding:4px 8px; border-radius:6px;">${s.role}</span>
+                <div style="background:linear-gradient(135deg,${s.glow} 0%,rgba(15,23,42,0.95) 100%); border:1px solid ${s.color}44; border-radius:1.25rem; padding:2rem; position:relative; overflow:hidden; display:flex; flex-direction:column; gap:1.25rem;">
+                    <div style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,${s.glow} 0%,transparent 70%);pointer-events:none;"></div>
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                        <div style="width:44px;height:44px;background:${s.glow};border:1px solid ${s.color}55;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i data-lucide="${s.icon}" style="color:${s.color};width:20px;height:20px;"></i>
+                        </div>
+                        <span style="font-size:0.65rem;font-weight:800;background:${s.glow};color:${s.color};padding:3px 8px;border-radius:6px;border:1px solid ${s.color}44;text-transform:uppercase;letter-spacing:0.06em;">${s.role}</span>
                     </div>
-                    <h3 style="margin-bottom:1rem; color:white;">${s.title}</h3>
-                    <p style="font-size:0.9rem; color:var(--slate-300); margin-bottom:1rem;">${s.solution}</p>
-                    <div style="margin-top:auto; font-size:0.85rem; color:var(--slate-400);">
-                        ${s.impact.map(i => `<div style="display:flex; align-items:center; gap:6px; margin-top:4px;"><span style="width:6px; height:6px; background:var(--emerald-500); border-radius:50%;"></span>${i}</div>`).join('')}
+                    <h3 style="font-size:1rem;font-weight:800;color:white;line-height:1.3;">${s.title}</h3>
+                    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                        <div style="display:flex;align-items:center;gap:0.5rem;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:8px 12px;">
+                            <i data-lucide="${s.flow.problem.icon}" style="width:13px;height:13px;color:#f87171;flex-shrink:0;"></i>
+                            <span style="font-size:0.78rem;color:var(--slate-300);">${s.flow.problem.label}</span>
+                        </div>
+                        <div style="text-align:center;color:var(--slate-600);font-size:0.7rem;">↓ solved by</div>
+                        <div style="display:flex;align-items:center;gap:0.5rem;background:${s.glow};border:1px solid ${s.color}33;border-radius:8px;padding:8px 12px;">
+                            <i data-lucide="${s.flow.solution.icon}" style="width:13px;height:13px;color:${s.color};flex-shrink:0;"></i>
+                            <span style="font-size:0.78rem;color:var(--slate-300);">${s.flow.solution.label}</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:auto;">
+                        ${s.flow.impact.map(i => `<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:6px;padding:4px 8px;font-size:0.72rem;color:var(--slate-300);"><i data-lucide="${i.icon}" style="width:10px;height:10px;color:${s.color};"></i>${i.label}</span>`).join('')}
                     </div>
                 </div>
             `).join('');
 
             // Render Skills
             document.getElementById('skills-content').innerHTML = DATA.skills.map(s => `
-                <div class="card">
-                    <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem;">
-                        <div class="n-icon"><i data-lucide="${s.icon}" style="color:var(--blue-400); width:18px;"></i></div>
-                        <span style="font-size:0.8rem; font-weight:800; color:var(--slate-300); text-transform:uppercase; letter-spacing:0.05em;">${s.cat}</span>
+                <div style="background:linear-gradient(135deg,${s.glow} 0%,rgba(15,23,42,0.9) 100%); border:1px solid ${s.color}33; border-radius:1.25rem; padding:2rem; position:relative; overflow:hidden; display:flex; flex-direction:column;">
+                    <div style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,${s.glow} 0%,transparent 70%);pointer-events:none;"></div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
+                        <div style="width:44px;height:44px;background:${s.glow};border:1px solid ${s.color}55;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i data-lucide="${s.icon}" style="color:${s.color};width:20px;height:20px;"></i>
+                        </div>
+                        <span style="font-size:0.85rem;font-weight:800;color:white;text-transform:uppercase;letter-spacing:0.05em;">${s.cat}</span>
                     </div>
-                    <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
-                        ${s.items.map(i => `<span style="background:var(--slate-950); padding:4px 10px; border-radius:6px; font-size:0.8rem; border:1px solid var(--slate-800); color:var(--slate-300);">${i}</span>`).join('')}
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:auto;">
+                        ${s.items.map(i => `<div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:8px;padding:7px 10px;"><i data-lucide="${i.icon}" style="width:12px;height:12px;color:${s.color};flex-shrink:0;"></i><span style="font-size:0.78rem;color:var(--slate-300);">${i.label}</span></div>`).join('')}
                     </div>
                 </div>
             `).join('');
 
-            // Render Exp
+            // Render Experience
             document.getElementById('experience-timeline').innerHTML = DATA.experience.map(e => `
-                <div class="time-item">
-                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.5rem; flex-wrap:wrap; gap:10px;">
-                        <h4 style="font-size:1.2rem; font-weight:800; color:white;">${e.role}</h4>
-                        <span style="font-size:0.7rem; background:var(--slate-800); padding:4px 12px; border-radius:99px;">${e.period}</span>
+                <div style="background:linear-gradient(135deg,rgba(16,185,129,0.06) 0%,rgba(15,23,42,0.8) 100%); border:1px solid rgba(52,211,153,0.15); border-radius:1rem; padding:1.75rem 2rem; margin-bottom:1.25rem; position:relative; overflow:hidden;">
+                    <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(16,185,129,0.12) 0%,transparent 70%);pointer-events:none;"></div>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem;">
+                        <div>
+                            <span style="background:rgba(${e.companyColor === 'var(--purple-400)' ? '192,132,252' : e.companyColor === 'var(--blue-400)' ? '96,165,250' : '100,116,139'},0.15); color:${e.companyColor}; font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:0.2rem 0.65rem; border-radius:999px; border:1px solid ${e.companyColor}33; margin-bottom:0.5rem; display:inline-block;">${e.company}</span>
+                            <h4 style="font-size:1.1rem; font-weight:800; color:white; line-height:1.2;">${e.role}</h4>
+                        </div>
+                        <span style="font-size:0.7rem; background:var(--slate-800); color:var(--slate-400); padding:4px 12px; border-radius:99px; white-space:nowrap;">${e.period}</span>
                     </div>
-                    <div style="color:var(--purple-400); font-weight:700; margin-bottom:0.75rem;">${e.company}</div>
-                    <p style="font-size:0.9rem; color:var(--slate-400);">${e.desc}</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
+                        ${e.bullets.map(b => `<span style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.04);border:1px solid var(--slate-800);border-radius:8px;padding:5px 10px;font-size:0.78rem;color:var(--slate-300);"><i data-lucide="${b.icon}" style="width:12px;height:12px;color:var(--emerald-400);flex-shrink:0;"></i>${b.label}</span>`).join('')}
+                    </div>
                 </div>
             `).join('');
 
