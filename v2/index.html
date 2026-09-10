@@ -374,7 +374,7 @@
         /* --- Stats strip --- */
         .stats-strip {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
             padding: 2rem 0 1rem;
         }
@@ -387,11 +387,22 @@
             text-align: center;
         }
 
+        .stat-box.stat-headline {
+            border-color: rgba(245, 166, 35, 0.35);
+        }
+
         .stat-num {
             font-family: var(--mono);
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 0.35rem;
+        }
+
+        .stat-note {
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+            line-height: 1.4;
         }
 
         .stat-label {
@@ -841,9 +852,9 @@
                 <p class="tagline">I build the systems behind scalable creative production.</p>
                 <p class="hero-desc">From scattered asset libraries to slow, manual content pipelines — I design DAM systems, automation pipelines, and AI-assisted workflows that hold up in production, not just in a demo.</p>
                 <div class="checklist">
+                    <div><span class="mark">→</span> Eliminated 640+ hours/quarter of manual asset work by automating the process end-to-end</div>
                     <div><span class="mark">→</span> Shipped a fully autonomous asset sync pipeline (CORA)</div>
                     <div><span class="mark">→</span> Migrated &amp; organized 7,700+ assets into a searchable DAM</div>
-                    <div><span class="mark">→</span> Built AI-assisted tooling that cuts manual production time from hours to seconds</div>
                 </div>
                 <div class="contact-chips">
                     <span class="chip"><i data-lucide="mail" style="width:13px;color:var(--text-dim)"></i> wawagraphic@gmail.com</span>
@@ -884,12 +895,17 @@
 
         <!-- STATS -->
         <div class="stats-strip">
+            <div class="stat-box stat-headline">
+                <div class="stat-num" style="color:var(--amber);">640+ hrs</div>
+                <div class="stat-label">Manual Work Eliminated / Quarter</div>
+                <div class="stat-note">Est. from replacing a ~5 min/asset manual browse → download → sort → rename → tag → publish process across 7,700+ assets</div>
+            </div>
             <div class="stat-box">
-                <div class="stat-num" style="color:var(--amber);">7,700+</div>
+                <div class="stat-num" style="color:var(--cyan);">7,700+</div>
                 <div class="stat-label">Assets Migrated &amp; Organized</div>
             </div>
             <div class="stat-box">
-                <div class="stat-num" style="color:var(--cyan);">600+</div>
+                <div class="stat-num" style="color:var(--green);">600+</div>
                 <div class="stat-label">Screenshots Automated (Desktop + Mobile)</div>
             </div>
             <div class="stat-box">
