@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abby Wasoochin | Creative Systems & AI Workflow Engineer</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05070b;
+            --surface: #0d1119;
+            --surface-2: #121824;
+            --border: #1e2733;
+            --border-soft: #171f2a;
+            --text: #cbd5e1;
+            --text-dim: #7d8a9c;
+            --text-mid: #9aa7b8;
+            --amber: #f5a623;
+            --amber-soft: rgba(245, 166, 35, 0.14);
+            --cyan: #22d3ee;
+            --cyan-soft: rgba(34, 211, 238, 0.14);
+            --violet: #8b5cf6;
+            --violet-soft: rgba(139, 92, 246, 0.14);
+            --green: #34d399;
+            --green-soft: rgba(52, 211, 153, 0.14);
+            --mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+            --sans: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 42px 42px;
+            color: var(--text);
+            font-family: var(--sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .mono {
+            font-family: var(--mono);
+        }
+
+        /* --- Nav --- */
+        nav.top {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(14px);
+            background-color: rgba(5, 7, 11, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: #fff;
+        }
+
+        .logo-sq {
+            width: 32px;
+            height: 32px;
+            background: var(--surface-2);
+            border: 1px solid var(--amber);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: var(--amber);
+            font-family: var(--mono);
+            font-weight: 700;
+        }
+
+        .nav-scroll-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-scroll-links a {
+            color: var(--text-dim);
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-family: var(--mono);
+            transition: color 0.2s;
+        }
+
+        .nav-scroll-links a:hover {
+            color: var(--amber);
+        }
+
+        .nav-btns {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: 0.2s;
+        }
+
+        .btn-amber {
+            background: var(--amber);
+            color: #1a1002;
+        }
+
+        .btn-dark {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: #fff;
+        }
+
+        .btn-sm:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        /* --- Hero --- */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            padding: 4rem 0 3rem;
+        }
+
+        .hero-text {
+            max-width: 58%;
+        }
+
+        .status-line {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--green);
+            background: var(--green-soft);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            padding: 0.4rem 0.85rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+        }
+
+        .dot-ping {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .dot-ping::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--green);
+            border-radius: 50%;
+            animation: ping 1.6s infinite;
+        }
+
+        @keyframes ping {
+            75%, 100% { transform: scale(3); opacity: 0; }
+        }
+
+        .role-line {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 0.4rem;
+        }
+
+        .role-line .prompt {
+            color: var(--amber);
+        }
+
+        h1.name {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--cyan);
+            margin-bottom: 1.1rem;
+        }
+
+        .hero-desc {
+            color: var(--text-mid);
+            font-size: 1rem;
+            font-weight: 300;
+            max-width: 540px;
+            margin-bottom: 1.5rem;
+        }
+
+        .checklist {
+            display: grid;
+            gap: 0.55rem;
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-bottom: 1.75rem;
+        }
+
+        .checklist div {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.55rem;
+        }
+
+        .checklist span.mark {
+            color: var(--amber);
+            font-family: var(--mono);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .contact-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+        }
+
+        .chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-family: var(--mono);
+            color: var(--text-dim);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        /* --- Terminal card --- */
+        .hero-visual {
+            width: 38%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .term-card {
+            width: 100%;
+            max-width: 340px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
+        }
+
+        .term-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.7rem 1rem;
+            background: var(--surface-2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .term-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .term-body {
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--amber);
+            box-shadow: 0 0 24px rgba(245, 166, 35, 0.25);
+            margin-bottom: 1rem;
+        }
+
+        .term-name {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .term-role {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            margin-bottom: 1.25rem;
+        }
+
+        .term-strengths {
+            text-align: left;
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .strength-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.78rem;
+            background: var(--bg);
+            border: 1px solid var(--border-soft);
+            border-radius: 8px;
+            padding: 0.55rem 0.7rem;
+        }
+
+        .strength-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* --- Stats strip --- */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 2rem 0 1rem;
+        }
+
+        .stat-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: var(--mono);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Sections --- */
+        .section {
+            padding: 4.5rem 0;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        .section-tag {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-heading {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-desc {
+            color: var(--text-dim);
+            font-size: 0.92rem;
+            margin-bottom: 2.25rem;
+            max-width: 620px;
+        }
+
+        /* --- Flagship system cards --- */
+        .flagship-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .flagship-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flagship-card.highlight {
+            border-color: rgba(245, 166, 35, 0.35);
+        }
+
+        .flagship-glow {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            filter: blur(10px);
+            pointer-events: none;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-family: var(--mono);
+        }
+
+        .flagship-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .flagship-sub {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            margin-top: -0.75rem;
+        }
+
+        .flagship-desc {
+            font-size: 0.9rem;
+            color: var(--text-mid);
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .feature-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            color: var(--text);
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .tag {
+            font-size: 0.72rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            font-family: var(--mono);
+        }
+
+        .flagship-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.88rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            width: fit-content;
+            margin-top: auto;
+        }
+
+        /* --- Compact automation cards --- */
+        .automation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .auto-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .auto-card-head {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .auto-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .auto-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .auto-desc {
+            font-size: 0.82rem;
+            color: var(--text-mid);
+        }
+
+        /* --- Case study cards (condensed) --- */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .case-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .case-role {
+            font-size: 0.65rem;
+            font-weight: 700;
+            font-family: var(--mono);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .case-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.35;
+        }
+
+        .case-flow {
+            font-size: 0.8rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+        }
+
+        .case-impact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: auto;
+        }
+
+        /* --- Experience --- */
+        .time-row {
+            border-bottom: 1px solid var(--border-soft);
+            padding: 1.1rem 0.25rem 1.35rem;
+        }
+
+        .time-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .time-company {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .time-role {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .time-period {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            white-space: nowrap;
+        }
+
+        .time-bullets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: 6px;
+            padding: 3px 9px;
+            font-size: 0.73rem;
+            color: var(--text-dim);
+        }
+
+        /* --- Skills --- */
+        .skill-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .skill-head {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .skill-cat {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .skill-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg);
+            border: 1px solid var(--border-soft);
+            border-radius: 7px;
+            padding: 7px 10px;
+            font-size: 0.76rem;
+            color: var(--text-mid);
+        }
+
+        /* --- Cover letter --- */
+        .letter-card {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .letter-head {
+            border-bottom: 1px solid var(--border-soft);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .letter-head h3 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 0.4rem;
+        }
+
+        .letter-head p {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .letter-body {
+            font-size: 0.92rem;
+            color: var(--text-mid);
+            line-height: 1.75;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .letter-closer {
+            margin-top: 0.5rem;
+            font-weight: 700;
+            color: white;
+            border-top: 1px solid var(--border-soft);
+            padding-top: 1.25rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-soft);
+            padding: 3rem 0;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.78rem;
+            font-family: var(--mono);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 2.5rem 0;
+            }
+
+            .hero-text, .hero-visual {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .checklist div, .flagship-card, .auto-card-head {
+                text-align: left;
+            }
+
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .flagship-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skill-items {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="top">
+        <div class="container nav-content">
+            <div class="logo">
+                <div class="logo-sq">A</div>Abby Wasoochin
+            </div>
+            <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
+                <nav class="nav-scroll-links">
+                    <a href="#systems">Systems</a>
+                    <a href="#experience">Experience</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#cover-letter">Cover Letter</a>
+                </nav>
+                <div class="nav-btns">
+                    <a href="mailto:wawagraphic@gmail.com" class="btn-sm btn-amber"><i data-lucide="mail" style="width:15px"></i> Let's Talk</a>
+                    <a href="https://www.linkedin.com/in/abby-wasoochin/" target="_blank" class="btn-sm btn-dark"><i data-lucide="link" style="width:15px"></i> LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-text">
+                <div class="status-line"><span class="dot-ping"></span> Available for new opportunities</div>
+                <div class="role-line"><span class="prompt">&gt;</span> creative_ops --role "AI Workflow Engineer"</div>
+                <h1 class="name">Abby Wasoochin</h1>
+                <p class="tagline">I build the systems behind scalable creative production.</p>
+                <p class="hero-desc">From scattered asset libraries to slow, manual content pipelines — I design DAM systems, automation pipelines, and AI-assisted workflows that hold up in production, not just in a demo.</p>
+                <div class="checklist">
+                    <div><span class="mark">→</span> Shipped a fully autonomous asset sync pipeline (CORA)</div>
+                    <div><span class="mark">→</span> Migrated &amp; organized 7,700+ assets into a searchable DAM</div>
+                    <div><span class="mark">→</span> Built AI-assisted tooling that cuts manual production time from hours to seconds</div>
+                </div>
+                <div class="contact-chips">
+                    <span class="chip"><i data-lucide="mail" style="width:13px;color:var(--text-dim)"></i> wawagraphic@gmail.com</span>
+                    <span class="chip"><i data-lucide="phone" style="width:13px;color:var(--text-dim)"></i> 014-904 6253</span>
+                    <span class="chip"><i data-lucide="map-pin" style="width:13px;color:var(--text-dim)"></i> On-site / Hybrid / Remote</span>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="term-card">
+                    <div class="term-bar">
+                        <div class="term-dot" style="background:#f87171"></div>
+                        <div class="term-dot" style="background:#fbbf24"></div>
+                        <div class="term-dot" style="background:#34d399"></div>
+                    </div>
+                    <div class="term-body">
+                        <img class="avatar" src="https://ca.slack-edge.com/T0D277EE5-U05GWHUUHRN-df9dc74a864b-512" alt="Abby Wasoochin">
+                        <div class="term-name">Abby Wasoochin</div>
+                        <div class="term-role">Senior Multimedia Producer @ Deriv</div>
+                        <div class="term-strengths">
+                            <div class="strength-row">
+                                <div class="strength-icon" style="background:var(--amber-soft); border:1px solid var(--amber);"><i data-lucide="workflow" style="color:var(--amber); width:14px;"></i></div>
+                                <div><strong style="color:white;">Pipeline Engineering</strong><br><span style="color:var(--text-dim); font-size:0.7rem;">Cloudflare Workers • GraphQL</span></div>
+                            </div>
+                            <div class="strength-row">
+                                <div class="strength-icon" style="background:var(--cyan-soft); border:1px solid var(--cyan);"><i data-lucide="database" style="color:var(--cyan); width:14px;"></i></div>
+                                <div><strong style="color:white;">Asset Systems (DAM)</strong><br><span style="color:var(--text-dim); font-size:0.7rem;">Governance • Taxonomy</span></div>
+                            </div>
+                            <div class="strength-row">
+                                <div class="strength-icon" style="background:var(--violet-soft); border:1px solid var(--violet);"><i data-lucide="sparkles" style="color:var(--violet); width:14px;"></i></div>
+                                <div><strong style="color:white;">AI Enablement</strong><br><span style="color:var(--text-dim); font-size:0.7rem;">Gemini • LTX • Automation</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATS -->
+        <div class="stats-strip">
+            <div class="stat-box">
+                <div class="stat-num" style="color:var(--amber);">7,700+</div>
+                <div class="stat-label">Assets Migrated &amp; Organized</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" style="color:var(--cyan);">600+</div>
+                <div class="stat-label">Screenshots Automated (Desktop + Mobile)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num" style="color:var(--violet);">480+</div>
+                <div class="stat-label">AI-Generated Assets Produced</div>
+            </div>
+        </div>
+
+        <!-- SYSTEMS -->
+        <section id="systems" class="section">
+            <div class="section-tag"><i data-lucide="terminal" style="width:14px"></i> Flagship Systems</div>
+            <h2 class="section-heading">What I've Built</h2>
+            <p class="section-desc">Two production systems I designed and shipped end-to-end — from the automation pipeline that keeps assets flowing without human intervention, to the AI tool that replaced a manual naming bottleneck.</p>
+
+            <div class="flagship-grid">
+                <!-- CORA -->
+                <div class="flagship-card highlight">
+                    <div class="flagship-glow" style="background:radial-gradient(circle, rgba(245,166,35,0.25) 0%, transparent 70%);"></div>
+                    <div class="badge-row">
+                        <span class="badge" style="background:var(--amber); color:#1a1002;">In Production</span>
+                        <span class="badge" style="background:var(--green-soft); color:var(--green); border:1px solid rgba(52,211,153,0.3);">Autonomous Pipeline</span>
+                    </div>
+                    <div>
+                        <div class="flagship-title">CORA</div>
+                        <div class="flagship-sub">Creative Organisation, Routing &amp; Archiving</div>
+                    </div>
+                    <p class="flagship-desc">A self-hosted Cloudflare Worker pipeline I rebuilt from scratch to move creative assets from Slack straight into Frontify — fully autonomously, daily, with zero manual sync.</p>
+                    <div class="feature-list">
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> First fully autonomous production run — no manual intervention</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> Manifest validation, GraphQL upload, dedupe ledger</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> 27 automated tests guarding against regressions</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> Moved sync cadence from weekly to daily</div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag" style="background:var(--amber-soft); color:var(--amber); border:1px solid rgba(245,166,35,0.3);">Cloudflare Workers</span>
+                        <span class="tag" style="background:var(--amber-soft); color:var(--amber); border:1px solid rgba(245,166,35,0.3);">GraphQL</span>
+                        <span class="tag" style="background:var(--amber-soft); color:var(--amber); border:1px solid rgba(245,166,35,0.3);">Pipeline Automation</span>
+                    </div>
+                </div>
+
+                <!-- AssetFlow -->
+                <div class="flagship-card">
+                    <div class="flagship-glow" style="background:radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%);"></div>
+                    <div class="badge-row">
+                        <span class="badge" style="background:var(--violet); color:#fff;">Live Tool</span>
+                        <span class="badge" style="background:var(--green-soft); color:var(--green); border:1px solid rgba(52,211,153,0.3);">AI-Powered</span>
+                    </div>
+                    <div>
+                        <div class="flagship-title">AssetFlow</div>
+                        <div class="flagship-sub">AI-Powered Batch Asset Renaming</div>
+                    </div>
+                    <p class="flagship-desc">An AI tool I built to solve a real production pain point — intelligently renames design files using context-aware naming conventions, cutting manual effort from hours to seconds.</p>
+                    <div class="feature-list">
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> Renames hundreds of assets in one click</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> AI understands file context &amp; naming rules</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> Enforces consistent naming conventions</div>
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag" style="background:var(--violet-soft); color:var(--violet); border:1px solid rgba(139,92,246,0.3);">Batch Renaming</span>
+                        <span class="tag" style="background:var(--violet-soft); color:var(--violet); border:1px solid rgba(139,92,246,0.3);">AI Naming Logic</span>
+                        <span class="tag" style="background:var(--violet-soft); color:var(--violet); border:1px solid rgba(139,92,246,0.3);">Design Ops</span>
+                    </div>
+                    <a href="https://slice-salon-76979007.figma.site/" target="_blank" rel="noopener noreferrer" class="flagship-cta" style="background:var(--violet); color:#fff;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                        <i data-lucide="external-link" style="width:15px;height:15px;"></i> View Live Tool →
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- AUTOMATION & TOOLING -->
+        <section class="section">
+            <div class="section-tag"><i data-lucide="camera" style="width:14px"></i> Automation &amp; Tooling</div>
+            <h2 class="section-heading">Coverage &amp; QA at Scale</h2>
+            <p class="section-desc">Beyond the two flagship systems, I built the tooling that keeps documentation and asset libraries reliable.</p>
+            <div class="automation-grid">
+                <div class="auto-card">
+                    <div class="auto-card-head">
+                        <div class="auto-icon" style="background:var(--cyan-soft); border:1px solid var(--cyan);"><i data-lucide="smartphone" style="color:var(--cyan);width:18px;"></i></div>
+                        <div class="auto-title">Multi-Platform Screenshot Automation</div>
+                    </div>
+                    <p class="auto-desc">Built a dual-device capture framework (iPhone 12 Pro Max, Samsung Galaxy) generating 600+ desktop &amp; mobile screenshots without touching live accounts — 43/43 clean runs, open-sourced on GitHub.</p>
+                </div>
+                <div class="auto-card">
+                    <div class="auto-card-head">
+                        <div class="auto-icon" style="background:var(--amber-soft); border:1px solid var(--amber);"><i data-lucide="image" style="color:var(--amber);width:18px;"></i></div>
+                        <div class="auto-title">AI Image Generation Pipeline</div>
+                    </div>
+                    <p class="auto-desc">Produced 480+ AI-generated assets — icons, 3D renders, lifestyle imagery — while migrating output quality from gpt-image-1 to gpt-image-2 and flagging weak results for cleanup rather than shipping them.</p>
+                </div>
+                <div class="auto-card">
+                    <div class="auto-card-head">
+                        <div class="auto-icon" style="background:var(--green-soft); border:1px solid var(--green);"><i data-lucide="plug-zap" style="color:var(--green);width:18px;"></i></div>
+                        <div class="auto-title">Frontify MCP &amp; API Infrastructure</div>
+                    </div>
+                    <p class="auto-desc">Validated and hardened the Frontify Admin GraphQL API and activated the MCP server so automated upload, tagging, and metadata don't silently fail — and so the team can query the library with AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CASE STUDIES -->
+        <section class="section">
+            <div class="section-tag"><i data-lucide="award" style="width:14px"></i> Case Studies</div>
+            <h2 class="section-heading">How I Improve Creative Workflows</h2>
+            <div class="grid-3" id="case-studies-grid"></div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience" class="section">
+            <div class="section-tag"><i data-lucide="briefcase" style="width:14px"></i> Track Record</div>
+            <h2 class="section-heading">Experience</h2>
+            <div id="experience-timeline"></div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills" class="section">
+            <div class="section-tag"><i data-lucide="cpu" style="width:14px"></i> Stack</div>
+            <h2 class="section-heading">My Stack</h2>
+            <p class="section-desc">Figma, AI tools, and cloud platforms that power my workflow systems.</p>
+            <div class="grid-3" id="skills-content"></div>
+        </section>
+
+        <!-- COVER LETTER -->
+        <section id="cover-letter" class="section">
+            <div class="section-tag"><i data-lucide="pen-line" style="width:14px"></i> Introduction</div>
+            <h2 class="section-heading">Cover Letter</h2>
+            <div class="letter-card">
+                <div class="letter-head">
+                    <h3>Application for Creative Operations / AI Workflow Role</h3>
+                    <p>Targeted: Global Digital Sales Creative Studio</p>
+                </div>
+                <div class="letter-body">
+                    <p>Dear Hiring Manager,</p>
+                    <p>I'm applying for the Creative Designer role. With a background in multimedia production and digital visual design at <strong style="color:#fff;">Deriv</strong>, I've built a career around turning messy creative operations into structured, reliable systems.</p>
+                    <p>As Senior Multimedia Producer, I designed and shipped <strong style="color:#fff;">CORA</strong>, a fully autonomous asset pipeline, and migrated over 7,700 assets into a searchable, governed library — while actively building AI-assisted tools like <strong style="color:#fff;">AssetFlow</strong> to remove manual bottlenecks entirely.</p>
+                    <p>I'm drawn to roles where creative execution and technical systems intersect, and I'm looking for a team that needs both.</p>
+                    <p class="letter-closer">I don't just create content — I build the systems that make content scalable.</p>
+                    <div>
+                        <p>Warm regards,</p>
+                        <p style="font-weight:900; color:#fff; font-size:1.15rem; margin-top:0.4rem;">Abby Wasoochin</p>
+                        <p style="font-family:var(--mono); font-size:0.8rem; color:var(--text-dim)">Digital Creative Designer | Senior Multimedia Producer</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© <span id="year"></span> Abby Wasoochin — built &amp; automated by me, obviously.</p>
+    </footer>
+
+    <script>
+        const DATA = {
+            caseStudies: [
+                {
+                    id: 1, title: "Organizing a Scattered Asset Library into a Usable System", role: "Asset Management", icon: "database", color: "var(--cyan)", glow: "rgba(34,211,238,0.12)",
+                    flow: "Assets stored everywhere → centralized library with standardized naming & categorization.",
+                    impact: ["↑ Discoverability", "↓ Search time", "Faster reuse"]
+                },
+                {
+                    id: 2, title: "Reducing Content Production Time with AI Workflows", role: "AI Workflow", icon: "sparkles", color: "var(--violet)", glow: "rgba(139,92,246,0.12)",
+                    flow: "Manual production slowed scaling → AI-assisted creation, refinement & iteration.",
+                    impact: ["↓ Turnaround", "Scalable pipeline", "AI-enabled ops"]
+                },
+                {
+                    id: 3, title: "Making Creative Assets Work Across Social, PPC, and Email", role: "Cross-team Enablement", icon: "git-branch", color: "var(--amber)", glow: "rgba(245,166,35,0.12)",
+                    flow: "Inconsistent team access → structured workflows + shared asset systems.",
+                    impact: ["↑ Collaboration", "Consistent outputs", "Streamlined requests"]
+                }
+            ],
+            experience: [
+                {
+                    role: "Senior Multimedia Producer", company: "Deriv", companyColor: "var(--amber)", period: "Aug 2024 – Present",
+                    bullets: [{ icon: "workflow", label: "CORA Pipeline (Cloudflare Workers)" }, { icon: "sparkles", label: "AI Tools (Gemini, LTX, HeyGen)" }, { icon: "database", label: "Asset Systems & DAM" }]
+                },
+                {
+                    role: "Graphic Designer", company: "Deriv", companyColor: "var(--amber)", period: "Jul 2023 – Aug 2024",
+                    bullets: [{ icon: "layout", label: "Social, PPC & Events" }, { icon: "palette", label: "Brand Consistency" }, { icon: "layers", label: "Cross-channel Assets" }]
+                },
+                {
+                    role: "Multimedia Designer", company: "KZ1", companyColor: "var(--cyan)", period: "Apr 2016 – Jun 2022",
+                    bullets: [{ icon: "camera", label: "Photography & Videography" }, { icon: "film", label: "Post-production" }, { icon: "megaphone", label: "Campaign Content" }]
+                },
+                {
+                    role: "Graphic Designer", company: "KZ1", companyColor: "var(--cyan)", period: "Jul 2012 – Mar 2016",
+                    bullets: [{ icon: "pen-tool", label: "Print & Digital Design" }, { icon: "monitor", label: "Social Platforms" }, { icon: "type", label: "Visual Communication" }]
+                },
+                {
+                    role: "Junior Video Editor (Intern)", company: "The Wedding Station", companyColor: "var(--text-dim)", period: "Jan 2012 – Jun 2012",
+                    bullets: [{ icon: "video", label: "Event Video Editing" }, { icon: "scissors", label: "Post-production" }, { icon: "star", label: "Visual Storytelling" }]
+                }
+            ],
+            skills: [
+                {
+                    cat: "Creative Systems", icon: "database", color: "var(--cyan)", glow: "rgba(34,211,238,0.1)",
+                    items: [{ icon: "folder-check", label: "Digital Asset Management" }, { icon: "git-branch", label: "Workflow Design" }, { icon: "settings", label: "Process Optimization" }, { icon: "layers", label: "Brand Governance" }, { icon: "film", label: "After Effects Animation" }, { icon: "pen-tool", label: "Graphic Design" }]
+                },
+                {
+                    cat: "AI & Automation", icon: "sparkles", color: "var(--violet)", glow: "rgba(139,92,246,0.1)",
+                    items: [{ icon: "brain", label: "Prompt Engineering" }, { icon: "zap", label: "Generative AI" }, { icon: "cpu", label: "AI Workflow Integration" }, { icon: "repeat", label: "Automation Pipelines" }]
+                },
+                {
+                    cat: "Tech Stack", icon: "cpu", color: "var(--amber)", glow: "rgba(245,166,35,0.1)",
+                    items: [{ icon: "square", label: "Figma" }, { icon: "cloud", label: "Cloudflare Workers" }, { icon: "share-2", label: "GraphQL" }, { icon: "database", label: "Supabase" }, { icon: "code", label: "VS Code" }, { icon: "sparkles", label: "Gemini AI" }]
+                }
+            ]
+        };
+
+        function init() {
+            document.getElementById('case-studies-grid').innerHTML = DATA.caseStudies.map(s => `
+                <div class="case-card" style="background:linear-gradient(135deg,${s.glow} 0%,rgba(13,17,25,0.95) 100%); border-color:${s.color}33;">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                        <div style="width:38px;height:38px;background:${s.glow};border:1px solid ${s.color}55;border-radius:9px;display:flex;align-items:center;justify-content:center;">
+                            <i data-lucide="${s.icon}" style="color:${s.color};width:17px;height:17px;"></i>
+                        </div>
+                        <span class="case-role" style="background:${s.glow};color:${s.color};padding:3px 8px;border-radius:6px;border:1px solid ${s.color}44;">${s.role}</span>
+                    </div>
+                    <div class="case-title">${s.title}</div>
+                    <div class="case-flow">${s.flow}</div>
+                    <div class="case-impact">
+                        ${s.impact.map(i => `<span class="pill">${i}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('skills-content').innerHTML = DATA.skills.map(s => `
+                <div class="skill-card" style="background:linear-gradient(135deg,${s.glow} 0%,rgba(13,17,25,0.9) 100%); border-color:${s.color}33;">
+                    <div class="skill-head">
+                        <div style="width:40px;height:40px;background:${s.glow};border:1px solid ${s.color}55;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                            <i data-lucide="${s.icon}" style="color:${s.color};width:18px;height:18px;"></i>
+                        </div>
+                        <span class="skill-cat">${s.cat}</span>
+                    </div>
+                    <div class="skill-items">
+                        ${s.items.map(i => `<div class="skill-item"><i data-lucide="${i.icon}" style="width:12px;height:12px;color:${s.color};flex-shrink:0;"></i>${i.label}</div>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('experience-timeline').innerHTML = DATA.experience.map(e => `
+                <div class="time-row">
+                    <div class="time-head">
+                        <div>
+                            <span class="time-company" style="color:${e.companyColor};">${e.company}</span><br>
+                            <span class="time-role">${e.role}</span>
+                        </div>
+                        <span class="time-period">${e.period}</span>
+                    </div>
+                    <div class="time-bullets">
+                        ${e.bullets.map(b => `<span class="pill"><i data-lucide="${b.icon}" style="width:11px;height:11px;color:var(--text-dim);"></i>${b.label}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('year').textContent = new Date().getFullYear();
+            lucide.createIcons();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>
