@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORA — Creative Organisation, Routing &amp; Archiving · System Blueprint</title>
+<style>
+    :root {
+        --bg: #0a0c10;
+        --panel: #10141b;
+        --panel2: #151a23;
+        --line: #232a36;
+        --text: #e6e9ef;
+        --dim: #8b93a3;
+        --amber: #f5a623;
+        --amber-soft: rgba(245, 166, 35, 0.14);
+        --cyan: #38bdf8;
+        --cyan-soft: rgba(56, 189, 248, 0.12);
+        --green: #34d399;
+        --green-soft: rgba(52, 211, 153, 0.12);
+        --violet: #8b5cf6;
+        --violet-soft: rgba(139, 92, 246, 0.14);
+        --red: #f87171;
+        --red-soft: rgba(248, 113, 113, 0.12);
+        --mono: "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); }
+    #app { display: flex; height: 100vh; }
+
+    /* ---------- Board ---------- */
+    #board-wrap { position: relative; flex: 1; overflow: hidden; }
+    #board { position: absolute; inset: 0; cursor: grab; }
+    #board.dragging { cursor: grabbing; }
+    #board svg { position: absolute; top: 0; left: 0; }
+    .bg-grid { opacity: 0.5; }
+
+    /* node hit areas + labels live inside svg */
+    .node-label { font-family: var(--mono); fill: var(--text); }
+    .node-sublabel { font-family: var(--mono); fill: var(--dim); }
+    .node-hit { cursor: pointer; }
+    .node-hit.dimmed { opacity: 0.16; }
+    .packet { pointer-events: none; }
+
+    /* ---------- Toolbar ---------- */
+    #toolbar {
+        position: absolute; top: 14px; left: 14px; right: 14px; z-index: 20;
+        display: flex; align-items: center; gap: 10px; pointer-events: none;
+    }
+    #toolbar > * { pointer-events: auto; }
+    .tb-title {
+        display: flex; align-items: baseline; gap: 10px;
+        background: rgba(16, 20, 27, 0.9); border: 1px solid var(--line);
+        border-radius: 10px; padding: 10px 14px; backdrop-filter: blur(6px);
+    }
+    .tb-title .sys { font-size: 1.05rem; font-weight: 800; letter-spacing: 0.04em; color: var(--amber); }
+    .tb-title .sub { font-size: 0.72rem; color: var(--dim); font-family: var(--mono); }
+    .tb-btn {
+        background: rgba(16, 20, 27, 0.9); border: 1px solid var(--line); color: var(--text);
+        font-family: var(--mono); font-size: 0.72rem; padding: 9px 13px; border-radius: 8px;
+        cursor: pointer; transition: all 0.15s;
+    }
+    .tb-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .tb-btn.active { background: var(--amber); color: #1a1002; border-color: var(--amber); font-weight: 700; }
+    .tb-spacer { flex: 1; }
+
+    /* lane chips */
+    #lane-chips { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .lane-chip {
+        font-family: var(--mono); font-size: 0.68rem; padding: 6px 11px; border-radius: 999px;
+        border: 1px solid; cursor: pointer; background: rgba(16,20,27,0.9); backdrop-filter: blur(6px);
+        transition: all 0.15s; user-select: none;
+    }
+    .lane-chip.off { opacity: 0.35; }
+
+    /* ---------- Sidebar ---------- */
+    #sidebar {
+        width: 340px; background: var(--panel); border-left: 1px solid var(--line);
+        display: flex; flex-direction: column; flex-shrink: 0;
+    }
+    #sidebar.hidden { display: none; }
+    .sb-head { padding: 18px 18px 14px; border-bottom: 1px solid var(--line); }
+    .sb-head h1 { font-size: 1.1rem; font-weight: 800; }
+    .sb-head .kicker { font-family: var(--mono); font-size: 0.68rem; color: var(--amber); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+    .sb-body { flex: 1; overflow-y: auto; padding: 16px 18px; }
+    .sb-body::-webkit-scrollbar { width: 8px; }
+    .sb-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+    .sb-h { font-family: var(--mono); font-size: 0.68rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; margin: 18px 0 8px; }
+    .sb-h:first-child { margin-top: 0; }
+    .sb-p { font-size: 0.82rem; color: var(--text); line-height: 1.6; margin-bottom: 10px; }
+    .sb-p .m { font-family: var(--mono); font-size: 0.76rem; color: var(--cyan); }
+    .sb-list { display: grid; gap: 6px; }
+    .sb-item {
+        display: flex; align-items: center; gap: 9px; font-size: 0.8rem; color: var(--text);
+        padding: 8px 10px; border-radius: 8px; background: var(--panel2); cursor: pointer;
+        border: 1px solid transparent; transition: all 0.15s;
+    }
+    .sb-item:hover { border-color: var(--line); }
+    .sb-item.active { border-color: var(--amber); background: var(--amber-soft); }
+    .sb-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .sb-item .lines { margin-left: auto; font-family: var(--mono); font-size: 0.66rem; color: var(--dim); }
+    .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 0.78rem; margin-bottom: 12px; }
+    .kv .k { color: var(--dim); font-family: var(--mono); font-size: 0.7rem; white-space: nowrap; }
+    .kv .v { color: var(--text); font-family: var(--mono); font-size: 0.74rem; word-break: break-word; }
+    .code-block {
+        background: #080a0e; border: 1px solid var(--line); border-radius: 8px;
+        padding: 10px 12px; font-family: var(--mono); font-size: 0.7rem; line-height: 1.55;
+        color: #b7c0d0; overflow-x: auto; white-space: pre; margin-bottom: 12px;
+    }
+    .code-block .c { color: #5b6472; }
+    .code-block .s { color: var(--green); }
+    .code-block .n { color: var(--amber); }
+    .foot-note { font-family: var(--mono); font-size: 0.62rem; color: var(--dim); padding: 12px 18px; border-top: 1px solid var(--line); }
+
+    /* ---------- Legend ---------- */
+    #legend {
+        position: absolute; bottom: 14px; left: 14px; z-index: 20;
+        background: rgba(16,20,27,0.9); border: 1px solid var(--line); border-radius: 10px;
+        padding: 10px 14px; backdrop-filter: blur(6px);
+        display: flex; gap: 16px; font-family: var(--mono); font-size: 0.64rem; color: var(--dim);
+    }
+    #legend .li { display: flex; align-items: center; gap: 6px; }
+    .sw { width: 14px; height: 14px; border-radius: 4px; border: 1px solid; flex-shrink: 0; }
+    .sw.fork { border-radius: 2px; transform: rotate(45deg) scale(0.8); }
+
+    /* ---------- Sheet (bottom drawer) ---------- */
+    #sheet {
+        position: absolute; left: 0; right: 0; bottom: 0; z-index: 30;
+        background: rgba(13,16,22,0.97); border-top: 1px solid var(--line);
+        backdrop-filter: blur(10px); max-height: 62vh; transform: translateY(100%);
+        transition: transform 0.25s ease; display: flex; flex-direction: column;
+    }
+    #sheet.open { transform: translateY(0); }
+    .sheet-head {
+        display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line);
+        flex-shrink: 0;
+    }
+    .sheet-head .sh-title { font-weight: 800; font-size: 0.95rem; }
+    .sheet-head .sh-tag { font-family: var(--mono); font-size: 0.64rem; padding: 3px 9px; border-radius: 999px; border: 1px solid; }
+    .sheet-close {
+        margin-left: auto; background: none; border: none; color: var(--dim); font-size: 1.2rem;
+        cursor: pointer; font-family: var(--mono); padding: 4px 8px; border-radius: 6px;
+    }
+    .sheet-close:hover { color: var(--text); background: var(--panel2); }
+    .sheet-body { padding: 16px 20px 24px; overflow-y: auto; }
+    .sheet-body::-webkit-scrollbar { width: 8px; }
+    .sheet-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+    .trace-step {
+        display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px dashed var(--line);
+        cursor: pointer; border-radius: 6px;
+    }
+    .trace-step:hover { background: rgba(255,255,255,0.02); }
+    .trace-step .ts-n {
+        font-family: var(--mono); font-size: 0.66rem; color: var(--bg); background: var(--amber);
+        width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center;
+        justify-content: center; flex-shrink: 0; font-weight: 700; margin-top: 2px;
+    }
+    .trace-step .ts-body { flex: 1; }
+    .trace-step .ts-t { font-size: 0.82rem; font-weight: 600; }
+    .trace-step .ts-t .m { font-family: var(--mono); color: var(--amber); font-size: 0.74rem; }
+    .trace-step .ts-d { font-size: 0.76rem; color: var(--dim); line-height: 1.5; margin-top: 2px; }
+    .trace-step.active .ts-n { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+    /* ---------- Paths menu ---------- */
+    #paths-menu {
+        position: absolute; top: 58px; left: 14px; z-index: 25;
+        background: rgba(16,20,27,0.97); border: 1px solid var(--line); border-radius: 10px;
+        padding: 8px; display: none; backdrop-filter: blur(10px); min-width: 240px;
+    }
+    #paths-menu.open { display: block; }
+    .pm-item {
+        display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
+        font-size: 0.8rem; cursor: pointer; font-family: var(--mono);
+    }
+    .pm-item:hover { background: var(--panel2); }
+    .pm-item .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    @media (max-width: 900px) {
+        #sidebar { display: none; }
+        #app { flex-direction: column; }
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="board-wrap">
+        <div id="toolbar">
+            <div class="tb-title">
+                <span class="sys">CORA</span>
+                <span class="sub">Creative Asset Sync pipeline · Sheet: SYS-01 · System axonometric<br>Rev: main · commit 07bcfd5+ · Scale: footprint = lines of code<br>1,413 lines across src/ · 81 tests across 6 files · 1 pipeline · 5 outcome branches</span>
+            </div>
+            <button class="tb-btn" id="btn-trace">▶ Run Trace</button>
+            <button class="tb-btn" id="btn-paths">Paths</button>
+            <div class="tb-spacer"></div>
+            <div id="lane-chips"></div>
+            <button class="tb-btn" id="btn-reset">Reset View</button>
+        </div>
+        <div id="paths-menu"></div>
+        <div id="board"></div>
+        <div id="legend">
+            <div class="li"><div class="sw" style="background:rgba(245,166,35,0.25);border-color:var(--amber);"></div>stage (size = lines)</div>
+            <div class="li"><div class="sw fork" style="background:rgba(139,92,246,0.3);border-color:var(--violet);"></div>decision</div>
+            <div class="li"><div class="sw" style="background:rgba(56,189,248,0.14);border-color:var(--cyan);border-style:dashed;"></div>external</div>
+            <div class="li"><div class="sw" style="background:rgba(52,211,153,0.14);border-color:var(--green);"></div>store</div>
+            <div class="li"><div class="sw" style="background:rgba(248,113,113,0.10);border-color:var(--red);opacity:0.55;"></div>retired</div>
+        </div>
+        <div id="sheet">
+            <div class="sheet-head">
+                <div class="sh-title" id="sheet-title"></div>
+                <div class="sh-tag" id="sheet-tag"></div>
+                <button class="sheet-close" id="sheet-close">✕</button>
+            </div>
+            <div class="sheet-body" id="sheet-body"></div>
+        </div>
+    </div>
+    <div id="sidebar">
+        <div class="sb-head">
+            <div class="kicker">System Blueprint</div>
+            <h1>CORA — Sync Pipeline</h1>
+        </div>
+        <div class="sb-body" id="sb-body"></div>
+        <div class="foot-note">Drawn by: Claude · Scale: footprint = lines of code · every payload real (see decision log D-001–D-038)</div>
+    </div>
+</div>
+<script>
+/* ===================================================================
+   CORA BLUEPRINT — geometry + engine (isometric projection)
+   =================================================================== */
+const ISO_X = Math.cos(Math.PI / 6);   // 30°
+const ISO_Y = Math.sin(Math.PI / 6);
+function iso(x, y, z) {
+    // isometric projection: x→right-down, y→left-down, z→up
+    return {
+        x: (x - y) * ISO_X,
+        y: (x + y) * ISO_Y - z
+    };
+}
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+}
+function poly(points) { return points.map(p => `${p.x},${p.y}`).join(' '); }
+
+/* ===================================================================
+   DATA — every fact below traces to 07-blueprint-brief.md
+   (real files, real line counts, verbatim payloads, D-log D-001–D-038)
+   Nothing invented: missing details are absent, not guessed.
+   =================================================================== */
+const LANE = {
+    synced:             { color: '#34d399', label: 'synced',             chip: 'rgba(52,211,153,0.14)',  border: '#34d399',
+                          desc: 'Happy path: schema → sync → frontify_api → frontify_lib → ledger.',
+                          nodes: ['slack_thread','cron','http','scheduled','slack_api','schema','sync','resolvefile','frontify_api','taxonomy','frontify_lib','ledger'] },
+    duplicate:          { color: '#8b93a3', label: 'duplicate',          chip: 'rgba(139,147,163,0.14)', border: '#8b93a3',
+                          desc: 'sync → ledger (already-synced check short-circuits before any Frontify call).',
+                          nodes: ['slack_thread','scheduled','slack_api','schema','sync','ledger'] },
+    held_for_review:    { color: '#f5a623', label: 'held_for_review',    chip: 'rgba(245,166,35,0.14)',  border: '#f5a623',
+                          desc: 'sync stops at the confidence-threshold check, nothing written to ledger.',
+                          nodes: ['slack_thread','scheduled','slack_api','schema','sync','mcp'] },
+    needs_verification: { color: '#38bdf8', label: 'needs_verification', chip: 'rgba(56,189,248,0.12)',  border: '#38bdf8',
+                          desc: 'sync finds a pending ledger record from a previous incomplete run — surfaced for a human, not retried automatically.',
+                          nodes: ['slack_thread','scheduled','slack_api','schema','sync','ledger'] },
+    error:              { color: '#f87171', label: 'error',              chip: 'rgba(248,113,113,0.12)', border: '#f87171',
+                          desc: 'Any step throws (Slack file gone, Frontify rejects, resource ceiling hit) — logged, left unmarked, retries next cron.',
+                          nodes: ['slack_thread','cron','scheduled','slack_api','schema','sync','resolvefile','frontify_api','ledger'] },
+};
+
+/* Title block (verbatim from the brief) */
+const TITLE_BLOCK = {
+    title: 'CORA — Creative Asset Sync pipeline',
+    sheet: 'SYS-01 · System axonometric',
+    rev:   'main · commit 07bcfd5+',
+    scale: 'footprint = lines of code',
+    drawn: 'Claude (this session)',
+    total: '1,413 lines across src/ · 81 tests across 6 files · 1 pipeline · 5 outcome branches',
+};
+
+/* node kinds: stage (box, height scales with real line count), fork (decision),
+   ext (dashed external system), store (cylinder), legacy (retired, off-board) */
+const NODES = [
+    { id: 'slack_thread', kind: 'ext', x: 0.0, y: 0.0, w: 2.4, lines: 0,
+      title: 'Slack · manifest thread', sub: '#experiment_slack_frontify_sync',
+      what: 'Source of truth for manifests. P2 posts manifest files to one fixed thread — channel C0BGNB7LXQB, thread ts 1788827777.973639.',
+      built: ['Manifest thread ts is swappable config, not hardcoded logic — moved once already when the original thread got too large (D-037).'] },
+
+    { id: 'cron', kind: 'fork', x: 0.0, y: 3.2, w: 1.6, lines: 0,
+      title: 'Cloudflare Cron Trigger', sub: 'daily 22:00 UTC',
+      what: 'Cloudflare Workers cron trigger — fires the scheduled handler daily at 22:00 UTC (wrangler.toml [triggers]).',
+      built: [] },
+
+    { id: 'http', kind: 'ext', x: 0.0, y: 5.6, w: 2.4, lines: 44,
+      title: 'Manual HTTP entry', sub: 'src/index.ts · 44 lines',
+      what: 'Cloudflare Worker fetch() — manual trigger endpoint. POST a full manifest to run the same pipeline without waiting for cron.',
+      built: [] },
+
+    { id: 'legacy_makecom', kind: 'legacy', x: 0.0, y: 8.4, w: 2.2, lines: 0,
+      title: 'Make.com orchestration', sub: 'retired',
+      what: 'The previous Make.com orchestration — switched off, replaced entirely by the Worker pipeline.',
+      built: ['Replaced entirely by the Cloudflare Worker (D-007).'] },
+
+    { id: 'scheduled', kind: 'stage', x: 3.6, y: 0.0, w: 2.6, lines: 223,
+      title: 'Discovery', sub: 'src/scheduled.ts · runScheduledSync · 223 lines',
+      what: 'Fetches every reply in the one fixed manifest thread, finds every .json file not yet marked processed, downloads/validates/syncs each, oldest first.',
+      built: [
+        'Per-manifest-file KV key (scheduled:processed:<fileId>), not a single scalar — lets one cron run catch up on multiple outstanding manifests instead of only ever seeing "the newest" (D-020).',
+        'Filename match widened from the exact p2-manifest-<date>.json pattern to any /\\.json$/i — a filename mismatch used to make a real manifest invisible to discovery entirely, worse than a validation failure since it never even got logged (D-036).',
+        'A manifest\'s own sync failure is caught in its own try/catch, separate from the fetch/validate step — one bad batch no longer blocks every file queued behind it in the same run (D-025, found live: a stuck manifest blocked an unrelated one for 4 days).',
+      ] },
+
+    { id: 'slack_api', kind: 'ext', x: 3.6, y: 3.2, w: 2.4, lines: 184,
+      title: 'Slack Web API client', sub: 'src/slack.ts · 184 lines',
+      what: 'The Worker\'s only window into Slack: files.info · conversations.replies · file download.',
+      built: [] },
+
+    { id: 'schema', kind: 'stage', x: 7.2, y: 0.0, w: 2.6, lines: 200,
+      title: 'Manifest validation', sub: 'src/schema.ts · Zod · 200 lines',
+      what: 'The one contract gate. assets[] is validated strictly (it\'s what actually syncs); manual_review[]/missing_slack_asset[] are validated as "any object" only; manifest_type/source_channel are required non-empty strings, not specific literals. Zero imports from other src/ files, by convention.',
+      built: [
+        'channel_id (a Slack-assigned ID, never reformatted) is the real enforced source boundary — not source_channel\'s human-typed label, which drifted in wording twice (D-034, then permanently loosened D-035).',
+        'source_url accepts a direct Slack file-page URL OR a message permalink — P2 sometimes links to the message a file was posted in rather than the file itself (D-029).',
+        'period_start/period_end accept either a plain date or a full ISO datetime — P2 sends both inconsistently (D-019).',
+        'A real production incident: two full manifest arrays (manual_review, missing_slack_asset) showed three genuinely different shapes across three consecutive days — fixed by not validating their shape at all (D-028).',
+      ] },
+
+    { id: 'resolvefile', kind: 'fork', x: 7.2, y: 3.4, w: 1.6, lines: 0,
+      title: 'File-ID resolution', sub: 'resolveFileId() in src/sync.ts',
+      what: 'Tries a direct Slack file-page URL first; falls back to resolving a message permalink to its actual attached file.',
+      built: [
+        'Originally used conversations.history, which only found a message by its own ts when that message was a thread root — returned zero messages for a reply\'s own ts. Switched to conversations.replies, which works uniformly for either (D-029, hardened D-033, after the reply-case question was raised directly with P2\'s own session).',
+      ] },
+
+    { id: 'sync', kind: 'stage', x: 10.8, y: 0.0, w: 2.6, lines: 344,
+      title: 'Sync core', sub: 'src/sync.ts · syncManifest → processAssetFile · 344 lines',
+      what: 'Resolves one shared dated-folder destination for the whole batch, then loops every file of every approved asset (one entry can carry several regional-language files) through upload.',
+      built: [
+        'Folder routing by content-type/series/campaign classification was built, then removed entirely after it misfiled two real assets live — every synced asset now lands in the same dated batch folder, no exceptions (D-022 → D-032).',
+        'Generated names no longer append the raw filename/UUID — a real synced asset once ended in Slack\'s own meaningless upload placeholder temporary-slug-<uuid> (D-030).',
+        'A metadata-write failure after a successful upload still reports "synced" — the file already exists in Frontify, so forcing a re-upload would be wasteful; only the metadata write itself needs a manual fix.',
+        'Below confidence_threshold → held_for_review, nothing written to the ledger, so it can be reconsidered later without needing a special "undo."',
+      ] },
+
+    { id: 'frontify_api', kind: 'ext', x: 10.8, y: 3.2, w: 2.4, lines: 228,
+      title: 'Frontify GraphQL client', sub: 'src/frontify.ts · 228 lines',
+      what: 'Three mutations: allocate an upload slot, PUT the file in 40MB chunks, create the asset, best-effort attach metadata.',
+      built: [
+        '40MB chunk size verified live against a real 109MB file (exactly 3 parts: 40MB, 40MB, 25.1MB) — the real constraint was Cloudflare\'s own 100MB outbound-subrequest body limit, not Frontify or S3 (D-010).',
+        'addCustomMetadata\'s real input field is customMetadata, not values — the guessed shape had been silently failing on every metadata write since it shipped, discovered live months later (D-027).',
+        'Content Type and Market custom-metadata properties don\'t exist on library 24 under any identifier at all — confirmed by a full re-pull of all 10 real properties, not a stale ID (D-031). Skipped with a logged warning rather than guessing a replacement.',
+      ] },
+
+    { id: 'taxonomy', kind: 'store', x: 7.2, y: 6.6, w: 2.2, lines: 104,
+      title: 'Frontify property/option ID maps', sub: 'src/frontifyTaxonomy.ts · 104 lines',
+      what: 'Static config mapping metadata fields to Frontify property/option IDs — never guessed at runtime.',
+      built: [] },
+
+    { id: 'ledger', kind: 'store', x: 10.8, y: 6.6, w: 2.2, lines: 36,
+      title: 'KV idempotency ledger', sub: 'src/dedupe.ts · SYNC_LEDGER · 36 lines',
+      what: 'sync:<fileId> → pending (written before createAsset) or synced. Cloudflare KV, SYNC_LEDGER namespace.',
+      built: [
+        'The pending intermediate state exists specifically for the case where createAsset succeeds but the follow-up markSynced call fails — the next run sees "ambiguous, needs a human" instead of silently re-uploading or silently losing the approval.',
+        'No TTL — audit record, not a cache, since Frontify has no query to look an asset up by its externalId.',
+      ] },
+
+    { id: 'frontify_lib', kind: 'store', x: 14.4, y: 3.2, w: 2.2, lines: 0,
+      title: 'Frontify Marketing Material library', sub: 'library 24 · dated batch folder',
+      what: 'Destination library — every synced asset lands in a dated batch folder, e.g. 2026-09-07/.',
+      built: [] },
+
+    { id: 'mcp', kind: 'ext', x: 14.4, y: 6.6, w: 2.4, lines: 0,
+      title: 'Frontify admin MCP session', sub: 'human judgment',
+      what: 'Everything past "fetch, upload, name, file into the dated batch folder": real folder taxonomy placement, Content Type/Market metadata, tagging, grouping related assets, one-off renames/refiles of a misfiled asset. A manual, separate Claude session.',
+      built: [
+        'Confirmed as the permanent design (D-038), not a temporary gap — automating this specifically produced real live mistakes (two misfiled/UUID-named assets, D-030) because it meant trusting P2\'s own confidence-scored classification as ground truth, with no fallback for a human to catch a wrong guess first.',
+      ] },
+];
+
+/* edges — payloads copied VERBATIM from the brief (real, not paraphrased) */
+const EDGES = [
+    { from: 'slack_thread', to: 'scheduled', label: 'discovery poll',
+      src: 'src/slack.ts → getConversationsReplies',
+      payload:
+`GET conversations.replies?channel=C0BGNB7LXQB&ts=1788827777.973639
+→ { ok: true, messages: [{ ts, files: [{ id, name }] }, ...] }` },
+
+    { from: 'scheduled', to: 'schema', label: 'manifest file fetch + parse',
+      src: 'src/slack.ts → getSlackFileInfo, downloadSlackFile',
+      payload:
+`GET files.info?file=<fileId>  → { file: { id, name, url_private_download, ... } }
+GET <url_private_download>, auth: Bearer <SLACK_BOT_TOKEN>  → raw JSON text
+JSON.parse(text) → candidate` },
+
+    { from: 'schema', to: 'sync', label: 'the real manifest contract',
+      src: 'src/schema.ts → manifestSchema',
+      note: 'manifest_type/source_channel here are the real wording P2 sent (not the older literal values), validated only as non-empty strings.',
+      payload:
+`{
+  "manifest_type": "p2_weekly_scan",
+  "schema_version": "3.0",
+  "batch_id": "2026-09-07",
+  "source_channel": "creative_feedback_center",
+  "channel_id": "C026V7SJS7K",
+  "confidence_threshold": 0.7,
+  "assets": [{
+    "asset_id": "mo459-why-index-gaps-eat-your-stop-loss",
+    "files": [
+      { "source_url": "https://deriv-group.slack.com/files/U08R9EPGGU8/F0BTXGK2353/MO_459 - Why index gaps eat your stop loss (EN).mp4", "language": "English" },
+      { "source_url": "https://deriv-group.slack.com/files/U08R9EPGGU8/F0BUPACGRL0/Thumbnail (EN)_00000.png", "language": "English" }
+    ],
+    "title_components": { "campaign_or_theme": "MO_459", "detail": "Why index gaps eat your stop loss" },
+    "content_type": "Social Media",
+    "placement": "Stories/Reels",
+    "channel": ["Social media"],
+    "confidence": 0.85,
+    "needs_classification_review": true
+  }],
+  "manual_review": [ /* any shape, informational only */ ],
+  "missing_slack_asset": [ /* any shape, informational only */ ]
+}` },
+
+    { from: 'sync', to: 'frontify_api', label: 'three real mutations',
+      src: 'src/frontify.ts',
+      payload:
+`mutation UploadFile($input: UploadFileInput!) {
+  uploadFile(input: $input) { id urls }
+}
+# input: { filename, size, chunkSize: 41943040 }
+
+mutation CreateAsset($input: CreateAssetInput!) {
+  createAsset(input: $input) { job { assetId } }
+}
+# input: { fileId, title, parentId, externalId, directory: ["2026-09-07"] }
+
+mutation AddCustomMetadata($input: AddCustomMetadataInput!) {
+  addCustomMetadata(input: $input) { parentIds }
+}
+# input: { parentIds: [assetId], customMetadata: [{ propertyId, value }] }` },
+
+    { from: 'frontify_api', to: 'frontify_lib', label: 'presigned chunk upload',
+      src: 'src/frontify.ts → putFileBytes',
+      note: 'No Authorization header — deliberately not the GraphQL bearer token.',
+      payload:
+`PUT <presigned url>, headers: { "Content-Length": <bytes> }, body: <chunk bytes>` },
+
+    { from: 'sync', to: 'ledger', label: 'idempotency record',
+      src: 'src/dedupe.ts',
+      payload:
+`// key: sync:<slackFileId>
+{ "status": "pending", "frontifyFileId": "…", "startedAt": "2026-09-07T…" }
+// then, after createAsset succeeds:
+{ "status": "synced", "frontifyFileId": "…", "frontifyAssetId": "…", "syncedAt": "2026-09-07T…" }` },
+
+    { from: 'http', to: 'schema', label: 'manual trigger contract',
+      src: 'src/index.ts',
+      payload:
+`POST /<SYNC_PATH_SLUG>
+Authorization: Bearer <WORKER_SHARED_SECRET>
+Content-Type: application/json
+<full manifest JSON, same shape as above>
+
+→ 200 { batch_id, totals: {synced, duplicate, held_for_review, needs_verification, error, manual_review_count, missing_asset_count}, results: [...] }` },
+
+    { from: 'frontify_lib', to: 'mcp', label: 'handoff to human judgment',
+      note: 'Not a code contract — a deliberate, documented handoff (D-038), the CORA equivalent of an "external model" edge but pointing at a human process instead of an API.',
+      payload:
+`Every asset lands in Frontify with: a generated name, a dated batch folder,
+and whatever metadata had a confirmed property ID (Placement/Categories/
+Channel/Language/Series). Everything else — real folder placement, Content
+Type/Market, tags, grouping, misfile corrections — is picked up manually.` },
+];
+
+/* TRACE — the synced happy path, every step a real fact */
+const TRACE = {
+    title: 'CORA — daily sync run',
+    steps: [
+        { node: 'cron',       t: 'cron fires',            d: 'Cloudflare Cron Trigger runs the Worker daily at 22:00 UTC (wrangler.toml [triggers]). The scheduled handler boots the discovery step.' },
+        { node: 'slack_thread',t: 'discovery poll',        d: 'src/slack.ts getConversationsReplies fetches every reply in the fixed manifest thread (channel C0BGNB7LXQB, ts 1788827777.973639).' },
+        { node: 'scheduled',  t: 'find unprocessed manifests', d: 'src/scheduled.ts finds every .json file not yet marked processed (per-file KV key scheduled:processed:<fileId>), oldest first. A single manifest\'s failure no longer blocks the rest (D-025).' },
+        { node: 'slack_api',  t: 'fetch + parse',          d: 'files.info resolves the file, then it is downloaded with the bot token and JSON.parse\'d into a candidate manifest.' },
+        { node: 'schema',     t: 'manifest validated',     d: 'src/schema.ts enforces the contract: assets[] strictly, informational arrays as any-object. A fail parks the file with a reason; it never blocks the batch.' },
+        { node: 'sync',       t: 'confidence check',      d: 'Above the manifest\'s confidence_threshold (0.7 in the real example) → proceed to upload. Below → held_for_review, nothing written to the ledger.' },
+        { node: 'resolvefile',t: 'file id resolved',      d: 'resolveFileId() tries the direct Slack file-page URL first, falls back to resolving a permalink to its attached file via conversations.replies (D-029, hardened D-033).' },
+        { node: 'frontify_api',t: 'upload in 40MB chunks', d: 'uploadFile allocates the slot (chunkSize 41943040), bytes go to the presigned URL in 40MB chunks, then createAsset lands the file — the real constraint was Cloudflare\'s 100MB outbound limit (D-010).' },
+        { node: 'frontify_lib',t: 'asset stored',         d: 'The asset exists in the Marketing Material library (24) inside the dated batch folder 2026-09-07/, with a generated name and confirmed-ID metadata (Placement/Categories/Channel/Language/Series).' },
+        { node: 'ledger',     t: 'marked synced',         d: 'src/dedupe.ts moves sync:<fileId> from pending → synced with the frontifyAssetId. Tomorrow\'s run recognises the file instantly.' },
+        { node: 'mcp',        t: 'human finish',          d: 'Folder placement, Content Type/Market, tags and grouping are finished manually via the Frontify admin MCP session — permanent design, not a gap (D-038).' },
+    ],
+};
+
+/* ===================================================================
+   ENGINE — camera, isometric board, node/edge rendering, packets,
+   lane filter, sidebar, sheet panel, trace walkthrough
+   (interaction pattern from imagegen-system-blueprint.html, adapted
+    to CORA's smaller graph — no invented behavior)
+   =================================================================== */
+
+/* ---------- kind palette ---------- */
+const KIND = {
+    stage:  { fill: 'rgba(245,166,35,0.16)',  stroke: '#f5a623', top: 'rgba(245,166,35,0.30)' },
+    fork:   { fill: 'rgba(139,92,246,0.16)',  stroke: '#8b5cf6', top: 'rgba(139,92,246,0.32)', hatch: true },
+    ext:    { fill: 'rgba(56,189,248,0.08)',  stroke: '#38bdf8', top: 'rgba(56,189,248,0.16)', dashed: true },
+    store:  { fill: 'rgba(52,211,153,0.10)',  stroke: '#34d399', top: 'rgba(52,211,153,0.20)', cylinder: true },
+    legacy: { fill: 'rgba(248,113,113,0.07)', stroke: '#f87171', top: 'rgba(248,113,113,0.14)', dim: true },
+};
+const NODE_BY = {};
+NODES.forEach(n => NODE_BY[n.id] = n);
+
+/* ---------- camera ---------- */
+const cam = { x: 0, y: 0, zoom: 1 };
+const U = 46; // world unit → screen px (pre-zoom)
+
+function worldBBox() {
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const n of NODES) {
+        const a = iso(n.x, n.y, h(n) + 1.2);
+        const b = iso(n.x + n.w, n.y + n.d, 0);
+        minX = Math.min(minX, a.x, b.x); maxX = Math.max(maxX, a.x, b.x);
+        minY = Math.min(minY, a.y, b.y); maxY = Math.max(maxY, a.y, b.y);
+    }
+    return { minX, minY, maxX, maxY };
+}
+function h(n) { return n.lines ? Math.max(0.25, n.lines / 200) : 0.5; }
+
+/* ---------- svg root ---------- */
+const board = document.getElementById('board');
+const svg = el('svg', { width: '100%', height: '100%' });
+const gWorld = el('g', {});
+svg.appendChild(gWorld);
+board.appendChild(svg);
+let VW = 1, VH = 1;
+function resize() {
+    VW = board.clientWidth; VH = board.clientHeight;
+    svg.setAttribute('viewBox', `0 0 ${VW} ${VH}`);
+    applyCam();
+}
+function applyCam() {
+    gWorld.setAttribute('transform',
+        `translate(${VW / 2 + cam.x},${VH / 2 + cam.y}) scale(${cam.zoom})`);
+}
+
+/* ---------- background grid ---------- */
+function drawGrid() {
+    const g = el('g', { class: 'bg-grid' });
+    const R = 22;
+    for (let i = -R; i <= R; i++) {
+        const a = iso(i, -R, 0), b = iso(i, R, 0);
+        const c = iso(-R, i, 0), d = iso(R, i, 0);
+        g.appendChild(el('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: '#161b25', 'stroke-width': 0.6 }));
+        g.appendChild(el('line', { x1: c.x, y1: c.y, x2: d.x, y2: d.y, stroke: '#161b25', 'stroke-width': 0.6 }));
+    }
+    gWorld.appendChild(g);
+}
+
+/* ---------- node rendering ---------- */
+const nodeHits = {};   // id → <g> hit target
+const edgeHits = [];   // { line, edge }
+
+function drawNode(n) {
+    const k = KIND[n.kind];
+    const dep = n.d || n.w; // square-ish footprint
+    const H = h(n);
+    const p = {
+        a: iso(n.x, n.y, 0),
+        b: iso(n.x + n.w, n.y, 0),
+        c: iso(n.x + n.w, n.y + dep, 0),
+        d: iso(n.x, n.y + dep, 0),
+        e: iso(n.x, n.y, H),
+        f: iso(n.x + n.w, n.y, H),
+        g: iso(n.x + n.w, n.y + dep, H),
+        hh: iso(n.x, n.y + dep, H),
+    };
+    const g = el('g', {});
+
+    if (k.cylinder) {
+        // store: box with an ellipse lid
+        const lid = el('ellipse', {
+            cx: (p.e.x + p.g.x) / 2, cy: (p.e.y + p.g.y) / 2,
+            rx: (p.f.x - p.e.x) / 2 + (p.g.x - p.f.x) / 2, ry: (p.g.y - p.f.y) / 2 + 6,
+            fill: k.top, stroke: k.stroke, 'stroke-width': 1.2,
+        });
+        g.appendChild(el('polygon', {
+            points: poly([p.a, p.b, p.c, p.d]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1.2,
+            'stroke-dasharray': k.dashed ? '5 4' : 'none',
+        }));
+        g.appendChild(el('polygon', {
+            points: poly([p.a, p.b, p.f, p.e]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1,
+            opacity: 0.7,
+        }));
+        g.appendChild(el('polygon', {
+            points: poly([p.b, p.c, p.g, p.f]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1, opacity: 0.45,
+        }));
+        g.appendChild(lid);
+    } else {
+        // stage / fork / ext / legacy: box with visible top + two sides
+        g.appendChild(el('polygon', {
+            points: poly([p.d, p.c, p.g, p.hh]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1, opacity: 0.55,
+            'stroke-dasharray': k.dashed ? '5 4' : 'none',
+        }));
+        g.appendChild(el('polygon', {
+            points: poly([p.a, p.d, p.hh, p.e]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1, opacity: 0.8,
+            'stroke-dasharray': k.dashed ? '5 4' : 'none',
+        }));
+        g.appendChild(el('polygon', {
+            points: poly([p.a, p.b, p.c, p.d]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1.2, opacity: 0.35,
+            'stroke-dasharray': k.dashed ? '5 4' : 'none',
+        }));
+        g.appendChild(el('polygon', {
+            points: poly([p.e, p.f, p.g, p.hh]),
+            fill: k.top, stroke: k.stroke, 'stroke-width': 1.4,
+            'stroke-dasharray': k.dashed ? '5 4' : 'none',
+        }));
+        if (k.hatch) {
+            // decision fork: hatching on the top face
+            const defs = el('pattern', {
+                id: 'hatch', width: 6, height: 6,
+                patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)',
+            });
+            defs.appendChild(el('rect', { width: 6, height: 6, fill: 'none' }));
+            defs.appendChild(el('line', { x1: 0, y1: 0, x2: 0, y2: 6, stroke: '#8b5cf6', 'stroke-width': 2, opacity: 0.5 }));
+            const defsEl = el('defs', {}); defsEl.appendChild(defs); svg.appendChild(defsEl);
+            g.appendChild(el('polygon', {
+                points: poly([p.e, p.f, p.g, p.hh]),
+                fill: 'url(#hatch)', stroke: 'none', opacity: 0.55,
+            }));
+        }
+    }
+
+    // label above the box
+    const lc = iso(n.x + n.w / 2, n.y + dep / 2, H + 0.55);
+    const label = el('text', {
+        x: lc.x, y: lc.y, class: 'node-label', 'text-anchor': 'middle',
+        'font-size': 12.5, 'font-weight': 700,
+        opacity: k.dim ? 0.55 : 1,
+    });
+    label.textContent = n.title;
+    const sub = el('text', {
+        x: lc.x, y: lc.y + 15, class: 'node-sublabel', 'text-anchor': 'middle',
+        'font-size': 10,
+    });
+    sub.textContent = n.sub;
+    g.appendChild(label); g.appendChild(sub);
+
+    // invisible hit target over the whole footprint + label
+    const hit = el('polygon', {
+        points: poly([p.a, p.b, p.c, p.d]),
+        fill: 'transparent', class: 'node-hit',
+    });
+    const hitTop = el('rect', {
+        x: lc.x - 90, y: lc.y - 34, width: 180, height: 52,
+        fill: 'transparent', class: 'node-hit',
+    });
+    hit.addEventListener('click', () => openNode(n));
+    hitTop.addEventListener('click', () => openNode(n));
+    hit.addEventListener('mouseenter', () => flashNode(n.id, true));
+    hit.addEventListener('mouseleave', () => flashNode(n.id, false));
+    hitTop.addEventListener('mouseenter', () => flashNode(n.id, true));
+    hitTop.addEventListener('mouseleave', () => flashNode(n.id, false));
+    g.appendChild(hit); g.appendChild(hitTop);
+    nodeHits[n.id] = { g, hit, hitTop, n };
+    gWorld.appendChild(g);
+}
+
+/* ---------- edge rendering ---------- */
+function edgePoints(e) {
+    const a = NODE_BY[e.from], b = NODE_BY[e.to];
+    const aa = iso(a.x + a.w / 2, (a.d || a.w) / 2 + a.y, h(a) + 0.5);
+    const bb = iso(b.x + b.w / 2, (b.d || b.w) / 2 + b.y, h(b) + 0.5);
+    return [aa, bb];
+}
+function drawEdge(e, idx) {
+    const [a, b] = edgePoints(e);
+    const line = el('line', {
+        x1: a.x, y1: a.y, x2: b.x, y2: b.y,
+        stroke: '#3a4354', 'stroke-width': 1.4,
+    });
+    gWorld.appendChild(line);
+    // hover hit zone (wider, invisible)
+    const hit = el('line', {
+        x1: a.x, y1: a.y, x2: b.x, y2: b.y,
+        stroke: 'transparent', 'stroke-width': 12, style: 'cursor:pointer',
+    });
+    hit.addEventListener('click', () => openEdge(e));
+    gWorld.appendChild(hit);
+    // midpoint label chip
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    const t = el('text', {
+        x: mx, y: my - 8, class: 'node-sublabel', 'text-anchor': 'middle', 'font-size': 9.5,
+    });
+    t.textContent = e.label;
+    gWorld.appendChild(t);
+    edgeHits.push({ line, label: t, edge: e, a, b });
+    return { line, hit, a, b };
+}
+
+/* ---------- payload packets (animated dots) ---------- */
+let packetRAF = null;
+const packets = [];
+function initPackets() {
+    for (const eh of edgeHits) {
+        const lane = laneOfEdge(eh.edge);
+        const dot = el('circle', { r: 3.2, fill: LANE[lane].color, class: 'packet' });
+        gWorld.appendChild(dot);
+        packets.push({ dot, eh, t: Math.random(), speed: 0.0016 + Math.random() * 0.0012, lane });
+    }
+}
+function tick() {
+    const activeLanes = getActiveLanes();
+    for (const p of packets) {
+        p.t += p.speed;
+        if (p.t > 1) p.t -= 1;
+        p.dot.setAttribute('cx', p.eh.a.x + (p.eh.b.x - p.eh.a.x) * p.t);
+        p.dot.setAttribute('cy', p.eh.a.y + (p.eh.b.y - p.eh.a.y) * p.t);
+        p.dot.style.opacity = activeLanes.has(p.lane) ? 0.95 : 0.08;
+    }
+    packetRAF = requestAnimationFrame(tick);
+}
+function laneOfEdge(e) {
+    // map each real edge to its lane from the brief's lane definitions
+    if (e.from === 'sync' && e.to === 'ledger') return 'synced';
+    if (e.from === 'frontify_lib' && e.to === 'mcp') return 'held_for_review';
+    return 'synced';
+}
+
+/* ---------- lane filter ---------- */
+let activeLanes = new Set(Object.keys(LANE));
+function getActiveLanes() { return activeLanes; }
+function laneIsActive(id) { return activeLanes.has(id); }
+function nodeInAnyActiveLane(n) {
+    for (const lid of activeLanes) if (LANE[lid].nodes.includes(n.id)) return true;
+    return false;
+}
+function refreshDimming() {
+    for (const id in nodeHits) {
+        const nh = nodeHits[id];
+        nh.g.classList.toggle('dimmed', !nodeInAnyActiveLane(nh.n));
+    }
+    for (const eh of edgeHits) {
+        const on = laneIsActive(laneOfEdge(eh.edge));
+        eh.line.style.opacity = on ? 1 : 0.1;
+        eh.label.style.opacity = on ? 1 : 0.1;
+    }
+}
+const laneChips = document.getElementById('lane-chips');
+function buildLaneChips() {
+    laneChips.innerHTML = '';
+    for (const lid in LANE) {
+        const L = LANE[lid];
+        const chip = document.createElement('div');
+        chip.className = 'lane-chip';
+        chip.style.borderColor = L.border;
+        chip.style.color = L.color;
+        chip.textContent = L.label;
+        chip.addEventListener('click', () => {
+            if (activeLanes.has(lid)) activeLanes.delete(lid); else activeLanes.add(lid);
+            chip.classList.toggle('off', !activeLanes.has(lid));
+            refreshDimming();
+        });
+        laneChips.appendChild(chip);
+    }
+}
+
+/* ---------- sidebar ---------- */
+const sbBody = document.getElementById('sb-body');
+function buildSidebar() {
+    const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    let html = `<div class="sb-h">Title block</div>
+        <div class="kv">
+            <span class="k">Sheet</span><span class="v">${esc(TITLE_BLOCK.sheet)}</span>
+            <span class="k">Rev</span><span class="v">${esc(TITLE_BLOCK.rev)}</span>
+            <span class="k">Scale</span><span class="v">${esc(TITLE_BLOCK.scale)}</span>
+            <span class="k">Drawn by</span><span class="v">${esc(TITLE_BLOCK.drawn)}</span>
+            <span class="k">Total</span><span class="v">${esc(TITLE_BLOCK.total)}</span>
+        </div>
+        <div class="sb-h">Lanes — 5 outcome branches</div><div class="sb-list" id="sb-lanes"></div>
+        <div class="sb-h">Nodes</div><div class="sb-list" id="sb-nodes"></div>`;
+    sbBody.innerHTML = html;
+
+    const laneList = document.getElementById('sb-lanes');
+    for (const lid in LANE) {
+        const L = LANE[lid];
+        const item = document.createElement('div');
+        item.className = 'sb-item';
+        item.innerHTML = `<span class="dot" style="background:${L.color}"></span><span style="font-family:var(--mono);font-size:0.74rem">${L.label}</span>`;
+        item.addEventListener('click', () => {
+            activeLanes = new Set([lid]);
+            buildLaneChips(); refreshDimming();
+        });
+        laneList.appendChild(item);
+    }
+
+    const nodeList = document.getElementById('sb-nodes');
+    for (const n of NODES) {
+        const item = document.createElement('div');
+        item.className = 'sb-item';
+        item.innerHTML = `<span class="dot" style="background:${KIND[n.kind].stroke}"></span>
+            <span>${esc(n.title)}</span>
+            <span class="lines">${n.lines ? n.lines + ' lines' : n.kind}</span>`;
+        item.addEventListener('click', () => { openNode(n); focusNode(n); });
+        nodeList.appendChild(item);
+    }
+}
+
+/* ---------- sheet panel ---------- */
+const sheet = document.getElementById('sheet');
+const sheetTitle = document.getElementById('sheet-title');
+const sheetTag = document.getElementById('sheet-tag');
+const sheetBody = document.getElementById('sheet-body');
+function openSheet(title, tag, tagColor, bodyHTML) {
+    sheetTitle.textContent = title;
+    sheetTag.textContent = tag;
+    sheetTag.style.borderColor = tagColor;
+    sheetTag.style.color = tagColor;
+    sheetBody.innerHTML = bodyHTML;
+    sheet.classList.add('open');
+}
+function closeSheet() { sheet.classList.remove('open'); }
+document.getElementById('sheet-close').addEventListener('click', closeSheet);
+
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+function openNode(n) {
+    const k = KIND[n.kind];
+    let html = `<div class="kv">
+        <span class="k">kind</span><span class="v">${n.kind}</span>
+        ${n.lines ? `<span class="k">size</span><span class="v">${n.lines} lines</span>` : ''}
+        <span class="k">sub</span><span class="v">${esc(n.sub)}</span>
+    </div>`;
+    if (n.what) html += `<div class="sb-h">What it does</div><div class="sb-p">${esc(n.what)}</div>`;
+    if (n.built && n.built.length) {
+        html += `<div class="sb-h">Built — real decisions (D-log)</div>`;
+        for (const b of n.built) html += `<div class="sb-p" style="font-size:0.78rem">• ${esc(b)}</div>`;
+    }
+    const edges = EDGES.filter(e => e.from === n.id || e.to === n.id);
+    if (edges.length) {
+        html += `<div class="sb-h">Contracts</div>`;
+        for (const e of edges) {
+            html += `<div class="sb-p" style="cursor:pointer;color:var(--cyan)" onclick="void(0)" data-edge="${e.from}→${e.to}">
+                ${e.from === n.id ? '→' : '←'} ${esc(e.label)} <span style="color:var(--dim)">(${esc(e.src || '')})</span></div>`;
+        }
+    }
+    openSheet(n.title, n.kind, k.stroke, html);
+    // wire contract clicks
+    sheetBody.querySelectorAll('[data-edge]').forEach(elm => {
+        elm.addEventListener('click', () => {
+            const [f, t] = elm.dataset.edge.split('→');
+            const e = EDGES.find(x => x.from === f && x.to === t);
+            if (e) openEdge(e);
+        });
+    });
+}
+
+function openEdge(e) {
+    let html = `<div class="kv">
+        <span class="k">from</span><span class="v">${esc(NODE_BY[e.from].title)}</span>
+        <span class="k">to</span><span class="v">${esc(NODE_BY[e.to].title)}</span>
+        ${e.src ? `<span class="k">src</span><span class="v">${esc(e.src)}</span>` : ''}
+    </div>`;
+    if (e.note) html += `<div class="sb-p" style="font-size:0.78rem;color:var(--dim)">${esc(e.note)}</div>`;
+    html += `<div class="sb-h">Payload — real, verbatim</div><div class="code-block">${esc(e.payload)}</div>`;
+    openSheet(e.label, 'contract', '#8b93a3', html);
+}
+
+function focusNode(n) {
+    const c = iso(n.x + n.w / 2, (n.d || n.w) / 2 + n.y, h(n));
+    cam.x = -c.x * cam.zoom; cam.y = -c.y * cam.zoom;
+    applyCam();
+}
+function flashNode(id, on) {
+    const nh = nodeHits[id];
+    if (!nh) return;
+    nh.g.style.filter = on ? 'brightness(1.6)' : '';
+}
+
+/* ---------- trace ---------- */
+let traceRunning = false;
+document.getElementById('btn-trace').addEventListener('click', runTrace);
+function runTrace() {
+    traceRunning = true;
+    let html = `<div class="sb-p">Every step is a real behavior of the daily run. Click a step to jump to its node.</div>`;
+    TRACE.steps.forEach((s, i) => {
+        html += `<div class="trace-step" data-step="${i}">
+            <div class="ts-n">${i + 1}</div>
+            <div class="ts-body">
+                <div class="ts-t">${esc(s.t)} <span class="m">${esc(NODE_BY[s.node].title)}</span></div>
+                <div class="ts-d">${esc(s.d)}</div>
+            </div>
+        </div>`;
+    });
+    openSheet(TRACE.title, 'trace', '#f5a623', html);
+    sheetBody.querySelectorAll('.trace-step').forEach(elm => {
+        elm.addEventListener('click', () => {
+            sheetBody.querySelectorAll('.trace-step').forEach(x => x.classList.remove('active'));
+            elm.classList.add('active');
+            const s = TRACE.steps[+elm.dataset.step];
+            focusNode(NODE_BY[s.node]);
+            flashNode(s.node, true);
+            setTimeout(() => flashNode(s.node, false), 900);
+        });
+    });
+    // auto-walk the first step
+    sheetBody.querySelector('.trace-step')?.click();
+}
+
+/* ---------- paths menu (lane quick-filter) ---------- */
+const pathsMenu = document.getElementById('paths-menu');
+document.getElementById('btn-paths').addEventListener('click', () => {
+    pathsMenu.classList.toggle('open');
+});
+function buildPathsMenu() {
+    pathsMenu.innerHTML = '';
+    const all = document.createElement('div');
+    all.className = 'pm-item';
+    all.innerHTML = `<span class="dot" style="background:var(--amber)"></span>all lanes`;
+    all.addEventListener('click', () => {
+        activeLanes = new Set(Object.keys(LANE));
+        buildLaneChips(); refreshDimming(); pathsMenu.classList.remove('open');
+    });
+    pathsMenu.appendChild(all);
+    for (const lid in LANE) {
+        const L = LANE[lid];
+        const item = document.createElement('div');
+        item.className = 'pm-item';
+        item.innerHTML = `<span class="dot" style="background:${L.color}"></span>${L.label}`;
+        item.title = L.desc;
+        item.addEventListener('click', () => {
+            activeLanes = new Set([lid]);
+            buildLaneChips(); refreshDimming(); pathsMenu.classList.remove('open');
+        });
+        pathsMenu.appendChild(item);
+    }
+}
+
+/* ---------- pan / zoom / drag ---------- */
+let drag = null;
+board.addEventListener('mousedown', ev => {
+    if (ev.target.closest('.node-hit') || ev.target.tagName === 'line') return;
+    drag = { sx: ev.clientX, sy: ev.clientY, cx: cam.x, cy: cam.y };
+    board.classList.add('dragging');
+});
+window.addEventListener('mousemove', ev => {
+    if (!drag) return;
+    cam.x = drag.cx + (ev.clientX - drag.sx);
+    cam.y = drag.cy + (ev.clientY - drag.sy);
+    applyCam();
+});
+window.addEventListener('mouseup', () => { drag = null; board.classList.remove('dragging'); });
+board.addEventListener('wheel', ev => {
+    ev.preventDefault();
+    const f = ev.deltaY < 0 ? 1.12 : 0.89;
+    cam.zoom = Math.min(3.5, Math.max(0.3, cam.zoom * f));
+    applyCam();
+}, { passive: false });
+
+/* ---------- reset ---------- */
+document.getElementById('btn-reset').addEventListener('click', () => {
+    cam.x = 0; cam.y = 0; cam.zoom = 1;
+    activeLanes = new Set(Object.keys(LANE));
+    buildLaneChips(); refreshDimming(); applyCam();
+});
+
+/* ---------- boot ---------- */
+function fitView() {
+    const bb = worldBBox();
+    const w = bb.maxX - bb.minX, ht = bb.maxY - bb.minY;
+    cam.zoom = Math.min((VW - 120) / w, (VH - 160) / ht, 1.1);
+    const cx = (bb.minX + bb.maxX) / 2, cy = (bb.minY + bb.maxY) / 2;
+    cam.x = -cx * cam.zoom; cam.y = -cy * cam.zoom;
+    applyCam();
+}
+function boot() {
+    drawGrid();
+    NODES.forEach(drawNode);
+    EDGES.forEach((e, i) => drawEdge(e, i));
+    initPackets();
+    buildLaneChips();
+    buildSidebar();
+    buildPathsMenu();
+    resize();
+    fitView();
+    refreshDimming();
+    tick();
+}
+window.addEventListener('resize', resize);
+boot();
+</script>
+</body>
+</html>
