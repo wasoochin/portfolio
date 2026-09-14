@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abby Wasoochin | Creative Systems & AI Workflow Engineer</title>
+    <title>Abby Wasoochin | Creative Systems Lead — Media, Motion & Automation</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -225,6 +225,14 @@
             line-height: 1.1;
             margin-bottom: 0.75rem;
             letter-spacing: -0.02em;
+        }
+
+        .craft-line {
+            font-size: 0.92rem;
+            color: var(--text-mid);
+            font-weight: 400;
+            max-width: 540px;
+            margin-bottom: 0.9rem;
         }
 
         .tagline {
@@ -593,49 +601,10 @@
             color: var(--text-mid);
         }
 
-        /* --- Case study cards (condensed) --- */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.25rem;
-        }
-
-        .case-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.9rem;
-        }
-
-        .case-role {
-            font-size: 0.65rem;
-            font-weight: 700;
-            font-family: var(--mono);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .case-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1.35;
-        }
-
-        .case-flow {
-            font-size: 0.8rem;
-            color: var(--text-mid);
-            line-height: 1.6;
-        }
-
-        .case-impact {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-top: auto;
         }
 
         /* --- Experience --- */
@@ -770,14 +739,6 @@
             gap: 1.1rem;
         }
 
-        .letter-closer {
-            margin-top: 0.5rem;
-            font-weight: 700;
-            color: white;
-            border-top: 1px solid var(--border-soft);
-            padding-top: 1.25rem;
-        }
-
         footer {
             border-top: 1px solid var(--border-soft);
             padding: 3rem 0;
@@ -846,10 +807,11 @@
         <section class="hero">
             <div class="hero-text">
                 <div class="status-line"><span class="dot-ping"></span> Available for new opportunities</div>
-                <div class="role-line"><span class="prompt">&gt;</span> creative_ops --role "AI Workflow Engineer"</div>
+                <div class="role-line"><span class="prompt">&gt;</span> creative_ops --role "Creative Systems Lead"</div>
                 <h1 class="name">Abby Wasoochin</h1>
+                <p class="craft-line">10+ years in media and motion design — the last two spent building the automation and AI systems that scale that craft across a whole org.</p>
                 <p class="tagline">I build the systems behind scalable creative production.</p>
-                <p class="hero-desc">From scattered asset libraries to slow, manual content pipelines — I design DAM systems, automation pipelines, and AI-assisted workflows that hold up in production, not just in a demo.</p>
+                <p class="hero-desc">DAM systems, automation pipelines, and AI-assisted workflows — built for production, not demos.</p>
                 <div class="checklist">
                     <div><span class="mark">→</span> Eliminated 640+ hours/quarter of manual asset work by automating the process end-to-end</div>
                     <div><span class="mark">→</span> Shipped a fully autonomous asset sync pipeline (CORA)</div>
@@ -931,12 +893,11 @@
                         <div class="flagship-title">CORA</div>
                         <div class="flagship-sub">Creative Organisation, Routing &amp; Archiving</div>
                     </div>
-                    <p class="flagship-desc">A self-hosted Cloudflare Worker pipeline that moves creative assets from Slack straight into Frontify — fully autonomously, daily, with zero manual sync.</p>
+                    <p class="flagship-desc">A self-hosted Cloudflare Worker pipeline that moves creative assets from chat straight into a governed DAM library — fully autonomously, daily, with zero manual sync.</p>
                     <div class="feature-list">
-                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> First fully autonomous production run — no manual intervention</div>
-                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> Manifest validation, GraphQL upload, dedupe ledger</div>
-                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> 81 automated tests across 6 files guarding against regressions</div>
-                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> Moved sync cadence from weekly to daily</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> Fully autonomous — no one has to remember to move a single asset</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> Validates and dedupes automatically, so nothing broken or duplicate reaches the library</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i> Engineered for reliability, not just speed — backed by an automated test suite instead of manual QA</div>
                     </div>
                     <div class="tag-row">
                         <span class="tag" style="background:var(--amber-soft); color:var(--amber); border:1px solid rgba(245,166,35,0.3);">Cloudflare Workers</span>
@@ -961,9 +922,9 @@
                     </div>
                     <p class="flagship-desc">An AI tool that intelligently renames design files using context-aware naming conventions — cutting manual effort from hours to seconds.</p>
                     <div class="feature-list">
-                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> Renames hundreds of assets in one click</div>
-                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> AI understands file context &amp; naming rules</div>
-                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> Enforces consistent naming conventions</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> Turns an hours-long manual chore into a one-click action</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> Reads file context, not just filenames — stays accurate at scale, not just fast</div>
+                        <div class="feature-row"><i data-lucide="check" style="width:14px;color:var(--violet);flex-shrink:0;margin-top:2px;"></i> Keeps the whole library consistent without anyone policing it by hand</div>
                     </div>
                     <div class="tag-row">
                         <span class="tag" style="background:var(--violet-soft); color:var(--violet); border:1px solid rgba(139,92,246,0.3);">Batch Renaming</span>
@@ -1007,18 +968,11 @@
                 <div class="auto-card">
                     <div class="auto-card-head">
                         <div class="auto-icon" style="background:var(--green-soft); border:1px solid var(--green);"><i data-lucide="plug-zap" style="color:var(--green);width:18px;"></i></div>
-                        <div class="auto-title">Frontify MCP &amp; API Infrastructure</div>
+                        <div class="auto-title">DAM Automation Reliability</div>
                     </div>
-                    <p class="auto-desc">Validated and hardened the Frontify Admin GraphQL API and activated the MCP server so automated upload, tagging, and metadata don't silently fail — and so the team can query the library with AI.</p>
+                    <p class="auto-desc">Closed the silent-failure gaps in the DAM's automation layer, and opened the library up to AI-assisted search for the whole team.</p>
                 </div>
             </div>
-        </section>
-
-        <!-- CASE STUDIES -->
-        <section class="section">
-            <div class="section-tag"><i data-lucide="award" style="width:14px"></i> Case Studies</div>
-            <h2 class="section-heading">How I Improve Creative Workflows</h2>
-            <div class="grid-3" id="case-studies-grid"></div>
         </section>
 
         <!-- EXPERIENCE -->
@@ -1043,19 +997,12 @@
             <div class="letter-card">
                 <div class="letter-head">
                     <h3>Application for Creative Operations / AI Workflow Role</h3>
-                    <p>Targeted: Global Digital Sales Creative Studio</p>
                 </div>
                 <div class="letter-body">
                     <p>Dear Hiring Manager,</p>
-                    <p>I'm applying for the Creative Designer role. With a background in multimedia production and digital visual design at <strong style="color:#fff;">Deriv</strong>, I've built a career around turning messy creative operations into structured, reliable systems.</p>
-                    <p>As Senior Multimedia Producer, I designed and shipped <strong style="color:#fff;">CORA</strong>, a fully autonomous asset pipeline, and migrated over 7,700 assets into a searchable, governed library — while actively building AI-assisted tools like <strong style="color:#fff;">AssetFlow</strong> to remove manual bottlenecks entirely.</p>
-                    <p>I'm drawn to roles where creative execution and technical systems intersect, and I'm looking for a team that needs both.</p>
-                    <p class="letter-closer">I don't just create content — I build the systems that make content scalable.</p>
-                    <div>
-                        <p>Warm regards,</p>
-                        <p style="font-weight:900; color:#fff; font-size:1.15rem; margin-top:0.4rem;">Abby Wasoochin</p>
-                        <p style="font-family:var(--mono); font-size:0.8rem; color:var(--text-dim)">Digital Creative Designer | Senior Multimedia Producer</p>
-                    </div>
+                    <p>I build the systems that make creative production scale. At Deriv, that meant shipping <strong style="color:#fff;">CORA</strong> — a fully autonomous asset pipeline — and migrating 7,700+ assets into a governed, searchable library, while building AI tools like <strong style="color:#fff;">AssetFlow</strong> to kill manual bottlenecks for good.</p>
+                    <p>I want a team that needs both the craft and the infrastructure behind it.</p>
+                    <p style="font-weight:900; color:#fff; font-size:1.15rem; margin-top:0.4rem;">Abby Wasoochin</p>
                 </div>
             </div>
         </section>
@@ -1067,23 +1014,6 @@
 
     <script>
         const DATA = {
-            caseStudies: [
-                {
-                    id: 1, title: "Organizing a Scattered Asset Library into a Usable System", role: "Asset Management", icon: "database", color: "var(--cyan)", glow: "rgba(34,211,238,0.12)",
-                    flow: "Assets stored everywhere → centralized library with standardized naming & categorization.",
-                    impact: ["↑ Discoverability", "↓ Search time", "Faster reuse"]
-                },
-                {
-                    id: 2, title: "Reducing Content Production Time with AI Workflows", role: "AI Workflow", icon: "sparkles", color: "var(--violet)", glow: "rgba(139,92,246,0.12)",
-                    flow: "Manual production slowed scaling → AI-assisted creation, refinement & iteration.",
-                    impact: ["↓ Turnaround", "Scalable pipeline", "AI-enabled ops"]
-                },
-                {
-                    id: 3, title: "Making Creative Assets Work Across Social, PPC, and Email", role: "Cross-team Enablement", icon: "git-branch", color: "var(--amber)", glow: "rgba(245,166,35,0.12)",
-                    flow: "Inconsistent team access → structured workflows + shared asset systems.",
-                    impact: ["↑ Collaboration", "Consistent outputs", "Streamlined requests"]
-                }
-            ],
             experience: [
                 {
                     role: "Senior Multimedia Producer", company: "Deriv", companyColor: "var(--amber)", period: "Aug 2024 – Present",
@@ -1123,22 +1053,6 @@
         };
 
         function init() {
-            document.getElementById('case-studies-grid').innerHTML = DATA.caseStudies.map(s => `
-                <div class="case-card" style="background:linear-gradient(135deg,${s.glow} 0%,rgba(13,17,25,0.95) 100%); border-color:${s.color}33;">
-                    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-                        <div style="width:38px;height:38px;background:${s.glow};border:1px solid ${s.color}55;border-radius:9px;display:flex;align-items:center;justify-content:center;">
-                            <i data-lucide="${s.icon}" style="color:${s.color};width:17px;height:17px;"></i>
-                        </div>
-                        <span class="case-role" style="background:${s.glow};color:${s.color};padding:3px 8px;border-radius:6px;border:1px solid ${s.color}44;">${s.role}</span>
-                    </div>
-                    <div class="case-title">${s.title}</div>
-                    <div class="case-flow">${s.flow}</div>
-                    <div class="case-impact">
-                        ${s.impact.map(i => `<span class="pill">${i}</span>`).join('')}
-                    </div>
-                </div>
-            `).join('');
-
             document.getElementById('skills-content').innerHTML = DATA.skills.map(s => `
                 <div class="skill-card" style="background:linear-gradient(135deg,${s.glow} 0%,rgba(13,17,25,0.9) 100%); border-color:${s.color}33;">
                     <div class="skill-head">
