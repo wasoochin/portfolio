@@ -65,15 +65,6 @@
     .tb-btn.active { background: var(--amber); color: #1a1002; border-color: var(--amber); font-weight: 700; }
     .tb-spacer { flex: 1; }
 
-    /* lane chips */
-    #lane-chips { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    .lane-chip {
-        font-family: var(--mono); font-size: 0.68rem; padding: 6px 11px; border-radius: 999px;
-        border: 1px solid; cursor: pointer; background: rgba(16,20,27,0.9); backdrop-filter: blur(6px);
-        transition: all 0.15s; user-select: none;
-    }
-    .lane-chip.off { opacity: 0.35; }
-
     /* ---------- Sidebar ---------- */
     #sidebar {
         width: 340px; background: var(--panel); border-left: 1px solid var(--line);
@@ -193,7 +184,6 @@
             <button class="tb-btn" id="btn-trace">▶ Run Trace</button>
             <button class="tb-btn" id="btn-paths">Paths</button>
             <div class="tb-spacer"></div>
-            <div id="lane-chips"></div>
             <button class="tb-btn" id="btn-reset">Reset View</button>
         </div>
         <div id="paths-menu"></div>
@@ -253,7 +243,7 @@ function poly(points) { return points.map(p => `${p.x},${p.y}`).join(' '); }
 const LANE = {
     synced:             { color: '#34d399', label: 'synced',             chip: 'rgba(52,211,153,0.14)',  border: '#34d399',
                           desc: 'Happy path: schema → sync → frontify_api → frontify_lib → ledger.',
-                          nodes: ['slack_thread','cron','http','scheduled','slack_api','schema','sync','resolvefile','frontify_api','taxonomy','frontify_lib','ledger'] },
+                          nodes: ['slack_thread','cron','scheduled','slack_api','schema','sync','resolvefile','frontify_api','taxonomy','frontify_lib','ledger'] },
     duplicate:          { color: '#8b93a3', label: 'duplicate',          chip: 'rgba(139,147,163,0.14)', border: '#8b93a3',
                           desc: 'sync → ledger (already-synced check short-circuits before any Frontify call).',
                           nodes: ['slack_thread','scheduled','slack_api','schema','sync','ledger'] },
@@ -289,11 +279,6 @@ const NODES = [
     { id: 'cron', kind: 'fork', x: 0, y: 9, w: 1.6, lines: 0,
       title: 'Cloudflare Cron Trigger', sub: 'daily 22:00 UTC',
       what: 'Cloudflare Workers cron trigger — fires the scheduled handler daily at 22:00 UTC (wrangler.toml [triggers]).',
-      built: [] },
-
-    { id: 'http', kind: 'ext', x: 0, y: 18, w: 1.8, lines: 44,
-      title: 'Manual HTTP entry', sub: 'src/index.ts · 44 lines',
-      what: 'Cloudflare Worker fetch() — manual trigger endpoint. POST a full manifest to run the same pipeline without waiting for cron.',
       built: [] },
 
     { id: 'legacy_makecom', kind: 'legacy', x: 0, y: 27, w: 2.0, lines: 0,
@@ -489,16 +474,6 @@ mutation AddCustomMetadata($input: AddCustomMetadataInput!) {
 { "status": "pending", "frontifyFileId": "…", "startedAt": "2026-09-07T…" }
 // then, after createAsset succeeds:
 { "status": "synced", "frontifyFileId": "…", "frontifyAssetId": "…", "syncedAt": "2026-09-07T…" }` },
-
-    { from: 'http', to: 'schema', label: 'manual trigger contract',
-      src: 'src/index.ts',
-      payload:
-`POST /<SYNC_PATH_SLUG>
-Authorization: Bearer <WORKER_SHARED_SECRET>
-Content-Type: application/json
-<full manifest JSON, same shape as above>
-
-→ 200 { batch_id, totals: {synced, duplicate, held_for_review, needs_verification, error, manual_review_count, missing_asset_count}, results: [...] }` },
 
     { from: 'frontify_lib', to: 'mcp', label: 'handoff to human judgment',
       note: 'Not a code contract — a deliberate, documented handoff (D-038), the CORA equivalent of an "external model" edge but pointing at a human process instead of an API.',
@@ -903,25 +878,6 @@ function refreshDimming() {
         eh.arrow.style.opacity = on ? 1 : 0.1;
     }
 }
-const laneChips = document.getElementById('lane-chips');
-function buildLaneChips() {
-    laneChips.innerHTML = '';
-    for (const lid in LANE) {
-        const L = LANE[lid];
-        const chip = document.createElement('div');
-        chip.className = 'lane-chip';
-        chip.style.borderColor = L.border;
-        chip.style.color = L.color;
-        chip.textContent = L.label;
-        chip.addEventListener('click', () => {
-            if (activeLanes.has(lid)) activeLanes.delete(lid); else activeLanes.add(lid);
-            chip.classList.toggle('off', !activeLanes.has(lid));
-            refreshDimming();
-        });
-        laneChips.appendChild(chip);
-    }
-}
-
 /* ---------- sidebar ---------- */
 const sbBody = document.getElementById('sb-body');
 function buildSidebar() {
@@ -946,7 +902,7 @@ function buildSidebar() {
         item.innerHTML = `<span class="dot" style="background:${L.color}"></span><span style="font-family:var(--mono);font-size:0.74rem">${L.label}</span>`;
         item.addEventListener('click', () => {
             activeLanes = new Set([lid]);
-            buildLaneChips(); refreshDimming();
+            refreshDimming();
         });
         laneList.appendChild(item);
     }
@@ -1076,7 +1032,7 @@ function buildPathsMenu() {
     all.innerHTML = `<span class="dot" style="background:var(--amber)"></span>all lanes`;
     all.addEventListener('click', () => {
         activeLanes = new Set(Object.keys(LANE));
-        buildLaneChips(); refreshDimming(); pathsMenu.classList.remove('open');
+        refreshDimming(); pathsMenu.classList.remove('open');
     });
     pathsMenu.appendChild(all);
     for (const lid in LANE) {
@@ -1087,7 +1043,7 @@ function buildPathsMenu() {
         item.title = L.desc;
         item.addEventListener('click', () => {
             activeLanes = new Set([lid]);
-            buildLaneChips(); refreshDimming(); pathsMenu.classList.remove('open');
+            refreshDimming(); pathsMenu.classList.remove('open');
         });
         pathsMenu.appendChild(item);
     }
@@ -1118,7 +1074,7 @@ board.addEventListener('wheel', ev => {
 document.getElementById('btn-reset').addEventListener('click', () => {
     cam.x = 0; cam.y = 0; cam.zoom = 1;
     activeLanes = new Set(Object.keys(LANE));
-    buildLaneChips(); refreshDimming(); applyCam();
+    refreshDimming(); applyCam();
 });
 
 /* ---------- boot ---------- */
@@ -1137,7 +1093,6 @@ function boot() {
     EDGES.forEach((e, i) => drawEdge(e, i));   // bus first — behind the boxes
     NODES.forEach(drawNode);                   // chips occlude the bus behind them
     initPackets();
-    buildLaneChips();
     buildSidebar();
     buildPathsMenu();
     resize();
