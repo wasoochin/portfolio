@@ -231,9 +231,10 @@ const ISO_X = Math.cos(Math.PI / 6);   // 30°
 const ISO_Y = Math.sin(Math.PI / 6);
 function iso(x, y, z) {
     // isometric projection: x→right-down, y→left-down, z→up
+    // scaled by U (world unit → screen px), so boxes render at real size
     return {
-        x: (x - y) * ISO_X,
-        y: (x + y) * ISO_Y - z
+        x: (x - y) * ISO_X * U,
+        y: (x + y) * ISO_Y * U - z * U
     };
 }
 const NS = 'http://www.w3.org/2000/svg';
@@ -514,7 +515,7 @@ function worldBBox() {
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     for (const n of NODES) {
         const a = iso(n.x, n.y, h(n) + 1.2);
-        const b = iso(n.x + n.w, n.y + n.d, 0);
+        const b = iso(n.x + n.w, n.y + (n.d || n.w), 0);
         minX = Math.min(minX, a.x, b.x); maxX = Math.max(maxX, a.x, b.x);
         minY = Math.min(minY, a.y, b.y); maxY = Math.max(maxY, a.y, b.y);
     }
