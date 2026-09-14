@@ -379,11 +379,27 @@ const NODES = [
 
 /* edges — payloads copied VERBATIM from the brief (real, not paraphrased) */
 const EDGES = [
+    { from: 'cron', to: 'scheduled', label: 'boots discovery',
+      src: 'wrangler.toml [triggers] → scheduled handler',
+      note: 'Cloudflare Cron Trigger fires the Worker daily at 22:00 UTC; the scheduled handler boots the discovery step (see trace, step 1).',
+      payload:
+`wrangler.toml
+[triggers]
+crons = ["0 22 * * *"]
+→ scheduled(event, env, ctx) invokes runScheduledSync()` },
+
     { from: 'slack_thread', to: 'scheduled', label: 'discovery poll',
       src: 'src/slack.ts → getConversationsReplies',
       payload:
 `GET conversations.replies?channel=C0BGNB7LXQB&ts=1788827777.973639
 → { ok: true, messages: [{ ts, files: [{ id, name }] }, ...] }` },
+
+    { from: 'scheduled', to: 'slack_api', label: 'fetch + parse via Slack client',
+      src: 'src/slack.ts → getSlackFileInfo, downloadSlackFile',
+      note: 'src/schema.ts imports zero other src/ files by convention — the manifest-file fetch itself is the Slack client\'s job, not schema\'s.',
+      payload:
+`getSlackFileInfo(fileId) → files.info?file=<fileId>
+downloadSlackFile(url_private_download) → raw JSON text` },
 
     { from: 'scheduled', to: 'schema', label: 'manifest file fetch + parse',
       src: 'src/slack.ts → getSlackFileInfo, downloadSlackFile',
@@ -419,6 +435,28 @@ JSON.parse(text) → candidate` },
   "manual_review": [ /* any shape, informational only */ ],
   "missing_slack_asset": [ /* any shape, informational only */ ]
 }` },
+
+    { from: 'sync', to: 'resolvefile', label: 'resolve file id',
+      src: 'src/sync.ts → resolveFileId()',
+      note: 'Called per file, above the confidence threshold, before any Frontify call (see trace, step 7).',
+      payload:
+`resolveFileId(source_url)
+→ tries the direct Slack file-page URL first
+→ falls back to resolving a message permalink via conversations.replies (D-029, D-033)` },
+
+    { from: 'resolvefile', to: 'frontify_api', label: 'resolved file id → upload',
+      src: 'src/sync.ts → processAssetFile()',
+      note: 'The resolved Slack fileId feeds straight into uploadFile\'s chunked upload (see trace, step 8).',
+      payload:
+`{ fileId } → uploadFile(input: { filename, size, chunkSize: 41943040 })` },
+
+    { from: 'sync', to: 'taxonomy', label: 'metadata property/option IDs',
+      src: 'src/frontifyTaxonomy.ts',
+      note: 'Static config, never guessed at runtime — sync looks up the confirmed property/option ID before calling addCustomMetadata.',
+      payload:
+`taxonomy lookup: metadata field → { propertyId, optionId }
+(Content Type / Market: no confirmed ID on library 24 — skipped with a
+ logged warning rather than guessing a replacement, D-031)` },
 
     { from: 'sync', to: 'frontify_api', label: 'three real mutations',
       src: 'src/frontify.ts',
@@ -840,7 +878,6 @@ function tick() {
 }
 function laneOfEdge(e) {
     // map each real edge to its lane from the brief's lane definitions
-    if (e.from === 'sync' && e.to === 'ledger') return 'synced';
     if (e.from === 'frontify_lib' && e.to === 'mcp') return 'held_for_review';
     return 'synced';
 }
