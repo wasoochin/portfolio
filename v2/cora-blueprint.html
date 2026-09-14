@@ -510,18 +510,37 @@ NODES.forEach(n => NODE_BY[n.id] = n);
 /* ---------- camera ---------- */
 const cam = { x: 0, y: 0, zoom: 1 };
 const U = 46; // world unit → screen px (pre-zoom)
+const WIRE = 7.5;  // z-height of the elevated wiring bus (above every box + label chip)
+const DEP = 1.25;  // constant shallow footprint depth — slabs, not cubes
+
+/* plate = the platform the whole pipeline sits on (everything except retired) */
+function plateBounds() {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const n of NODES) {
+        if (n.kind === 'legacy') continue;
+        x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y);
+        x1 = Math.max(x1, n.x + n.w); y1 = Math.max(y1, n.y + (n.d || DEP));
+    }
+    return { x0: x0 - 3.2, y0: y0 - 3.2, x1: x1 + 3.2, y1: y1 + 3.2 };
+}
 
 function worldBBox() {
+    const pb = plateBounds();
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    const take = p => { minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x); minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y); };
+    for (const [x, y] of [[pb.x0, pb.y0], [pb.x1, pb.y0], [pb.x1, pb.y1], [pb.x0, pb.y1]]) {
+        take(iso(x, y, 0)); take(iso(x, y, WIRE));
+    }
     for (const n of NODES) {
-        const a = iso(n.x, n.y, h(n) + 1.2);
-        const b = iso(n.x + n.w, n.y + (n.d || n.w), 0);
-        minX = Math.min(minX, a.x, b.x); maxX = Math.max(maxX, a.x, b.x);
-        minY = Math.min(minY, a.y, b.y); maxY = Math.max(maxY, a.y, b.y);
+        if (n.kind !== 'legacy') continue;
+        take(iso(n.x, n.y, 0)); take(iso(n.x + n.w, n.y + (n.d || DEP), h(n) + 1.4));
     }
     return { minX, minY, maxX, maxY };
 }
-function h(n) { return n.lines ? Math.max(0.25, n.lines / 200) : 0.5; }
+function h(n) {
+    if (n.lines) return Math.max(0.42, n.lines / 120);
+    return { stage: 0.8, ext: 0.55, fork: 0.5, store: 1.0, legacy: 0.42 }[n.kind] || 0.5;
+}
 
 /* ---------- svg root ---------- */
 const board = document.getElementById('board');
@@ -540,26 +559,71 @@ function applyCam() {
         `translate(${VW / 2 + cam.x},${VH / 2 + cam.y}) scale(${cam.zoom})`);
 }
 
-/* ---------- background grid ---------- */
-function drawGrid() {
+/* ---------- background grid (clipped to plate) ---------- */
+function drawGrid(pb) {
     const g = el('g', { class: 'bg-grid' });
-    const R = 22;
-    for (let i = -R; i <= R; i++) {
-        const a = iso(i, -R, 0), b = iso(i, R, 0);
-        const c = iso(-R, i, 0), d = iso(R, i, 0);
-        g.appendChild(el('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: '#161b25', 'stroke-width': 0.6 }));
-        g.appendChild(el('line', { x1: c.x, y1: c.y, x2: d.x, y2: d.y, stroke: '#161b25', 'stroke-width': 0.6 }));
+    for (let i = Math.ceil(pb.x0); i <= Math.floor(pb.x1); i++) {
+        const a = iso(i, pb.y0, 0), b = iso(i, pb.y1, 0);
+        g.appendChild(el('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: '#1a2130', 'stroke-width': 0.7 }));
+    }
+    for (let j = Math.ceil(pb.y0); j <= Math.floor(pb.y1); j++) {
+        const a = iso(pb.x0, j, 0), b = iso(pb.x1, j, 0);
+        g.appendChild(el('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: '#1a2130', 'stroke-width': 0.7 }));
     }
     gWorld.appendChild(g);
 }
 
+/* ---------- platform plate ---------- */
+function drawPlate(pb) {
+    const t = 0.55; // plate thickness
+    const A = iso(pb.x0, pb.y0, 0), B = iso(pb.x1, pb.y0, 0),
+          C = iso(pb.x1, pb.y1, 0), D = iso(pb.x0, pb.y1, 0);
+    const D2 = iso(pb.x0, pb.y1, -t), C2 = iso(pb.x1, pb.y1, -t);
+    const g = el('g', {});
+    // slab sides (front-right and front-left faces below z=0)
+    g.appendChild(el('polygon', {
+        points: poly([D, C, C2, D2]),
+        fill: '#141a26', stroke: '#2a3242', 'stroke-width': 1.2,
+    }));
+    g.appendChild(el('polygon', {
+        points: poly([A, D, D2, iso(pb.x0, pb.y0, -t)]),
+        fill: '#10151f', stroke: '#2a3242', 'stroke-width': 1.2,
+    }));
+    // top surface
+    g.appendChild(el('polygon', {
+        points: poly([A, B, C, D]),
+        fill: '#0d121b', stroke: '#39445a', 'stroke-width': 1.6,
+    }));
+    // corner ticks — drafting-table registration marks
+    const tick = 0.8;
+    for (const [cx, cy, dx, dy] of [
+        [pb.x0, pb.y0, 1, 1], [pb.x1, pb.y0, -1, 1], [pb.x1, pb.y1, -1, -1], [pb.x0, pb.y1, 1, -1],
+    ]) {
+        const p1 = iso(cx, cy, 0.02), p2 = iso(cx + dx * tick, cy + dy * tick, 0.02);
+        g.appendChild(el('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: '#f5a623', 'stroke-width': 1.4, opacity: 0.65 }));
+    }
+    // plate edge label
+    const lc = iso(pb.x0 + 0.6, pb.y1 - 0.6, 0.02);
+    const t0 = el('text', { x: lc.x, y: lc.y, class: 'node-sublabel', 'text-anchor': 'start', 'font-size': 10, opacity: 0.6 });
+    t0.textContent = 'CORA · Cloudflare Worker runtime · 1,413 lines src/ · plate = pipeline footprint';
+    g.appendChild(t0);
+    gWorld.appendChild(g);
+}
+
 /* ---------- node rendering ---------- */
-const nodeHits = {};   // id → <g> hit target
-const edgeHits = [];   // { line, edge }
+const nodeHits = {};   // id → { g, hit, n }
+const edgeHits = [];   // { line, label, edge, a, b }
+
+// approximate screen-space width of a label chip
+function chipW(n) {
+    const title = (n.title || '').length * 7.6;
+    const sub = (n.sub || '').length * 5.6;
+    return Math.max(title, sub, 60) + 20;
+}
 
 function drawNode(n) {
     const k = KIND[n.kind];
-    const dep = n.d || n.w; // square-ish footprint
+    const dep = n.d || DEP;
     const H = h(n);
     const p = {
         a: iso(n.x, n.y, 0),
@@ -572,89 +636,81 @@ function drawNode(n) {
         hh: iso(n.x, n.y + dep, H),
     };
     const g = el('g', {});
+    const dash = k.dashed ? '6 4' : 'none';
 
     if (k.cylinder) {
-        // store: box with an ellipse lid
-        const lid = el('ellipse', {
-            cx: (p.e.x + p.g.x) / 2, cy: (p.e.y + p.g.y) / 2,
-            rx: (p.f.x - p.e.x) / 2 + (p.g.x - p.f.x) / 2, ry: (p.g.y - p.f.y) / 2 + 6,
-            fill: k.top, stroke: k.stroke, 'stroke-width': 1.2,
-        });
-        g.appendChild(el('polygon', {
-            points: poly([p.a, p.b, p.c, p.d]),
-            fill: k.fill, stroke: k.stroke, 'stroke-width': 1.2,
-            'stroke-dasharray': k.dashed ? '5 4' : 'none',
-        }));
-        g.appendChild(el('polygon', {
-            points: poly([p.a, p.b, p.f, p.e]),
-            fill: k.fill, stroke: k.stroke, 'stroke-width': 1,
-            opacity: 0.7,
-        }));
-        g.appendChild(el('polygon', {
-            points: poly([p.b, p.c, p.g, p.f]),
-            fill: k.fill, stroke: k.stroke, 'stroke-width': 1, opacity: 0.45,
-        }));
-        g.appendChild(lid);
-    } else {
-        // stage / fork / ext / legacy: box with visible top + two sides
+        // store: box body with a raised lid
         g.appendChild(el('polygon', {
             points: poly([p.d, p.c, p.g, p.hh]),
             fill: k.fill, stroke: k.stroke, 'stroke-width': 1, opacity: 0.55,
-            'stroke-dasharray': k.dashed ? '5 4' : 'none',
         }));
         g.appendChild(el('polygon', {
             points: poly([p.a, p.d, p.hh, p.e]),
             fill: k.fill, stroke: k.stroke, 'stroke-width': 1, opacity: 0.8,
-            'stroke-dasharray': k.dashed ? '5 4' : 'none',
         }));
         g.appendChild(el('polygon', {
             points: poly([p.a, p.b, p.c, p.d]),
-            fill: k.fill, stroke: k.stroke, 'stroke-width': 1.2, opacity: 0.35,
-            'stroke-dasharray': k.dashed ? '5 4' : 'none',
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1, opacity: 0.35,
         }));
         g.appendChild(el('polygon', {
             points: poly([p.e, p.f, p.g, p.hh]),
             fill: k.top, stroke: k.stroke, 'stroke-width': 1.4,
-            'stroke-dasharray': k.dashed ? '5 4' : 'none',
         }));
-        if (k.hatch) {
-            // decision fork: hatching on the top face
-            const defs = el('pattern', {
-                id: 'hatch', width: 6, height: 6,
-                patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)',
-            });
-            defs.appendChild(el('rect', { width: 6, height: 6, fill: 'none' }));
-            defs.appendChild(el('line', { x1: 0, y1: 0, x2: 0, y2: 6, stroke: '#8b5cf6', 'stroke-width': 2, opacity: 0.5 }));
-            const defsEl = el('defs', {}); defsEl.appendChild(defs); svg.appendChild(defsEl);
-            g.appendChild(el('polygon', {
-                points: poly([p.e, p.f, p.g, p.hh]),
-                fill: 'url(#hatch)', stroke: 'none', opacity: 0.55,
-            }));
-        }
+    } else {
+        // stage / fork / ext / legacy: solid cuboid — three shaded faces
+        g.appendChild(el('polygon', {
+            points: poly([p.a, p.b, p.c, p.d]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1.1, opacity: 0.38,
+            'stroke-dasharray': dash,
+        }));
+        g.appendChild(el('polygon', {
+            points: poly([p.a, p.d, p.hh, p.e]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1.1, opacity: 0.8,
+            'stroke-dasharray': dash,
+        }));
+        g.appendChild(el('polygon', {
+            points: poly([p.d, p.c, p.g, p.hh]),
+            fill: k.fill, stroke: k.stroke, 'stroke-width': 1.1, opacity: 0.55,
+            'stroke-dasharray': dash,
+        }));
+        g.appendChild(el('polygon', {
+            points: poly([p.e, p.f, p.g, p.hh]),
+            fill: k.top, stroke: k.stroke, 'stroke-width': 1.5,
+            'stroke-dasharray': dash,
+        }));
     }
 
-    // label above the box
-    const lc = iso(n.x + n.w / 2, n.y + dep / 2, H + 0.55);
+    // label chip floating above the box, with a background plate
+    const lc = iso(n.x + n.w / 2, n.y + dep / 2, H + 0.42);
+    const w = chipW(n);
+    const chip = el('g', { class: 'label-chip' });
+    chip.appendChild(el('rect', {
+        x: lc.x - w / 2, y: lc.y - 15, width: w, height: 36,
+        rx: 6,
+        fill: 'rgba(10,12,16,0.92)', stroke: k.stroke, 'stroke-width': 1,
+        opacity: k.dim ? 0.6 : 0.96,
+    }));
     const label = el('text', {
-        x: lc.x, y: lc.y, class: 'node-label', 'text-anchor': 'middle',
-        'font-size': 12.5, 'font-weight': 700,
+        x: lc.x, y: lc.y + 1, class: 'node-label', 'text-anchor': 'middle',
+        'font-size': 11.5, 'font-weight': 700,
         opacity: k.dim ? 0.55 : 1,
     });
     label.textContent = n.title;
     const sub = el('text', {
-        x: lc.x, y: lc.y + 15, class: 'node-sublabel', 'text-anchor': 'middle',
-        'font-size': 10,
+        x: lc.x, y: lc.y + 14, class: 'node-sublabel', 'text-anchor': 'middle',
+        'font-size': 9,
     });
     sub.textContent = n.sub;
-    g.appendChild(label); g.appendChild(sub);
+    chip.appendChild(label); chip.appendChild(sub);
+    g.appendChild(chip);
 
-    // invisible hit target over the whole footprint + label
+    // invisible hit target over footprint + chip
     const hit = el('polygon', {
         points: poly([p.a, p.b, p.c, p.d]),
         fill: 'transparent', class: 'node-hit',
     });
     const hitTop = el('rect', {
-        x: lc.x - 90, y: lc.y - 34, width: 180, height: 52,
+        x: lc.x - w / 2, y: lc.y - 16, width: w, height: 38,
         fill: 'transparent', class: 'node-hit',
     });
     hit.addEventListener('click', () => openNode(n));
@@ -664,61 +720,121 @@ function drawNode(n) {
     hitTop.addEventListener('mouseenter', () => flashNode(n.id, true));
     hitTop.addEventListener('mouseleave', () => flashNode(n.id, false));
     g.appendChild(hit); g.appendChild(hitTop);
-    nodeHits[n.id] = { g, hit, hitTop, n };
+    nodeHits[n.id] = { g, hit, hitTop, n, chip };
     gWorld.appendChild(g);
 }
 
-/* ---------- edge rendering ---------- */
-function edgePoints(e) {
+/* ---------- edge rendering: elevated orthogonal bus ----------
+   Every edge leaves the source's top face, rises to a shared WIRE
+   height, runs orthogonally (world-x then world-y) across the board,
+   then drops onto the target's top face. In isometric projection the
+   world-axis runs are perfectly parallel to the box edges — no
+   arbitrary diagonals, no cutting through boxes. */
+function edgePoly(e) {
     const a = NODE_BY[e.from], b = NODE_BY[e.to];
-    const aa = iso(a.x + a.w / 2, (a.d || a.w) / 2 + a.y, h(a) + 0.5);
-    const bb = iso(b.x + b.w / 2, (b.d || b.w) / 2 + b.y, h(b) + 0.5);
-    return [aa, bb];
+    const dep = n => n.d || DEP;
+    const ad = dep(a), bd = dep(b);
+    // anchor points on top faces, biased to the near corner of each box
+    const ax = a.x + a.w / 2, ay = a.y + ad / 2;
+    const bx = b.x + b.w / 2, by = b.y + bd / 2;
+    // 3-D waypoints: rise, run, drop
+    const pts = [
+        [ax, ay, h(a) + 0.05],           // leave source top
+        [ax, ay, WIRE],                  // up to the wire bus
+        [bx, ay, WIRE],                  // run along world-x
+        [bx, by, WIRE],                  // run along world-y
+        [bx, by, h(b) + 0.05],           // drop onto target top
+    ];
+    return pts.map(([x, y, z]) => iso(x, y, z));
 }
 function drawEdge(e, idx) {
-    const [a, b] = edgePoints(e);
-    const line = el('line', {
-        x1: a.x, y1: a.y, x2: b.x, y2: b.y,
-        stroke: '#3a4354', 'stroke-width': 1.4,
+    const pts = edgePoly(e);
+    const line = el('polyline', {
+        points: poly(pts),
+        fill: 'none', stroke: '#4a5670', 'stroke-width': 1.6,
+        'stroke-linejoin': 'round',
     });
     gWorld.appendChild(line);
-    // hover hit zone (wider, invisible)
-    const hit = el('line', {
-        x1: a.x, y1: a.y, x2: b.x, y2: b.y,
-        stroke: 'transparent', 'stroke-width': 12, style: 'cursor:pointer',
+    // arrowhead at the drop point, oriented along the final segment
+    const tip = pts[pts.length - 1], prev = pts[pts.length - 2];
+    const ang = Math.atan2(tip.y - prev.y, tip.x - prev.x);
+    const AL = 9, AW = 4.2;
+    const ar = el('polygon', {
+        points: `${tip.x},${tip.y} ${tip.x - AL * Math.cos(ang) - AW * Math.sin(ang)},${tip.y - AL * Math.sin(ang) + AW * Math.cos(ang)} ${tip.x - AL * Math.cos(ang) + AW * Math.sin(ang)},${tip.y - AL * Math.sin(ang) - AW * Math.cos(ang)}`,
+        fill: '#4a5670',
+    });
+    gWorld.appendChild(ar);
+    // hover hit zone along the path
+    const hit = el('polyline', {
+        points: poly(pts), fill: 'none',
+        stroke: 'transparent', 'stroke-width': 14, style: 'cursor:pointer',
     });
     hit.addEventListener('click', () => openEdge(e));
     gWorld.appendChild(hit);
-    // midpoint label chip
-    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    // label chip at the midpoint of the longest segment
+    let bi = 0, bl = -1;
+    for (let i = 0; i < pts.length - 1; i++) {
+        const l = Math.hypot(pts[i + 1].x - pts[i].x, pts[i + 1].y - pts[i].y);
+        if (l > bl) { bl = l; bi = i; }
+    }
+    const mx = (pts[bi].x + pts[bi + 1].x) / 2, my = (pts[bi].y + pts[bi + 1].y) / 2;
+    const lw = (e.label.length * 5.8) + 14;
+    const chip = el('g', {});
+    chip.appendChild(el('rect', {
+        x: mx - lw / 2, y: my - 14, width: lw, height: 15,
+        rx: 4, fill: 'rgba(10,12,16,0.92)', stroke: '#2a3242', 'stroke-width': 1,
+    }));
     const t = el('text', {
-        x: mx, y: my - 8, class: 'node-sublabel', 'text-anchor': 'middle', 'font-size': 9.5,
+        x: mx, y: my - 3.5, class: 'node-sublabel', 'text-anchor': 'middle', 'font-size': 8.6,
+        fill: '#aeb8c9',
     });
     t.textContent = e.label;
-    gWorld.appendChild(t);
-    edgeHits.push({ line, label: t, edge: e, a, b });
-    return { line, hit, a, b };
+    chip.appendChild(t);
+    gWorld.appendChild(chip);
+    edgeHits.push({ line, arrow: ar, label: t, chip, edge: e, pts });
+    return { line, hit, pts };
 }
 
-/* ---------- payload packets (animated dots) ---------- */
+/* ---------- payload packets (animated dots along the polyline) ---------- */
 let packetRAF = null;
 const packets = [];
 function initPackets() {
     for (const eh of edgeHits) {
         const lane = laneOfEdge(eh.edge);
-        const dot = el('circle', { r: 3.2, fill: LANE[lane].color, class: 'packet' });
+        const dot = el('circle', { r: 3.4, fill: LANE[lane].color, class: 'packet' });
         gWorld.appendChild(dot);
         packets.push({ dot, eh, t: Math.random(), speed: 0.0016 + Math.random() * 0.0012, lane });
     }
 }
+function pointOnPoly(pts, t) {
+    let total = 0;
+    const segs = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+        const l = Math.hypot(pts[i + 1].x - pts[i].x, pts[i + 1].y - pts[i].y);
+        segs.push(l); total += l;
+    }
+    let d = t * total;
+    for (let i = 0; i < segs.length; i++) {
+        if (d <= segs[i]) {
+            const f = segs[i] === 0 ? 0 : d / segs[i];
+            return {
+                x: pts[i].x + (pts[i + 1].x - pts[i].x) * f,
+                y: pts[i].y + (pts[i + 1].y - pts[i].y) * f,
+            };
+        }
+        d -= segs[i];
+    }
+    return pts[pts.length - 1];
+}
 function tick() {
-    const activeLanes = getActiveLanes();
+    const active = getActiveLanes();
     for (const p of packets) {
         p.t += p.speed;
         if (p.t > 1) p.t -= 1;
-        p.dot.setAttribute('cx', p.eh.a.x + (p.eh.b.x - p.eh.a.x) * p.t);
-        p.dot.setAttribute('cy', p.eh.a.y + (p.eh.b.y - p.eh.a.y) * p.t);
-        p.dot.style.opacity = activeLanes.has(p.lane) ? 0.95 : 0.08;
+        const c = pointOnPoly(p.eh.pts, p.t);
+        p.dot.setAttribute('cx', c.x);
+        p.dot.setAttribute('cy', c.y);
+        p.dot.style.opacity = active.has(p.lane) ? 0.95 : 0.08;
     }
     packetRAF = requestAnimationFrame(tick);
 }
@@ -745,7 +861,9 @@ function refreshDimming() {
     for (const eh of edgeHits) {
         const on = laneIsActive(laneOfEdge(eh.edge));
         eh.line.style.opacity = on ? 1 : 0.1;
-        eh.label.style.opacity = on ? 1 : 0.1;
+        eh.label.style.opacity = on ? 1 : 0.12;
+        eh.chip.style.opacity = on ? 1 : 0.12;
+        eh.arrow.style.opacity = on ? 1 : 0.1;
     }
 }
 const laneChips = document.getElementById('lane-chips');
@@ -869,7 +987,7 @@ function openEdge(e) {
 }
 
 function focusNode(n) {
-    const c = iso(n.x + n.w / 2, (n.d || n.w) / 2 + n.y, h(n));
+    const c = iso(n.x + n.w / 2, (n.d || DEP) / 2 + n.y, h(n));
     cam.x = -c.x * cam.zoom; cam.y = -c.y * cam.zoom;
     applyCam();
 }
@@ -976,9 +1094,11 @@ function fitView() {
     applyCam();
 }
 function boot() {
-    drawGrid();
-    NODES.forEach(drawNode);
-    EDGES.forEach((e, i) => drawEdge(e, i));
+    const pb = plateBounds();
+    drawGrid(pb);
+    drawPlate(pb);
+    EDGES.forEach((e, i) => drawEdge(e, i));   // bus first — behind the boxes
+    NODES.forEach(drawNode);                   // chips occlude the bus behind them
     initPackets();
     buildLaneChips();
     buildSidebar();
