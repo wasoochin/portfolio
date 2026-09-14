@@ -281,27 +281,27 @@ const TITLE_BLOCK = {
 /* node kinds: stage (box, height scales with real line count), fork (decision),
    ext (dashed external system), store (cylinder), legacy (retired, off-board) */
 const NODES = [
-    { id: 'slack_thread', kind: 'ext', x: 0.0, y: 0.0, w: 2.4, lines: 0,
+    { id: 'slack_thread', kind: 'ext', x: 0, y: 0, w: 2.0, lines: 0,
       title: 'Slack · manifest thread', sub: '#experiment_slack_frontify_sync',
       what: 'Source of truth for manifests. P2 posts manifest files to one fixed thread — channel C0BGNB7LXQB, thread ts 1788827777.973639.',
       built: ['Manifest thread ts is swappable config, not hardcoded logic — moved once already when the original thread got too large (D-037).'] },
 
-    { id: 'cron', kind: 'fork', x: 0.0, y: 3.2, w: 1.6, lines: 0,
+    { id: 'cron', kind: 'fork', x: 0, y: 9, w: 1.6, lines: 0,
       title: 'Cloudflare Cron Trigger', sub: 'daily 22:00 UTC',
       what: 'Cloudflare Workers cron trigger — fires the scheduled handler daily at 22:00 UTC (wrangler.toml [triggers]).',
       built: [] },
 
-    { id: 'http', kind: 'ext', x: 0.0, y: 5.6, w: 2.4, lines: 44,
+    { id: 'http', kind: 'ext', x: 0, y: 18, w: 1.8, lines: 44,
       title: 'Manual HTTP entry', sub: 'src/index.ts · 44 lines',
       what: 'Cloudflare Worker fetch() — manual trigger endpoint. POST a full manifest to run the same pipeline without waiting for cron.',
       built: [] },
 
-    { id: 'legacy_makecom', kind: 'legacy', x: 0.0, y: 8.4, w: 2.2, lines: 0,
+    { id: 'legacy_makecom', kind: 'legacy', x: 0, y: 27, w: 2.0, lines: 0,
       title: 'Make.com orchestration', sub: 'retired',
       what: 'The previous Make.com orchestration — switched off, replaced entirely by the Worker pipeline.',
       built: ['Replaced entirely by the Cloudflare Worker (D-007).'] },
 
-    { id: 'scheduled', kind: 'stage', x: 3.6, y: 0.0, w: 2.6, lines: 223,
+    { id: 'scheduled', kind: 'stage', x: 11, y: 0, w: 2.2, lines: 223,
       title: 'Discovery', sub: 'src/scheduled.ts · runScheduledSync · 223 lines',
       what: 'Fetches every reply in the one fixed manifest thread, finds every .json file not yet marked processed, downloads/validates/syncs each, oldest first.',
       built: [
@@ -310,12 +310,12 @@ const NODES = [
         'A manifest\'s own sync failure is caught in its own try/catch, separate from the fetch/validate step — one bad batch no longer blocks every file queued behind it in the same run (D-025, found live: a stuck manifest blocked an unrelated one for 4 days).',
       ] },
 
-    { id: 'slack_api', kind: 'ext', x: 3.6, y: 3.2, w: 2.4, lines: 184,
+    { id: 'slack_api', kind: 'ext', x: 11, y: 9, w: 2.0, lines: 184,
       title: 'Slack Web API client', sub: 'src/slack.ts · 184 lines',
       what: 'The Worker\'s only window into Slack: files.info · conversations.replies · file download.',
       built: [] },
 
-    { id: 'schema', kind: 'stage', x: 7.2, y: 0.0, w: 2.6, lines: 200,
+    { id: 'schema', kind: 'stage', x: 22, y: 0, w: 2.2, lines: 200,
       title: 'Manifest validation', sub: 'src/schema.ts · Zod · 200 lines',
       what: 'The one contract gate. assets[] is validated strictly (it\'s what actually syncs); manual_review[]/missing_slack_asset[] are validated as "any object" only; manifest_type/source_channel are required non-empty strings, not specific literals. Zero imports from other src/ files, by convention.',
       built: [
@@ -325,14 +325,14 @@ const NODES = [
         'A real production incident: two full manifest arrays (manual_review, missing_slack_asset) showed three genuinely different shapes across three consecutive days — fixed by not validating their shape at all (D-028).',
       ] },
 
-    { id: 'resolvefile', kind: 'fork', x: 7.2, y: 3.4, w: 1.6, lines: 0,
+    { id: 'resolvefile', kind: 'fork', x: 22, y: 9, w: 1.6, lines: 0,
       title: 'File-ID resolution', sub: 'resolveFileId() in src/sync.ts',
       what: 'Tries a direct Slack file-page URL first; falls back to resolving a message permalink to its actual attached file.',
       built: [
         'Originally used conversations.history, which only found a message by its own ts when that message was a thread root — returned zero messages for a reply\'s own ts. Switched to conversations.replies, which works uniformly for either (D-029, hardened D-033, after the reply-case question was raised directly with P2\'s own session).',
       ] },
 
-    { id: 'sync', kind: 'stage', x: 10.8, y: 0.0, w: 2.6, lines: 344,
+    { id: 'sync', kind: 'stage', x: 33, y: 0, w: 2.2, lines: 344,
       title: 'Sync core', sub: 'src/sync.ts · syncManifest → processAssetFile · 344 lines',
       what: 'Resolves one shared dated-folder destination for the whole batch, then loops every file of every approved asset (one entry can carry several regional-language files) through upload.',
       built: [
@@ -342,7 +342,7 @@ const NODES = [
         'Below confidence_threshold → held_for_review, nothing written to the ledger, so it can be reconsidered later without needing a special "undo."',
       ] },
 
-    { id: 'frontify_api', kind: 'ext', x: 10.8, y: 3.2, w: 2.4, lines: 228,
+    { id: 'frontify_api', kind: 'ext', x: 44, y: 0, w: 2.0, lines: 228,
       title: 'Frontify GraphQL client', sub: 'src/frontify.ts · 228 lines',
       what: 'Three mutations: allocate an upload slot, PUT the file in 40MB chunks, create the asset, best-effort attach metadata.',
       built: [
@@ -351,12 +351,12 @@ const NODES = [
         'Content Type and Market custom-metadata properties don\'t exist on library 24 under any identifier at all — confirmed by a full re-pull of all 10 real properties, not a stale ID (D-031). Skipped with a logged warning rather than guessing a replacement.',
       ] },
 
-    { id: 'taxonomy', kind: 'store', x: 7.2, y: 6.6, w: 2.2, lines: 104,
+    { id: 'taxonomy', kind: 'store', x: 33, y: 9, w: 1.8, lines: 104,
       title: 'Frontify property/option ID maps', sub: 'src/frontifyTaxonomy.ts · 104 lines',
       what: 'Static config mapping metadata fields to Frontify property/option IDs — never guessed at runtime.',
       built: [] },
 
-    { id: 'ledger', kind: 'store', x: 10.8, y: 6.6, w: 2.2, lines: 36,
+    { id: 'ledger', kind: 'store', x: 33, y: 18, w: 1.8, lines: 36,
       title: 'KV idempotency ledger', sub: 'src/dedupe.ts · SYNC_LEDGER · 36 lines',
       what: 'sync:<fileId> → pending (written before createAsset) or synced. Cloudflare KV, SYNC_LEDGER namespace.',
       built: [
@@ -364,12 +364,12 @@ const NODES = [
         'No TTL — audit record, not a cache, since Frontify has no query to look an asset up by its externalId.',
       ] },
 
-    { id: 'frontify_lib', kind: 'store', x: 14.4, y: 3.2, w: 2.2, lines: 0,
+    { id: 'frontify_lib', kind: 'store', x: 55, y: 0, w: 2.0, lines: 0,
       title: 'Frontify Marketing Material library', sub: 'library 24 · dated batch folder',
       what: 'Destination library — every synced asset lands in a dated batch folder, e.g. 2026-09-07/.',
       built: [] },
 
-    { id: 'mcp', kind: 'ext', x: 14.4, y: 6.6, w: 2.4, lines: 0,
+    { id: 'mcp', kind: 'ext', x: 55, y: 9, w: 2.0, lines: 0,
       title: 'Frontify admin MCP session', sub: 'human judgment',
       what: 'Everything past "fetch, upload, name, file into the dated batch folder": real folder taxonomy placement, Content Type/Market metadata, tagging, grouping related assets, one-off renames/refiles of a misfiled asset. A manual, separate Claude session.',
       built: [
