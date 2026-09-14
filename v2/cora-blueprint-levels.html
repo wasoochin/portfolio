@@ -623,7 +623,7 @@ function drawFloors() {
         g.appendChild(el('polygon', { points: poly([A, B, C, D]), fill: '#0d121b', stroke: '#39445a', 'stroke-width': 1.4 }));
         // level tag on the floor's near-left corner
         const lt = iso(bx0 + 0.4, fy2 - 0.35, 0.02);
-        const tag = el('text', { x: lt.x, y: lt.y, class: 'level-tag', 'text-anchor': 'start', 'font-size': 9, opacity: 0.75 });
+        const tag = el('text', { x: lt.x, y: lt.y, class: 'level-tag', 'text-anchor': 'start', 'font-size': 13, 'font-weight': 800, opacity: 0.95 });
         tag.textContent = `LEVEL ${L.n} · ${L.tag}`;
         g.appendChild(tag);
         // spine number badge at the far end
@@ -708,32 +708,17 @@ function drawNode(n) {
 }
 
 /* ---------- edge rendering ----------
-   spine edges (level → next level) run down the wire bus and get a
-   BOLD amber arrowhead. side edges stay thin gray, like SYS-01. */
+   spine edges (level → next level) run down the wire bus. side edges
+   stay thin gray, like SYS-01. */
 /* 'spine-jump' edges skip over an intermediate level (e.g. sync straight to
-   frontify_api / ledger) and would otherwise run down the exact same x
-   column as the hop-by-hop chain that already passes through there —
-   the two lines would draw on top of each other. Bow the jump's long run
-   out to a clear bypass lane to the left of the main column instead. */
-const JUMP_LANE = -2.8;
+   frontify_api / ledger) — they share the exact same routing as ordinary
+   spine edges: one main column, one mainstream, no side lanes peeling out. */
 function edgePoly(e) {
     const a = NODE_BY[e.from], b = NODE_BY[e.to];
     const dep = n => n.d || DEP;
     const ad = dep(a), bd = dep(b);
     const ax = a.x + a.w / 2, ay = a.y + ad / 2;
     const bx = b.x + b.w / 2, by = b.y + bd / 2;
-    if (e.kind === 'spine-jump') {
-        const jx = bx + JUMP_LANE;
-        const pts = [
-            [ax, ay, h(a) + 0.05],
-            [ax, ay, WIRE],
-            [jx, ay, WIRE],
-            [jx, by, WIRE],
-            [bx, by, WIRE],
-            [bx, by, h(b) + 0.05],
-        ];
-        return pts.map(([x, y, z]) => iso(x, y, z));
-    }
     const pts = [
         [ax, ay, h(a) + 0.05],
         [ax, ay, WIRE],
@@ -749,21 +734,22 @@ function edgePoly(e) {
 function drawEdge(e, idx) {
     const spine = e.kind === 'spine' || e.kind === 'spine-jump';
     const pts = edgePoly(e);
+    // lines stay subtle everywhere — the dots carry the flow, lines just connect
     const line = el('polyline', {
         points: poly(pts),
         fill: 'none',
-        stroke: spine ? '#f5a623' : '#4a5670',
-        'stroke-width': spine ? 2.6 : 1.6,
+        stroke: spine ? '#8a6a3a' : '#3a4358',
+        'stroke-width': 1.4,
         'stroke-linejoin': 'round',
-        opacity: spine ? 0.95 : 1,
+        opacity: spine ? 0.85 : 0.9,
     });
     gWorld.appendChild(line);
     const tip = pts[pts.length - 1], prev = pts[pts.length - 2];
     const ang = Math.atan2(tip.y - prev.y, tip.x - prev.x);
-    const AL = spine ? 11 : 9, AW = spine ? 5.4 : 4.2;
+    const AL = spine ? 8 : 7, AW = spine ? 3.6 : 3.2;
     const ar = el('polygon', {
         points: `${tip.x},${tip.y} ${tip.x - AL * Math.cos(ang) - AW * Math.sin(ang)},${tip.y - AL * Math.sin(ang) + AW * Math.cos(ang)} ${tip.x - AL * Math.cos(ang) + AW * Math.sin(ang)},${tip.y - AL * Math.sin(ang) - AW * Math.cos(ang)}`,
-        fill: spine ? '#f5a623' : '#4a5670',
+        fill: spine ? '#8a6a3a' : '#3a4358',
     });
     gWorld.appendChild(ar);
     const hit = el('polyline', { points: poly(pts), fill: 'none', stroke: 'transparent', 'stroke-width': 14, style: 'cursor:pointer' });
@@ -803,10 +789,14 @@ function initPackets() {
     for (const eh of edgeHits) {
         const lane = laneOfEdge(eh.edge);
         for (let i = 0; i < TRAIN; i++) {
-            const dot = el('circle', { r: 3.4, fill: LANE[lane].color, class: 'packet' });
+            // soft glow halo drawn first so the dot itself sits on top and reads
+            // clearly against the now-subtle lines
+            const glow = el('circle', { r: 7, fill: LANE[lane].color, opacity: 0.22, class: 'packet' });
+            const dot = el('circle', { r: 4.2, fill: LANE[lane].color, class: 'packet' });
+            gWorld.appendChild(glow);
             gWorld.appendChild(dot);
             // dot fades near the destination and fades back in after the wrap — no visible snap-back
-            packets.push({ dot, eh, t: i / TRAIN, speed: TRAIN_SPEED, lane });
+            packets.push({ dot, glow, eh, t: i / TRAIN, speed: TRAIN_SPEED, lane });
         }
     }
 }
@@ -838,10 +828,13 @@ function tick() {
         const c = pointOnPoly(p.eh.pts, p.t);
         p.dot.setAttribute('cx', c.x);
         p.dot.setAttribute('cy', c.y);
+        p.glow.setAttribute('cx', c.x);
+        p.glow.setAttribute('cy', c.y);
         // fade out over the last 15% of the run, fade in over the first 15% —
         // the wrap from 1 back to 0 happens while invisible, so motion reads strictly one-way
         const f = p.t < 0.15 ? p.t / 0.15 : (p.t > 0.85 ? (1 - p.t) / 0.15 : 1);
         p.dot.style.opacity = (active.has(p.lane) ? 0.95 : 0.08) * f;
+        p.glow.style.opacity = (active.has(p.lane) ? 0.22 : 0.05) * f;
     }
     packetRAF = requestAnimationFrame(tick);
 }

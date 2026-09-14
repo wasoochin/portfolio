@@ -250,46 +250,6 @@
             margin-bottom: 1.5rem;
         }
 
-        .checklist {
-            display: grid;
-            gap: 0.55rem;
-            font-size: 0.9rem;
-            color: var(--text);
-            margin-bottom: 1.75rem;
-        }
-
-        .checklist div {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.55rem;
-        }
-
-        .checklist span.mark {
-            color: var(--amber);
-            font-family: var(--mono);
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .contact-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.7rem;
-        }
-
-        .chip {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.78rem;
-            font-family: var(--mono);
-            color: var(--text-dim);
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 6px 12px;
-            border-radius: 6px;
-        }
-
         /* --- Terminal card --- */
         .hero-visual {
             width: 38%;
@@ -377,6 +337,24 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+        }
+
+        .term-contact {
+            text-align: left;
+            display: grid;
+            gap: 0.5rem;
+            margin-top: 1.1rem;
+            padding-top: 1.1rem;
+            border-top: 1px dashed var(--border-soft);
+        }
+
+        .term-contact-row {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--text-dim);
         }
 
         /* --- Stats strip --- */
@@ -761,7 +739,7 @@
                 width: 100%;
             }
 
-            .checklist div, .flagship-card, .auto-card-head {
+            .flagship-card, .auto-card-head {
                 text-align: left;
             }
 
@@ -830,6 +808,12 @@
                                 <div><strong style="color:white;">AI Systems Engineering</strong><br><span style="color:var(--text-dim); font-size:0.7rem;">Claude Code • Magnific • Figma • Automation</span></div>
                             </div>
                         </div>
+                        <div class="term-contact">
+                            <div class="term-contact-row"><i data-lucide="mail" style="width:13px; color:var(--amber);"></i> <a href="mailto:wawagraphic@gmail.com" style="color:var(--text-dim); text-decoration:none;">wawagraphic@gmail.com</a></div>
+                            <div class="term-contact-row"><i data-lucide="phone" style="width:13px; color:var(--amber);"></i> 014-904 6253</div>
+                            <div class="term-contact-row"><i data-lucide="map-pin" style="width:13px; color:var(--amber);"></i> On-site / Hybrid / Remote</div>
+                            <div class="term-contact-row"><i data-lucide="link" style="width:13px; color:var(--amber);"></i> <a href="https://www.linkedin.com/in/abby-wasoochin/" target="_blank" rel="noopener noreferrer" style="color:var(--text-dim); text-decoration:none;">linkedin.com/in/abby-wasoochin</a></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -841,16 +825,6 @@
                 <p class="craft-line">10+ years in media and motion design — the last two spent building the automation and AI systems that scale that craft across a whole org.</p>
                 <p class="tagline">I build the systems behind scalable creative production.</p>
                 <p class="hero-desc">DAM systems, automation pipelines, and AI-assisted workflows — built for production, not demos.</p>
-                <div class="checklist">
-                    <div><span class="mark">→</span> Eliminated 640+ hours/quarter of manual asset work by automating the process end-to-end</div>
-                    <div><span class="mark">→</span> Shipped a fully autonomous asset sync pipeline (CORA)</div>
-                    <div><span class="mark">→</span> Migrated &amp; organized 7,700+ assets into a searchable DAM</div>
-                </div>
-                <div class="contact-chips">
-                    <span class="chip"><i data-lucide="mail" style="width:13px;color:var(--text-dim)"></i> wawagraphic@gmail.com</span>
-                    <span class="chip"><i data-lucide="phone" style="width:13px;color:var(--text-dim)"></i> 014-904 6253</span>
-                    <span class="chip"><i data-lucide="map-pin" style="width:13px;color:var(--text-dim)"></i> On-site / Hybrid / Remote</span>
-                </div>
             </div>
         </section>
 
