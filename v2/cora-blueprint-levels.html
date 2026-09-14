@@ -797,12 +797,17 @@ function drawEdgeLabels() {
 /* ---------- payload packets ---------- */
 let packetRAF = null;
 const packets = [];
+const TRAIN = 3;          // dots per edge, evenly spaced — reads as one conveyor
+const TRAIN_SPEED = 0.0022; // uniform speed: every edge flows at the same pace
 function initPackets() {
     for (const eh of edgeHits) {
         const lane = laneOfEdge(eh.edge);
-        const dot = el('circle', { r: 3.4, fill: LANE[lane].color, class: 'packet' });
-        gWorld.appendChild(dot);
-        packets.push({ dot, eh, t: Math.random(), speed: 0.0016 + Math.random() * 0.0012, lane });
+        for (let i = 0; i < TRAIN; i++) {
+            const dot = el('circle', { r: 3.4, fill: LANE[lane].color, class: 'packet' });
+            gWorld.appendChild(dot);
+            // dot fades near the destination and fades back in after the wrap — no visible snap-back
+            packets.push({ dot, eh, t: i / TRAIN, speed: TRAIN_SPEED, lane });
+        }
     }
 }
 function pointOnPoly(pts, t) {
@@ -833,7 +838,10 @@ function tick() {
         const c = pointOnPoly(p.eh.pts, p.t);
         p.dot.setAttribute('cx', c.x);
         p.dot.setAttribute('cy', c.y);
-        p.dot.style.opacity = active.has(p.lane) ? 0.95 : 0.08;
+        // fade out over the last 15% of the run, fade in over the first 15% —
+        // the wrap from 1 back to 0 happens while invisible, so motion reads strictly one-way
+        const f = p.t < 0.15 ? p.t / 0.15 : (p.t > 0.85 ? (1 - p.t) / 0.15 : 1);
+        p.dot.style.opacity = (active.has(p.lane) ? 0.95 : 0.08) * f;
     }
     packetRAF = requestAnimationFrame(tick);
 }
